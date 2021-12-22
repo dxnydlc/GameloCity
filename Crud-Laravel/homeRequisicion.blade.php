@@ -107,7 +107,7 @@ Requisicion
                                     <!-- ./col -->
                                 </div>
                                 <hr>
-                                <table class=" able table-hover cell-border compact hover nowrap row-border table-striped table-hover " id="wrapperTable" cellspacing="0" width="100%" style="width:100%">
+                                <table class=" table table-hover cell-border compact hover nowrap row-border table-striped table-hover " id="wrapperTable" cellspacing="0" width="100%" style="width:100%">
                                     <thead>
                                         <tr>
                                             <th></th>
