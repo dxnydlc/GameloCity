@@ -9,6 +9,13 @@ Codigos que más vamos a usar en el proyecto, así como ejemplos de uso.
 - Crud de Laravel
 - Node JS
 
+| Plugin | README |
+| ------ | ------ |
+| dillinger | https://dillinger.io/ |
+| Sequelize | https://sequelize.org/master/manual/model-querying-basics.html#simple-insert-queries |
+| JConfirm | https://craftpip.github.io/jquery-confirm/ |
+
+
 ## License
 
 MIT
