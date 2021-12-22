@@ -1,0 +1,213 @@
+
+
+<div class=" row " ></div>
+<!-- ./row -->
+
+<div class=" col-lg-3 col-md-3 " ></div>
+<!-- ./col -->
+
+<div class=" row " >
+	<div class=" col-lg-3 col-md-3 " ></div>
+	<!-- ./col -->
+	<div class=" col-lg-3 col-md-3 " ></div>
+	<!-- ./col -->
+	<div class=" col-lg-3 col-md-3 " ></div>
+	<!-- ./col -->
+	<div class=" col-lg-3 col-md-3 " ></div>
+	<!-- ./col -->
+</div>
+<!-- ./row -->
+
+	
+
+<div class=" form-group "></div>
+<!-- ./form-group -->
+
+<!-- COMBO  -->
+<div class=" form-group ">
+	<label for="Cliente">Cliente</label>
+	<select id="Estado" name="Estado" multiple="multiple" class="form-control">
+		<option value="">Seleccione</option>
+		<option value="Digitado">Digitado</option>
+		<option value="Aprobado">Aprobado</option>
+		<option value="Anulado">Anulado</option>
+		<option value="Terminado">Terminado</option>
+		<option value="Finalizado">Finalizado</option>
+	</select>
+</div>
+<!-- ./form-group -->
+
+<!-- COMBO  -->
+<div class=" form-group ">
+	<label for="Cliente">Cliente</label>
+	<select name="cboCliente" id="cboCliente" class="form-control" ></select>
+	<a href="#" id="QuitarSelect">Quitar Seleccion</a>
+</div>
+<!-- ./form-group -->
+
+<!-- TEXTAREA  -->
+<div class=" form-group ">
+	<label for="Cliente">Cliente</label>
+	<textarea name="" id="" class=" form-control " ></textarea>
+</div>
+<!-- ./form-group -->
+
+<!-- TEXTOS -->
+<div class="form-group">
+	<label for="Cliente">Desde</label> 
+	<input type="text" name="inicio" id="inicio" class="form-control" value="" maxlength="150" />
+</div>
+<!-- ./form-group -->
+
+<!-- NUMERO -->
+<div class="form-group">
+	<label for="inicio" >Desde</label> 
+	<input type="number" name="inicio" id="inicio" class="form-control text-right" value="" />
+</div>
+<!-- ./form-group -->
+
+<!-- DATE FECHAS -->
+<div class="form-group">
+	<label for="Cliente">Desde</label> 
+	<input type="date" name="inicio" id="inicio" class="form-control" value="{{ FECHA_MYSQL }}">
+</div>
+<!-- ./form-group -->
+
+<!-- FECHA/HORA -->
+<div class="form-group">
+	<label for="">Fecha hora contacto</label>
+	<input type="datetime-local" name="FechaHoraContacto" id="FechaHoraContacto" class=" form-control " value="<?php echo date("Y-m-d\TH:i");?>" />
+</div>
+<!-- ./form-group -->
+<!-- HORA -->
+<div class="form-group">
+	<label for="">Fecha hora contacto</label>
+	<input type="time" id="appt" name="appt" class=" form-control " value="<?php echo date("H:i");?>" />
+</div>
+<!-- ./form-group -->
+
+
+<div class="form-group">
+	<label for="Cliente">Hasta</label> 
+	<input type="date" name="fin" id="fin" class="form-control" value="{{ FECHA_MYSQL }}">
+</div>
+<!-- ./form-group -->
+
+<!-- Input text -->
+<div class="form-group">
+	<label for="Cliente">Dirección</label> 
+	<input type="text" name="fin" id="fin" class="form-control" value=""  maxlength="150" />
+</div>
+<!-- ./form-group -->
+
+<!-- Estado Aunlado -->
+<span class="badge bg-red">Aunlado</span>
+<!-- Estado Peligro -->
+<span class="badge bg-yellow">Peligro<span>
+<!-- Estado Aunlado -->
+<span class="badge bg-red">Aunlado</span>
+<!-- Estado Digitado -->
+<span class="badge bg-light-blue">Digitado</span>
+<!-- Estado Aprobado -->
+<span class="badge bg-green">Aprobado</span>
+
+<div class=" box box-primary " >
+	<div class="box-header with-border">
+		<h3 class="box-title">Filtro</h3>
+	</div>
+	<!-- /.box-header -->
+	<div class=" box-body " >
+	</div>
+	<!-- /.box-body -->
+	<div class=" box-footer " ></div>
+	<!-- /.box-footer -->
+</div>
+<!-- ./box -->
+
+<!-- Boton anular chiquito -->
+<button data-id="${rs.id}" data-uuid="${rs.uu_id}" type="button" class="btn btn-block btn-danger btn-xs">Anular</button>
+
+
+<!-- Modal -->
+<div class="modal fade" id="mdlGR" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false" >
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel">Filtros</h4>
+			</div>
+			<div class="modal-body">
+			...
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+				<button id="btnBuscar" type="button" class="btn btn-primary">Guardar</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Modal filtro mdlFiltro DAFTONE -->
+<div class="modal fade" id="mdlFiltro" role="dialog" aria-labelledby="exampleModalDefaultLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
+    <div class=" modal-dialog modal-xl " role="document" >
+        <div class="modal-content ">
+            <div class="modal-header bg-primary " >
+                <h6 class="modal-title m-0" id="exampleModalDefaultLabel">Filtrobúsqueda</h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div><!--end modal-header-->
+            <div class="modal-body">
+            </div><!--end modal-body-->
+            <div class="modal-footer">
+                <button id="btnBuscar" type="button" class="btn btn-primary btn-sm" >Buscar</button>
+                <button type="button" class="btn btn-soft-secondary btn-sm" data-bs-dismiss="modal">Cerrar</button>
+            </div><!--end modal-footer-->
+        </div><!--end modal-content-->
+    </div><!--end modal-dialog-->
+</div><!--end modal-->
+
+<!-- CARD -->
+<div class="card">
+	<div class="card-header">
+		<h4 class="card-title">Markers</h4>
+		<p class="text-muted mb-0">Example of google maps.</p>  
+	</div><!--end card-header-->
+	<div class="card-body">
+	</div><!--end card-body-->
+	<div class="card-footer">
+	</div><!--end card-footer-->
+</div>
+
+<!-- BOX -->
+<div class="box box-primary " >
+	<div class="box-header with-border">
+		<i class="fa fa-text-width"></i>
+		<h3 class="box-title">Nueva capacitación</h3>
+		<div class=" box-tools pull-right ">
+			<div class="btn btn-box-tool">
+				<a id="btnCerrarTop" href="#" class=" cerrarFrame " ><i class="fa fa-times"></i> Cerrar</a>
+			</div>
+		</div>
+		<!-- /.box-tools -->
+	</div>
+	<!-- /.box-header -->
+	<div class="box-body">
+		<!-- BODY -->
+	</div>
+	<!-- /.box-body -->
+	<div class="box-footer">
+		<!-- FOOTER -->
+	</div>
+	<!-- /.box-footer -->
+</div>
+<!-- ./box -->
+
+
+
+<!-- SweetAlert -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+<!-- SweetAlert -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9/dist/sweetalert2.min.js"></script>
+<!-- waitMe-31.10.17 -->
+<link rel="stylesheet" href="{{ asset('plugins/waitMe-31.10.17/waitMe.min.css') }}">
+<!-- waitMe-31.10.17 -->
+<script src="{{ asset('plugins/waitMe-31.10.17/waitMe.min.js') }}"></script>
+
