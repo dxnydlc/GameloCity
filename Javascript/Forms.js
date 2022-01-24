@@ -53,9 +53,16 @@ try {
 var $FechaHoraContacto = moment( json.data.FechaHoraContacto ).format('YYYY-MM-DDTHH:mm:ss');
 $('#frmDocumento #FechaHoraContacto').val($FechaHoraContacto);
 
+// EVENTO CLICK
+
 $('#ddddd').click(function (e) { 
 	e.preventDefault();
 });
+
+$("#ddddd").on( "click", function() {
+	e.preventDefault();
+});
+
 
 await fichaInspeccionModel.create(req.body)
 .then(( result ) => {
