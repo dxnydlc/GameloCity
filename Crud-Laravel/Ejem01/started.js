@@ -23,9 +23,7 @@ var table;
         $('#btnCrear').click(function (e) { 
             e.preventDefault();
             $('#frmDocumento #lblTitulo').html(`Nuevo resumen de boletas`);
-            _URL_PDF = '', _URL_XML = '', _XML_SUNAT = '';
-            $('#tabItemDoc').trigger('click');
-            $('#tituloForm').html(`Nueva boleta electrónica`);
+            $('a[href="#tabDoc"]').tab('show');
             $('#frmDocumento input[type="text"]').each(function(e){
                 $(this).val('');
             });

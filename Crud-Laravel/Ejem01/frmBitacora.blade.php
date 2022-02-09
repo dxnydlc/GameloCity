@@ -21,7 +21,7 @@
             <div class="box box-primary " >
                 <div class="box-header with-border">
                     <i class="fa fa-text-width"></i>
-                    <h3 class="box-title" id="mdlInTitulo" >_</h3>
+                    <h3 class="box-title" id="lblTitulo" >_</h3>
                     <div class=" box-tools pull-right ">
                         <div class="btn btn-box-tool">
                             <a id="btnCerrarTop" href="#" class="cerrarFrame" ><i class="fa fa-times"></i> Cerrar</a>
