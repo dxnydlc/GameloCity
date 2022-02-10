@@ -1,0 +1,89 @@
+
+<div class="form-group">
+    <label for="rngFechas" >Rango de fechas</label> 
+    <input type="text" name="datefilter" class=" form-control input-lg " value="" maxlength="150" />
+</div>
+<!-- ./form-group -->
+
+
+<link rel="stylesheet" href="{{ asset('plugins/daterangepicker-master/daterangepicker.css') }}">
+
+<script src="{{ asset('plugins/daterangepicker-master/daterangepicker.js') }}"></script>
+
+
+
+
+<script type="text/javascript">
+/* ------------------------------------------------------------- */
+var _arrayDiasSemana = ['Do','Lu','Ma','Mi','Ju','Vi','Sa'], _FechaInic_DRP = '', _FechaFin_DRP = '';
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+//
+(function($){
+	$(document).ready(function()
+    {
+        /* ------------------------------------------------------------- */
+        /* ------------------------------------------------------------- */
+        $('input[name="datefilter"]').daterangepicker({
+            autoUpdateInput: false,
+            ranges: {
+				'Hoy': [moment(), moment()],
+				'Ayer': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+				'Hace 7 dias': [moment().subtract(6, 'days'), moment()],
+				'Hace 30 dias': [moment().subtract(29, 'days'), moment()],
+				'Este mes': [moment().startOf('month'), moment().endOf('month')],
+				'Mes anterior': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            },
+            "locale": {
+				"format": "DD/MM/YYYY",
+				"separator": " - ",
+				"applyLabel": "Aplicar",
+				"cancelLabel": "Cancela",
+				"fromLabel": "desde",
+				"toLabel": "hasta",
+				"customRangeLabel": "Definir",
+				"weekLabel": "W",
+				"daysOfWeek": [
+					"Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"
+				],
+				"monthNames": [
+					"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+				],
+				"firstDay": 1
+            },
+        }, function(start, end, label) {
+			var _Token = $('#frmDocumento #uu_id').val();
+			cambio_Dias_Tablas( _Token , start.format('YYYY-MM-DD') , end.format('YYYY-MM-DD') );
+			_FechaInic_DRP = start.format('YYYY-MM-DD');
+			_FechaFin_DRP  = end.format('YYYY-MM-DD');
+        });
+        // "minDate": "01/01/2022",
+		// "maxDate": "31/01/2022"
+        /* ------------------------------------------------------------- */
+        $('input[name="datefilter"]').on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
+        });
+        /* ------------------------------------------------------------- */
+        $('input[name="datefilter"]').on('cancel.daterangepicker', function(ev, picker) {
+            $(this).val('');
+        });
+        /* ------------------------------------------------------------- */
+        /* ------------------------------------------------------------- */
+        /* ------------------------------------------------------------- */
+        /* ------------------------------------------------------------- */
+        /* ------------------------------------------------------------- */
+        /* ------------------------------------------------------------- */
+        /* ------------------------------------------------------------- */
+        /* ------------------------------------------------------------- */
+        /* ------------------------------------------------------------- */
+        /* ------------------------------------------------------------- */
+    });
+})(jQuery);
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+</script>
+
+

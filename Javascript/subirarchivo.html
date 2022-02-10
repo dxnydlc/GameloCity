@@ -1,0 +1,93 @@
+
+
+<div id="showoldupload" ></div>
+
+
+<link href="{{ asset('plugins/jquery-upload-file-master/css/uploadfile.css') }}" rel="stylesheet">
+<script src="{{ asset('plugins/jquery-upload-file-master/js/jquery.uploadfile.min.js') }}" ></script>
+<!-- http://hayageek.com/docs/jquery-upload-file.php -->
+
+
+
+<script type="text/javascript">
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+var uploadObj;
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+//
+(function($){
+	$(document).ready(function()
+    {
+        /* ------------------------------------------------------------- */
+        uploadObj = $("#showoldupload").uploadFile({
+            url             :  _URL_HOME +  'subir/archivo/post' ,
+            dragDrop        : true,
+            fileName        : "formData",
+            formData: {     '_token'  : $('meta[name="csrf-token"]').attr('content') , 'token' : _SessionToken } ,
+            returnType      : "json",
+            showDelete      : true,
+            statusBarWidth  : 500,
+            dragdropWidth   : 500,
+            maxFileSize     : 20000*1024,
+            showPreview     : true,
+            previewHeight   : "70px",
+            previewWidth    : "70px",
+            dragDropStr     : "<span><b>Arrastra tus archivos aquí :)</b></span>",
+            abortStr        : "Abandonar",
+            cancelStr       : "Mejor no...",
+            doneStr         : "Correcto",
+            multiDragErrorStr : "Por favor revisa las restricciónes de archivos.",
+            allowedTypes    : 'jpg,png,jpeg',
+            extErrorStr     : "Sólo archivo de imágenes ()JPG,JPEG,PNG)",
+            sizeErrorStr    : "El máximo de tamaño es 20Mb:",
+            uploadErrorStr  : "Error",
+            uploadStr       : "Cargar",
+            dynamicFormData: function()
+            {
+                //var data ="XYZ=1&ABCD=2";
+                var data ={"XYZ":1,"ABCD":2};
+                return data;        
+            },
+            deleteCallback: function (data, pd) {
+                var $datita = { '_token'  : $('meta[name="csrf-token"]').attr('content') , 'id' : data.data.id , 'uu_id' : data.data.uu_id };
+                // console.log( 'Hola!!! >>>' , data , $datita );
+                if( data.data != undefined ){
+                    $.post( "del/archivo/post" , $datita ,
+                        function (resp,textStatus, jqXHR) {
+                            //Show Message  
+                            // alert("File Deleted");
+                    });
+                }
+                pd.statusbar.hide(); //You choice.
+            },
+            afterUploadAll:function(files,data,xhr,pd)
+            {
+                console.log( files, data );
+                var $n = files.responses.length;
+                console.log( 'hay '+$n +' Archivos...');
+                // $('#btnAplicadFilesPost').removeClass('disabled').removeAttr('disabled');
+                uploadObj.reset();
+            }
+        });
+        /* ------------------------------------------------------------- */
+        /* ------------------------------------------------------------- */
+        /* ------------------------------------------------------------- */
+        /* ------------------------------------------------------------- */
+        /* ------------------------------------------------------------- */
+        /* ------------------------------------------------------------- */
+        /* ------------------------------------------------------------- */
+        /* ------------------------------------------------------------- */
+        /* ------------------------------------------------------------- */
+        /* ------------------------------------------------------------- */
+        /* ------------------------------------------------------------- */
+    });
+})(jQuery);
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+</script>
+
