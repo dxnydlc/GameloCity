@@ -15,6 +15,7 @@ Codigos que más vamos a usar en el proyecto, así como ejemplos de uso.
 | Sequelize | https://sequelize.org/master/manual/model-querying-basics.html#simple-insert-queries |
 | JConfirm | https://craftpip.github.io/jquery-confirm/ |
 | pdf xml | https://dsiscom.com/convertir-xml-a-pdf-para-peru/ |
+| Validar xml | https://www.xmlvalidation.com/ |
 
 
 ## License
