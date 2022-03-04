@@ -387,6 +387,7 @@ var _NroMes = parseInt( moment().format('MM') );
             $('#frmDocumento #mdlInTitulo').html(`Crear nueva requisición`);
             $('#frmDocumento #MesCorrsp').val( _ArrMeses[_NroMes] );
             renovarToken();
+            // tblDetalle.columns.adjust().draw();
         });
         /* ------------------------------------------------------------- */
         $(document).delegate('.delData', 'click', function(event) {

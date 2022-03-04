@@ -20,9 +20,7 @@ socket.emit('accion:audit',{
 });
 // ******* NODE JS *******
 
-
-// gv-5mq435yjxoyjyb.dv.googlehosted.com. r7e73oz4xnwv
-
+/*
 <!-- SweetAlert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 <!-- SweetAlert -->
@@ -36,6 +34,62 @@ socket.emit('accion:audit',{
         width:100%!important;
     }
 </style>
+
+/**/
+function call_ajax()
+{
+	//
+	try {
+		$('#wrapperTable').waitMe({
+			effect  : 'facebook',
+			text    : 'Espere...',
+			bg      : 'rgba(255,255,255,0.7)',
+			color   : '#146436',fontSize:'20px',textPos : 'vertical',
+			onClose : function() {}
+		});
+		var _dataSerie = $('#frmDocumento').serialize();
+		$.ajax({
+			url     : `${_URL_NODE3}/api/`,
+			method  : "POST",
+			data    : _dataSerie ,
+			dataType: "json",
+			headers : {
+				"api-token"  : _TokenUser,
+				"user-token" : _token_node
+			}
+		})
+		.done(function(  json ) {
+			switch(json.estado)
+			{
+				case 'ERROR':
+					Swal.fire(json.error);
+				break;
+				case 'OK':
+					// negocio...
+					var $jsonData = populateCC( json );
+					table.clear();
+					table.rows.add($jsonData).draw();
+				break;
+			}
+		})
+		.fail(function(xhr, status, error) {
+			capturaError( xhr );
+			$('#wrapperTable').waitMe('hide');
+		})
+		.always(function() {
+			$('#wrapperTable').waitMe('hide');
+		});
+	} catch (error) {
+		alert( error );
+		$('#wrapperTable').waitMe('hide');
+	}
+	//
+}
+/**/
+
+// gv-5mq435yjxoyjyb.dv.googlehosted.com. r7e73oz4xnwv
+
+
 
 // Perdir confirmacion con Sweet Alert
 swal({
