@@ -59,6 +59,18 @@ function call_ajax()
 			}
 		})
 		.done(function(  json ) {
+			/**
+			switch (json.codigo) {
+                case 200:
+                    // negocio...
+                    tostada( json.resp.titulo , json.resp.texto , json.resp.clase );
+                    $('#frmDocumento #id').val( json.item.id );
+                    $('#frmDocumento #Codigo').val( json.item.Codigo );
+                break;
+                default:
+                break;
+            }
+			/**/
 			switch(json.estado)
 			{
 				case 'ERROR':
@@ -74,6 +86,7 @@ function call_ajax()
 		})
 		.fail(function(xhr, status, error) {
 			capturaError( xhr );
+			// get_Error( xhr );
 			$('#wrapperTable').waitMe('hide');
 		})
 		.always(function() {
