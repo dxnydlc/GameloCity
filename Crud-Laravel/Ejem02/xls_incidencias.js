@@ -1,11 +1,12 @@
-//xls_incidencias.js
+// xls_reqMat.js
+
 
 /* ------------------------------------------------------------- */
-var  _AuthFormulario = 'XLS_INCIDENCIAS_LAP';
+var  _AuthFormulario = 'XLS_REQMATERIAL_LAP';
 /* ------------------------------------------------------------- */
 var table, tblDetalle;
 /* ------------------------------------------------------------- */
-var _urlServicio = `${_URL_NODE3}/api/lap_incidencias/`;
+var _urlServicio = `${_URL_NODE3}/api/lap_req_material/`;
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
@@ -178,6 +179,34 @@ var _urlServicio = `${_URL_NODE3}/api/lap_incidencias/`;
             var _id = $(this).data('id'), _uuid = $(this).data('uuid'), _nombre = $(this).data('nombre');
         });
         /* ------------------------------------------------------------- */
+        $(document).delegate('.itemDelete', 'click', function(event) {
+            event.preventDefault();
+            var _id = $(this).data('id'), _uuid = $(this).data('uuid'), _nombre = $(this).data('nombre');
+            //
+            $.confirm({
+                title: 'Confirmar',
+                type    : 'orange',
+                content: 'Confirme eliminar registro: '+_nombre,
+                autoClose: 'Cancelar|10000',
+                buttons: {
+                    Confirmar: {
+                        keys: [ 'enter','Y' ],
+                        text : 'Confirmar (Y)',
+                        btnClass: 'btn-blue',
+                        action : function () {
+                            delDocumento( $uuid );
+                        },
+                    },
+                    Cancelar: {
+                        keys: [ 'N' ],
+                        action : function () {
+                            //
+                        }
+                    },
+                }
+            });
+            //
+        });
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
@@ -437,15 +466,12 @@ function listarItems()
 			}
 		})
 		.done(function(  json ) {
-			switch(json.estado)
-			{
-				case 'ERROR':
-					Swal.fire(json.error);
-				break;
-				case 'OK':
+            switch(json.codigo)
+            {
+                case 200:
                     dibujarTabla_detalle( json.data , '#tblDetalle' );
-				break;
-			}
+                break;
+            }
 		})
 		.fail(function(xhr, status, error) {
 			get_Error( xhr );
@@ -577,7 +603,99 @@ function guardar_Data()
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
+function del_Item( _uuid )
+{
+	//
+	try {
+		$('#wrapperTable').waitMe({
+			effect  : 'facebook',
+			text    : 'Espere...',
+			bg      : 'rgba(255,255,255,0.7)',
+			color   : '#146436',fontSize:'20px',textPos : 'vertical',
+			onClose : function() {}
+		});
+		var _dataSerie = { 'uuid' : _uuid  };
+		$.ajax({
+			url     : `${_urlServicio}items/del`,
+			method  : "POST",
+			data    : _dataSerie ,
+			dataType: "json",
+			headers : {
+				"api-token"  : _TokenUser,
+				"user-token" : _token_node
+			}
+		})
+		.done(function(  json ) {
+			/**/
+			switch (json.codigo) {
+                case 200:
+                    // negocio...
+                    tostada( json.resp.titulo , json.resp.texto , json.resp.clase );
+                    listarItems();
+                break;
+                default:
+                break;
+            }
+			/**/
+		})
+		.fail(function(xhr, status, error) {
+			capturaError( xhr );
+			// get_Error( xhr );
+			$('#wrapperTable').waitMe('hide');
+		})
+		.always(function() {
+			$('#wrapperTable').waitMe('hide');
+		});
+	} catch (error) {
+		alert( error );
+		$('#wrapperTable').waitMe('hide');
+	}
+	//
+}
 /* ------------------------------------------------------------- */
+function dibuja_tablita( json , _target , _tipo )
+{
+    //
+    var _htmlTabla = ``;
+    if( json.length > 0 )
+    {
+        //
+        _htmlTabla += `<thead>`;
+        _htmlTabla += `<tr>`;
+        // Dibujamos primero el head...
+        $.each( json[0] , function( key, rs ){
+            _htmlTabla += `<th>${key}</th>`;
+        });
+        _htmlTabla += `</tr>`;
+        _htmlTabla += `</thead>`;
+
+        // Ahora a dibujar el body...
+        _htmlTabla += `<tbody>`;
+        for (let index = 0; index < json.length; index++) {
+            //
+            const _rsData = json[index];
+            _htmlTabla += `<tr>`;
+            $.each( _rsData , function( key, rs ){
+                _htmlTabla += `<td>${rs}</td>`;
+            });
+            _htmlTabla += `</tr>`;
+            //
+        }
+        _htmlTabla += `</tbody>`;
+        //
+    }else{
+        _htmlTabla += `<thead>`;
+        _htmlTabla += `<tr>`;
+        _htmlTabla += `<th></th><th></th><th>No hay datos disponibles...</th>`;
+        _htmlTabla += `</tr>`;
+        _htmlTabla += `</thead>`;
+        _htmlTabla += `<tbody></tbody>`;
+    }
+    varDump( _htmlTabla );
+    $(_target).html( _htmlTabla );
+    aplicarDataTable( _tipo );
+    //
+}
 /* ------------------------------------------------------------- */
 function dibujarTabla_detalle( json , _target )
 {
@@ -616,7 +734,7 @@ function dibujarTabla_detalle( json , _target )
         _htmlTabla += `</thead>`;
         _htmlTabla += `<tbody></tbody>`;
     }
-    varDump( _htmlTabla );
+
     $(_target).html( _htmlTabla );
     aplicarDataTable( 'DET' );
 }
@@ -814,7 +932,7 @@ function dibujarCargador()
     $('#formData').fileinput({
         theme       : 'fas',
         language    : 'es',
-        uploadUrl   : `${_URL_HOME}/adjunto/lap/xls/operarios`,
+        uploadUrl   : `${_URL_HOME}/adjunto/lap/xls/generico`,
         allowedFileExtensions: [ 'xls' , 'xlsx' ],
         showPreview     : true ,
         uploadExtraData : _dataEnvio,
@@ -846,4 +964,3 @@ function dibujarCargador()
     });
 }
 /* ------------------------------------------------------------- */
-
