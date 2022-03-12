@@ -11,12 +11,14 @@ socket.emit('accion:todos',{
 
 // ******* NODE JS *******
 socket.emit('accion:audit',{
-	user:$nomU,
-	msg:'Aprobar Req.Mat. #'+$('#frmDocumento #IdRequerimientoCab').val(),
-	dni:$dniU,
+	user  : $nomU,
+	msg   : 'Aprobar Req.Mat. #'+$('#frmDocumento #IdRequerimientoCab').val(),
+	dni   : $dniU,
 	serie : 0,
-	corr : 0,
-	form : _AuthFormulario
+	corr  : 0,
+	form  : _AuthFormulario,
+	url   : window.location.href,
+	token : ''
 });
 // ******* NODE JS *******
 
