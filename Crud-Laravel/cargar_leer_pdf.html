@@ -85,6 +85,7 @@ var thePdf = null;
 var scale2 = 2.1;
 pdfjsLib.GlobalWorkerOptions.workerSrc = '//mozilla.github.io/pdf.js/build/pdf.worker.js';
 /* ------------------------------------------------------------- */
+var _urlExcel = `${_URL_NODE3}/api/excel_carga/`;
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
@@ -235,7 +236,8 @@ function cargarDoc( uuid )
                             $('#frmDocumento #IdLocal').trigger('change');
                         }
                     }
-                    listarItems();
+                    // Files
+                    populateArchivoThumbs( json.files );
                     tostada( json.resp.titulo , json.resp.texto , json.resp.clase );
                 break;
                 default:
@@ -260,6 +262,7 @@ function cargarDoc( uuid )
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
+
 /* ------------------------------------------------------------- */
 function renderPage2(pageNumber, canvas)
 {
@@ -654,6 +657,98 @@ function dibujarCargador()
     });
 }
 /* ------------------------------------------------------------- */
+function aplicarDataTable( tipo )
+{
+    //
+    var _opciones = {
+        "pagingType": "full_numbers",
+        "lengthMenu": [
+        [25, 50, 100],
+        [25, 50, 100]
+        ],
+        "searching" : true,
+        "order"     : [[ 2, "desc" ]],
+        "scrollX"   : true,
+        buttons: [
+        {
+            extend: 'collection',
+            exportOptions: {
+            modifier: {
+            page: 'all',
+            search: 'none'   
+            }
+            },
+            text: 'Exportar',
+            buttons: [
+            'copy','excel','csv','pdf', 'print'
+            ]
+        }
+        ],
+        language : {
+        sProcessing: "Procesando...",
+        sLengthMenu: "Mostrar _MENU_ registros",
+        sZeroRecords: "No se encontraron resultados",
+        sEmptyTable: "Ningún dato disponible en esta tabla",
+        sInfo: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+        sInfoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
+        sInfoFiltered: "(filtrado de un total de _MAX_ registros)",
+        sInfoPostFix: "",
+        sSearch: "Buscar:",
+        sUrl: "",
+        sInfoThousands: ",",
+        sLoadingRecords: "Cargando...",
+        oPaginate: {
+            sFirst: "|<",
+            sLast: ">|",
+            sNext: ">",
+            sPrevious: "<",
+        },
+        oAria: {
+            sSortAscending: ": Activar para ordenar la columna de manera ascendente",
+            sSortDescending: ": Activar para ordenar la columna de manera descendente",
+        }
+        },
+        dom: "<'row'<'col-sm-3'l><'col-sm-3'f><'col-sm-6'p>>" +
+        "<'row'<'col-sm-12'tr>>" +
+        "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+        "initComplete": function(settings, json) {
+            $('#tblDatos').waitMe('hide');
+        },
+        "drawCallback": function( settings ) {
+            var api = this.api();
+            $('#tblDatos').waitMe('hide');
+        }
+    };
+    //
+    switch (tipo) {
+        case 'CAB':
+            //
+            try {
+                table.destroy();
+            } catch (error) {
+                //
+            }
+            table = $('#wrapperTable').DataTable( _opciones );
+            table.columns.adjust().draw();
+            //
+        break;
+        case 'DET':
+            //
+            try {
+                tblDetalle.destroy();
+            } catch (error) {
+                //
+            }
+            tblDetalle = $('#tblDetalle').DataTable( _opciones );
+            //tblDetalle.columns.adjust().draw();
+            //
+        break;
+        default:
+            //
+        break;
+    }
+    //
+}
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
