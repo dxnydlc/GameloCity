@@ -1,0 +1,662 @@
+
+<!-- plugin -->
+<script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@2.13.216/build/pdf.min.js" integrity="sha256-Yjn9rQHDeN29XFpZN9iixcSI5lf9Spfmv/3g+w3gqao=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.13.216/pdf.worker.min.js"></script>
+
+
+<!-- HTML para mostrar archivo y boton cargar -->
+<hr>
+<a id="btnOpenModalFiles" href="#" class="btn btn-primary ">Cargar archivo.</a>
+<hr>
+<div class="row" id="wrapper_imgs" ></div>
+<hr>
+<div class="row" id="wrapper_thumbs_files" ></div>
+<hr>
+
+
+<!-- Modal VER ARCHIVOS -->
+<div class="modal fade" id="mdlVerArchivos" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false" >
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel">visualizar archivo</h4>
+			</div>
+			<div class="modal-body">
+				<div id="wrapperArchivos" >
+					<div id="pdf-viewer"></div>
+				</div>
+				<div id="wrappereTablaDetalle" >
+					<table class=" table table-hover cell-border compact hover nowrap row-border table-striped table-hover " id="tblDetalle" cellspacing="0" width="100%" style="width:100%"></table>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+<!-- Modal CARGAR ARCHIVO -->
+<div class=" modal fade " id="mdlArchivos56" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false" >
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel" >Cargar archivos.</h4>
+			</div>
+			<div class="modal-body">
+                <!--<a href="{{ asset('assets/formatos/xls_Maquinarias_LAP.xlsx') }}" id="dowd-formato" class=" btn btn-primary btn-xs ">Decargar formato.</a>
+                <small class="text-muted">Por favor respetar los encabezados del formato.</small>
+				<hr/>-->
+                <div class="file-loading" >
+                    <input id="formData" name="formData" type="file" multiple data-browse-on-zone-click="true" data-show-preview="true" >
+                </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+/* ------------------------------------------------------------- */
+// para cargar un PDF
+var urlPDF = ``;
+var thePdf = null;
+var scale2 = 2.1;
+pdfjsLib.GlobalWorkerOptions.workerSrc = '//mozilla.github.io/pdf.js/build/pdf.worker.js';
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+//
+(function($){
+	$(document).ready(function()
+    {
+        /* ------------------------------------------------------------- */
+        // abrir modalar para cargar archivo
+        $("#btnOpenModalFiles").on( "click", function(e) {
+            e.preventDefault();
+            //uploadObj.reset();
+            /**/
+            try {
+                $('#formData').fileinput('destroy');
+            } catch (error) {
+                console.error(error);
+            }
+            dibujarCargador();
+            /**/
+            $('#mdlArchivos56').modal('show');
+        });
+        /* ------------------------------------------------------------- */
+        $(document).delegate('.verFile', 'click', function(event) {
+            
+            $('#pdf-viewer').html('');
+
+            try {
+                tblDetalle.clear();
+                tblDetalle.rows.add([]).draw();
+                tblDetalle.destroy();
+            } catch (error) {
+                //
+            }
+
+            event.preventDefault();
+            var _id = $(this).data('id'), _uuid = $(this).data('uuid'), _nombre = $(this).data('nombre');
+            var _ext = $(this).data('ext'), _codigo = $(this).data('codigo');
+            var _href = $(this).attr('href');
+            // wrapperArchivos
+            switch (_ext) {
+                case 'pdf':
+                    
+                    urlPDF = _href;
+                    pdfjsLib.getDocument(urlPDF).promise.then(function(pdf) {
+                        thePdf = pdf;
+                        viewer = document.getElementById('pdf-viewer');
+                        //
+                        for(page = 1; page <= pdf.numPages; page++) {
+                            canvas = document.createElement("canvas");    
+                            canvas.className = 'pdf-page-canvas';         
+                            viewer.appendChild(canvas);            
+                            renderPage2(page, canvas);
+                        }
+                        //
+                    });
+                break;
+                case 'xls':
+                case 'xlsx':
+                    //$('#wrappereTabla').html('<table class=" table table-hover cell-border compact hover nowrap row-border table-striped table-hover " id="tblDetalle" cellspacing="0" width="100%" style="width:100%"></table>');
+                    listarExcelByIdFile( _id );
+                break;
+                default:
+                    break;
+            }
+            $('#mdlVerArchivos').modal('show');
+        });        
+        /* ------------------------------------------------------------- */
+        $(document).delegate('.delPDf', 'click', function(event) {
+            event.preventDefault();
+            var $id = $(this).data('id'), $uuid = $(this).data('uuid'), $nombre = $(this).data('nombre');
+            //
+            $.confirm({
+                title: 'Confirmar',
+                type    : 'orange',
+                content: 'Confirme eliminar archivo: '+$nombre,
+                autoClose: 'Cancelar|10000',
+                buttons: {
+                    Confirmar: {
+                        keys: [ 'enter','Y' ],
+                        text : 'Confirmar (Y)',
+                        btnClass: 'btn-blue',
+                        action : function () {
+                            delPDF( $uuid , $id );
+                        },
+                    },
+                    Cancelar: {
+                        keys: [ 'N' ],
+                        action : function () {
+                            //
+                        }
+                    },
+                }
+            });
+        });
+        /* ------------------------------------------------------------- */
+        /* ------------------------------------------------------------- */
+        /* ------------------------------------------------------------- */
+        /* ------------------------------------------------------------- */
+        /* ------------------------------------------------------------- */
+        /* ------------------------------------------------------------- */
+        /* ------------------------------------------------------------- */
+        /* ------------------------------------------------------------- */
+    });
+})(jQuery);
+/* ------------------------------------------------------------- */
+function cargarDoc( uuid )
+{
+    try {
+        //tblDetalle.columns.adjust().draw();
+        $('#frmDocumento').waitMe({
+            effect  : 'facebook',
+            text    : 'Espere...',
+            bg      : 'rgba(255,255,255,0.7)',
+            color   : '#146436',fontSize:'20px',textPos : 'vertical',
+            onClose : function() {}
+        });
+        $.ajax({
+            url     : `${_urlServicio}get_data`,
+            method  : "POST",
+            data    : { 'uuid' : uuid },
+            dataType: "json",
+            headers : {
+            "api-token"  : _TokenUser,
+            "user-token" : _token_node
+            }
+        })
+        .done(function(  json ) {
+            switch (json.codigo) {
+                case 200:
+                    var rs = json.data;
+                    if( json.data != undefined ){
+                        $.each( json.data , function( key, value ) {
+                            $('#frmDocumento #'+key).val(value);
+                        });
+                        $('#frmDocumento #IdCliente').html(`<option value="${rs.IdCliente}" >${rs.Cliente}</option>`);
+                        $('#frmDocumento #IdCliente').trigger('change');
+                        // Locales
+                        if( json.locales != undefined ){
+                            var _html = '<option value="" >Todos</option>';
+                            $.each( json.locales , function( key, value ) {
+                                _html += '<option value="'+value.IdSucursal+'" >'+value.IdSucursal+'-'+value.Descripcion+'</option>'; 
+                                });
+                            $('#frmDocumento #IdLocal').html( _html );
+                            $('#frmDocumento #IdLocal').val( rs.IdLocal );
+                            $('#frmDocumento #IdLocal').trigger('change');
+                        }
+                    }
+                    listarItems();
+                    tostada( json.resp.titulo , json.resp.texto , json.resp.clase );
+                break;
+                default:
+                break;
+            }
+        })
+        .fail(function(xhr, status, error) {
+            get_Error( xhr );
+            $('#frmDocumento').waitMe('hide');
+        })
+        .always(function() {
+            $('#frmDocumento').waitMe('hide');
+        });
+    } catch (error) {
+        varDump(error);
+        alert( error );
+		$('#wrapperTable').waitMe('hide');
+    }
+    
+}
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+function renderPage2(pageNumber, canvas)
+{
+    thePdf.getPage(pageNumber).then(function(page) {
+        viewport = page.getViewport({scale: scale2});
+        canvas.height   = viewport.height;
+        canvas.width    = viewport.width;       
+        page.render({
+            canvasContext: canvas.getContext('2d'), viewport: viewport
+        });
+    });
+}
+/* ------------------------------------------------------------- */
+function dibujar_pdf( json )
+{
+    //
+    var _html = ``;
+    for (let index = 0; index < json.length; index++) {
+        const _rs = json[index];
+
+        var url = _rs.url;
+        var _del = `<a class="delPDf btn btn-danger btn-sm " data-nombre="${_rs.nombre_archivo}" data-id="${_rs.id}" data-uuid="${_rs.uu_id}" href="${url}" >Quitar PDF</a><a href="#" data-url="${url}" data-nombre="${_rs.nombre_archivo}" class=" btn btn-primary btn-sm verPDF " >Ver</a>`;
+        var _iframe = `<div id="wrap_pdf${_rs.id}" class="  embed-responsive embed-responsive-16by9" ><iframe class="embed-responsive-item" src="${url}" ></iframe></div>`;
+        _html += `<div class=" col-lg-6 col-md-6 " >${_del}${_iframe}</div>`;
+
+    }
+    $('#wrapperPDF').html( _html );
+}
+/* ------------------------------------------------------------- */
+function delPDF( uuid , id )
+{
+	//
+	try {
+		$('#wrapperTable').waitMe({
+			effect  : 'facebook',
+			text    : 'Espere...',
+			bg      : 'rgba(255,255,255,0.7)',
+			color   : '#146436',fontSize:'20px',textPos : 'vertical',
+			onClose : function() {}
+		});
+		var _dataSerie = $('#frmDocumento').serialize();
+		$.ajax({
+			url     : `${_URL_NODE3}/api/lap_mant_maquinaria/delFile/${uuid}`,
+			method  : "POST",
+			data    : {} ,
+			dataType: "json",
+			headers : {
+				"api-token"  : _TokenUser,
+				"user-token" : _token_node
+			}
+		})
+		.done(function(  json ) {
+			switch(json.estado)
+			{
+				case 'ERROR':
+					Swal.fire(json.error);
+				break;
+				case 'OK':
+					// negocio...
+                    tostada('Correcto','Se eliminó el PDF','success');
+                    $('#wrap_pdf'+id).hide();
+				break;
+			}
+		})
+		.fail(function(xhr, status, error) {
+			capturaError( xhr );
+			// get_Error( xhr );
+			$('#wrapperTable').waitMe('hide');
+		})
+		.always(function() {
+			$('#wrapperTable').waitMe('hide');
+		});
+	} catch (error) {
+		alert( error );
+		$('#wrapperTable').waitMe('hide');
+	}
+	//
+}
+/* ------------------------------------------------------------- */
+function dibuja_tablita( json , _target , _tipo )
+{
+    //
+    var _htmlTabla = ``, _tableName = `wrapperTable`;
+    switch (_tipo) {
+        case 'CAB':
+            _tableName = `wrapperTable`
+            try {
+                table.destroy();
+            } catch (error) {}
+        break;
+        case 'DET':
+            _tableName = `tblDetalle`
+            try {
+                tblDetalle.destroy();
+            } catch (error) {}
+        break;
+    }
+    if( json.length > 0 )
+    {
+        //
+        _htmlTabla += `<table class=" table table-hover cell-border compact hover nowrap row-border table-striped table-hover " id="${_tableName}" cellspacing="0" width="100%" style="width:100%">
+        <thead>`;
+        _htmlTabla += `<tr>`;
+        // Dibujamos primero el head...
+        $.each( json[0] , function( key, rs ){
+            _htmlTabla += `<th>${key}</th>`;
+        });
+        _htmlTabla += `</tr>`;
+        _htmlTabla += `</thead>`;
+
+        // Ahora a dibujar el body...
+        _htmlTabla += `<tbody>`;
+        for (let index = 0; index < json.length; index++) {
+            //
+            const _rsData = json[index];
+            _htmlTabla += `<tr>`;
+            $.each( _rsData , function( key, rs ){
+                _htmlTabla += `<td>${rs}</td>`;
+            });
+            _htmlTabla += `</tr>`;
+            //
+        }
+        _htmlTabla += `</tbody>`;
+        //
+    }else{
+        _htmlTabla += `<thead>`;
+        _htmlTabla += `<tr>`;
+        _htmlTabla += `<th></th><th></th><th>No hay datos disponibles...</th>`;
+        _htmlTabla += `</tr>`;
+        _htmlTabla += `</thead>`;
+        _htmlTabla += `<tbody></tbody></table>`;
+    }
+    $(_target).html( _htmlTabla );
+    // ##################### D ###########################
+    setTimeout(function () {
+		aplicarDataTable( _tipo , _target );
+	}, 1000);
+    // ##################### D ###########################
+}
+/* ------------------------------------------------------------- */
+function populateArchivoThumbs( json )
+{
+    var _html = ``;
+    if( json )
+    {
+        $.each( json , function( key, rs ) {
+            switch (rs.extension) {
+                // ---------------------------------------------------------------
+                case 'xls':
+                case 'xlsx':
+                    _html += `
+                    <div class="col-xs-6 col-md-3 col-lg-2 " id="wrap_pdf${rs.id}" >
+                        <a data-id="${rs.id}" data-ext="${rs.extension}" data-uuid="${rs.uu_id}" data-codigo="${rs.Cod001}" href="${rs.url}" class=" thumbnail verFile " >
+                            <img src="${_URL_HOME}assets/img/excel.png" alt="${rs.nombre_archivo}" />
+                            <small>${rs.nombre_archivo}</small>
+                            <a href="#" data-nombre="${rs.nombre_archivo}" data-id="${rs.id}" data-uuid="${rs.uu_id}" class=" delPDf text-danger" ><i class="fa fa-close" ></i> quitar archivo</a>
+                        </a>
+                    </div>`;
+                break;
+                // ---------------------------------------------------------------
+                case 'pdf':
+                    _html += `
+                    <div class="col-xs-6 col-md-3 col-lg-2 " id="wrap_pdf${rs.id}" >
+                        <a data-id="${rs.id}" data-ext="${rs.extension}" data-uuid="${rs.uu_id}" data-codigo="${rs.Cod001}" href="${rs.url}" class=" thumbnail verFile " >
+                            <img src="${_URL_HOME}assets/img/pdf.png" alt="${rs.nombre_archivo}" />
+                            <small>${rs.nombre_archivo}</small>
+                            <a href="#" data-nombre="${rs.nombre_archivo}" data-id="${rs.id}" data-uuid="${rs.uu_id}" class=" delPDf text-danger" ><i class="fa fa-close" ></i> quitar archivo</a>
+                        </a>
+                    </div>`;
+                break;
+                // ---------------------------------------------------------------
+                default:
+                    _html += `<div data-ext="${rs.extension}" data-uuid="${rs.uu_id}" data-codigo="${rs.Cod001}" class="col-xs-6 col-md-3 col-lg-2 " id="wrap_pdf${rs.id}" >
+                        <a data-id="${rs.id}" data-fancybox="gallery" href="${rs.url}" class=" thumbnail verFile " >
+                            <img src="${rs.url}" alt="${rs.nombre_archivo}" />
+                            <small>${rs.nombre_archivo}</small>
+                            <a href="#" data-nombre="${rs.nombre_archivo}" data-id="${rs.id}" data-uuid="${rs.uu_id}" class=" delPDf text-danger" ><i class="fa fa-close" ></i> quitar imagen</a>
+                        </a>
+                    </div>`;
+                break;
+                // ---------------------------------------------------------------
+            }
+                    
+		});
+    }
+    $('#wrapper_thumbs_files').html( _html );
+}
+/* ------------------------------------------------------------- */
+function importar_detalle_xls( _Codigo , IdFile , _Token )
+{
+	//
+	try {
+		$('#wrapperTable').waitMe({
+			effect  : 'facebook',
+			text    : 'Espere...',
+			bg      : 'rgba(255,255,255,0.7)',
+			color   : '#146436',fontSize:'20px',textPos : 'vertical',
+			onClose : function() {}
+		});
+		var _dataSerie = $('#frmDocumento').serialize();
+		$.ajax({
+			url     : `${_urlExcel}importar_detalle`,
+            method  : "POST",
+            data    : { 'IdFile' : IdFile , 'Token' : _Token, 'Flag' : _AuthFormulario , 'Codigo' : _Codigo },
+            dataType: "json",
+            headers : {
+                "api-token"  : _TokenUser,
+                "user-token" : _token_node
+            },
+		})
+		.done(function(  json ) {
+			/**/
+			switch (json.codigo) {
+                case 200:
+                    setTimeout(function(){
+                        //
+                        $('body').waitMe('hide');
+                        tostada2( json.resp );
+                    }, 2000);
+                    $('#mdlArchivos56').modal('hide');
+                break;
+                default:
+                break;
+            }
+			/**/
+		})
+		.fail(function(xhr, status, error) {
+			get_Error( xhr );
+			$('#wrapperTable').waitMe('hide');
+		})
+		.always(function() {
+			$('#wrapperTable').waitMe('hide');
+		});
+	} catch (error) {
+		alert( error );
+		$('#wrapperTable').waitMe('hide');
+	}
+	//
+}
+/* ------------------------------------------------------------- */
+function cargar_xls_bd( _Token , IdFile )
+{
+    //
+    try {
+        // * //
+        $('body').waitMe({
+            effect  : 'facebook',
+            text    : 'Espere...',
+            bg      : 'rgba(255,255,255,0.7)',
+            color   : '#146436',fontSize:'20px',textPos : 'vertical',
+            onClose : function() {}
+        });
+        $.ajax({
+            url     : `${_urlExcel}importar_header`,
+            method  : "POST",
+            data    : { 'IdFile' : IdFile , 'Token' : _Token, 'Flag' : _AuthFormulario , 'Codigo' : $('#frmDocumento #Codigo').val() },
+            dataType: "json",
+            headers : {
+                "api-token"  : _TokenUser,
+                "user-token" : _token_node
+            }
+        })
+        .done(function(  json ) {
+            /**/
+			switch (json.codigo) {
+                case 200:
+                    setTimeout(function(){
+                        //
+                        importar_detalle_xls( json.CodFile , IdFile , _Token );
+                        //
+                    }, 2000);
+                break;
+                default:
+                break;
+            }
+			/**/
+        })
+        .fail(function(xhr, status, error) {
+            capturaError( xhr );
+            $('body').waitMe('hide');
+        })
+        .always(function() {
+            //$('body').waitMe('hide');
+        });
+
+    } catch (error) {
+        alert( error  );
+        $('body').waitMe('hide');
+    }
+    //
+}
+/* ------------------------------------------------------------- */
+function listarExcelByIdFile( IdFile )
+{
+	//
+	try {
+		$('body').waitMe({
+			effect  : 'facebook',
+			text    : 'Espere...',
+			bg      : 'rgba(255,255,255,0.7)',
+			color   : '#146436',fontSize:'20px',textPos : 'vertical',
+			onClose : function() {}
+		});
+		var _dataSerie = { 'IdFile' : IdFile };
+		$.ajax({
+			url     : `${_URL_NODE3}/api/excel_carga/by_idfile`,
+			method  : "POST",
+			data    : _dataSerie ,
+			dataType: "json",
+			headers : {
+				"api-token"  : _TokenUser,
+				"user-token" : _token_node
+			}
+		})
+		.done(function(  json ) {
+			/**/
+			switch (json.codigo) {
+                case 200:
+                    // negocio...
+                    dibuja_tablita( json.data , '#wrappereTablaDetalle' , 'DET' );
+                    //tostada( json.resp.titulo , json.resp.texto , json.resp.clase );
+                break;
+                default:
+                break;
+            }
+			/**/
+		})
+		.fail(function(xhr, status, error) {
+            get_Error( xhr );
+			$('body').waitMe('hide');
+		})
+		.always(function() {
+			$('body').waitMe('hide');
+		});
+	} catch (error) {
+		alert( error );
+		$('body').waitMe('hide');
+	}
+	//
+}
+/* ------------------------------------------------------------- */
+function dibujarCargador()
+{
+    //
+    var _dataEnvio ={
+        '_token': $('meta[name="csrf-token"]').attr('content') , 
+        'Token' : $('#frmDocumento #uu_id').val(),
+        'Id'    : $('#frmDocumento #id').val(),
+        'Flag' : _AuthFormulario
+    };
+    $('#formData').fileinput({
+        theme       : 'fas',
+        language    : 'es',
+        uploadUrl   : `${_URL_HOME}/adjunto/lap/xls/generico`,
+        allowedFileExtensions: [ 'xls' , 'xlsx' , 'pdf' ],
+        showPreview     : true ,
+        uploadExtraData : _dataEnvio,
+    }).on('fileuploaded', function( event, previewId, index, fileId) {
+        // >>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        console.log('File Uploaded', 'ID: ' + fileId + ', Thumb ID: ' + previewId);
+        varDump( previewId.response );
+
+        try {
+            var json = previewId.response.adjuntos[0];
+            var _Token = $('#frmDocumento #uu_id').val();
+            populateArchivoThumbs( previewId.response.adjuntos );
+            // CallBack
+            varDump(json.extension);
+            switch (json.extension) {
+                case 'xls':
+                case 'xlsx':
+                    cargar_xls_bd( _Token , json.id );
+                    break;
+                case 'pdf':
+                    break;
+            }
+        } catch (error) {
+            alert(error);
+        }
+
+        // >>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    }).on('filebatchuploadcomplete', function(event, preview, config, tags, extraData) {
+        // >>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        
+        $('#formData').fileinput('refresh');
+
+        // >>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    }).on('fileuploaderror', function(event, data, msg) {
+        // >>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        console.log('File Upload Error', 'ID: ' + data.fileId + ', Thumb ID: ' + data.previewId);
+        // >>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    });
+}
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+</script>
