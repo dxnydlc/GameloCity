@@ -256,7 +256,7 @@ function initOrq()
     $('#frmDocumento #Codigo').val(0);
 }
 /* ------------------------------------------------------------- */
-function renovarToken()
+function renovarToken( obj )
 {
     var length = 25;
     var result           = '';
@@ -273,7 +273,7 @@ function renovarToken()
     for ( var i = 0; i < length; i++ ) {
         result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
-    $('#frmDocumento #uu_id').val( result );   
+    $( obj ).val( result );   
 }
 /* ------------------------------------------------------------- */
 function getAll()
@@ -299,7 +299,7 @@ function getAll()
         .done(function(  json ) {
             switch (json.codigo) {
                 case 200:
-                    dibujarTabla_cab( json.data , '#wrapperTable' );
+                    dibuja_tablita( json.data , '#wrapperTable' , 'CAB' )
                 break;
                 default:
                 break;
@@ -602,6 +602,66 @@ function guardar_Data()
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
+function dibuja_tablita( json , _target , _tipo )
+{
+    //
+    var _htmlTabla = ``, _tableName = `wrapperTable`;
+    switch (_tipo) {
+        case 'CAB':
+            _tableName = `wrapperTable`
+            try {
+                table.destroy();
+            } catch (error) {}
+        break;
+        case 'DET':
+            _tableName = `tblDetalle`
+            try {
+                tblDetalle.destroy();
+            } catch (error) {}
+        break;
+    }
+    if( json.length > 0 )
+    {
+        //
+        _htmlTabla += `<table class=" table table-hover cell-border compact hover nowrap row-border table-striped table-hover " id="${_tableName}" cellspacing="0" width="100%" style="width:100%">
+        <thead>`;
+        _htmlTabla += `<tr>`;
+        // Dibujamos primero el head...
+        $.each( json[0] , function( key, rs ){
+            _htmlTabla += `<th>${key}</th>`;
+        });
+        _htmlTabla += `</tr>`;
+        _htmlTabla += `</thead>`;
+
+        // Ahora a dibujar el body...
+        _htmlTabla += `<tbody>`;
+        for (let index = 0; index < json.length; index++) {
+            //
+            const _rsData = json[index];
+            _htmlTabla += `<tr>`;
+            $.each( _rsData , function( key, rs ){
+                _htmlTabla += `<td>${rs}</td>`;
+            });
+            _htmlTabla += `</tr>`;
+            //
+        }
+        _htmlTabla += `</tbody>`;
+        //
+    }else{
+        _htmlTabla += `<thead>`;
+        _htmlTabla += `<tr>`;
+        _htmlTabla += `<th></th><th></th><th>No hay datos disponibles...</th>`;
+        _htmlTabla += `</tr>`;
+        _htmlTabla += `</thead>`;
+        _htmlTabla += `<tbody></tbody></table>`;
+    }
+    $(_target).html( _htmlTabla );
+    // ##################### D ###########################
+    setTimeout(function () {
+		aplicarDataTable( _tipo , _target );
+	}, 1000);
+    // ##################### D ###########################
+}
 /* ------------------------------------------------------------- */
 function del_Item( _uuid )
 {
