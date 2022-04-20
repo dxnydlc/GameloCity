@@ -208,6 +208,51 @@ var _urlServicio = `${_URL_NODE3}/api/lap_req_material/`;
             //
         });
         /* ------------------------------------------------------------- */
+        $(document).delegate('.edit_img', 'click', function(event) {
+            event.preventDefault();
+            var $id = $(this).data('id'), $uuid = $(this).data('uuid'), $nombre = $(this).data('nombre');
+            // ******************************
+            $.confirm({
+                title: 'Ediar archivo',
+                content: '' +
+                '<form action="" class="formName">' +
+                '<div class="form-group">' +
+                '<label>Ingrese nombre</label>' +
+                '<input type="text" class="name form-control" required value="'+$nombre+'" />' +
+                '</div>' +
+                '</form>',
+                buttons: {
+                    formSubmit: {
+                        text: 'Actualizar',
+                        btnClass: 'btn-blue',
+                        action: function () {
+                            var name = this.$content.find('.name').val();
+                            if(!name){
+                                $.alert('Ingrese un nombre');
+                                return false;
+                            }
+                            updateArchivos( $uuid , name )
+                        }
+                    },
+                    cancel: function () {
+                        //close
+                    },
+                },
+                onContentReady: function () {
+                    // bind to events
+                    var jc = this;
+                    this.$content.find('form').on('submit', function (e) {
+                        // if the user submits the form by pressing enter in the field.
+                        e.preventDefault();
+                        jc.$$formSubmit.trigger('click'); // reference the button and click it
+                    });
+                }
+            });
+        });
+        /* ------------------------------------------------------------- */
+        $("input[type='text']").on("click", function () {
+            $(this).select();
+         });
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
@@ -427,6 +472,12 @@ function getLocales( IdClienteProv )
 /* ------------------------------------------------------------- */
 function populateImg( json )
 {
+    /*
+    <style>
+    .thumbnail{
+        margin-bottom: 3px;
+    }
+    </style> */
     var _html = ``;
     if( json )
     {
@@ -434,7 +485,9 @@ function populateImg( json )
             _html += `<div class="col-xs-6 col-md-3 col-lg-2 " id="wp_img_${rs.id}" >
                 <a data-fancybox="gallery" href="${rs.url}" class="thumbnail" >
                     <img src="${rs.url}" alt="${rs.nombre_archivo}" />
-                    <a href="#" data-id="${rs.id}" data-uuid="${rs.uu_id}" class=" rem_img text-danger" ><i class="fa fa-close" ></i> quitar imagen</a>
+                    <smallid="name_img_${rs.id}" >${rs.nombre_archivo}</small>
+                    <a href="#" data-id="${rs.id}" data-uuid="${rs.uu_id}" class=" rem_img text-danger btn btn-danger btn-sm" ><i class="fa fa-close" ></i></a>
+                    <a href="#" data-id="${rs.id}" data-uuid="${rs.uu_id}" data-nombre="${rs.nombre_archivo}" class=" edit_img text-danger btn btn-primary btn-sm" ><i class="fa fa-edit" ></i></a>
                 </a>
             </div>`;
 		});
@@ -601,6 +654,53 @@ function guardar_Data()
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
+function updateArchivos( uuid , nombre )
+{
+	//
+	try {
+		$('#wrapper_imgs').waitMe({
+			effect  : 'facebook',
+			text    : 'Espere...',
+			bg      : 'rgba(255,255,255,0.7)',
+			color   : '#146436',fontSize:'20px',textPos : 'vertical',
+			onClose : function() {}
+		});
+		var _dataSerie = { 'nombre_archivo' : nombre };
+		$.ajax({
+			url     : `${_urlServicioFiles}${uuid}`,
+			method  : "PUT",
+			data    : _dataSerie ,
+			dataType: "json",
+			headers : {
+				"api-token"  : _TokenUser,
+				"user-token" : _token_node
+			}
+		})
+		.done(function(  json ) {
+			/**/
+			switch (json.codigo) {
+                case 200:
+                    // negocio...
+                    tostada2( json.resp );
+                break;
+                default:
+                break;
+            }
+			/**/
+		})
+		.fail(function(xhr, status, error) {
+			get_Error( xhr );
+			$('#wrapper_imgs').waitMe('hide');
+		})
+		.always(function() {
+			$('#wrapper_imgs').waitMe('hide');
+		});
+	} catch (error) {
+		alert( error );
+		$('#wrapper_imgs').waitMe('hide');
+	}
+	//
+}
 /* ------------------------------------------------------------- */
 function dibuja_tablita( json , _target , _tipo )
 {
@@ -713,49 +813,6 @@ function del_Item( _uuid )
 	//
 }
 /* ------------------------------------------------------------- */
-function dibuja_tablita( json , _target , _tipo )
-{
-    //
-    var _htmlTabla = ``;
-    if( json.length > 0 )
-    {
-        //
-        _htmlTabla += `<thead>`;
-        _htmlTabla += `<tr>`;
-        // Dibujamos primero el head...
-        $.each( json[0] , function( key, rs ){
-            _htmlTabla += `<th>${key}</th>`;
-        });
-        _htmlTabla += `</tr>`;
-        _htmlTabla += `</thead>`;
-
-        // Ahora a dibujar el body...
-        _htmlTabla += `<tbody>`;
-        for (let index = 0; index < json.length; index++) {
-            //
-            const _rsData = json[index];
-            _htmlTabla += `<tr>`;
-            $.each( _rsData , function( key, rs ){
-                _htmlTabla += `<td>${rs}</td>`;
-            });
-            _htmlTabla += `</tr>`;
-            //
-        }
-        _htmlTabla += `</tbody>`;
-        //
-    }else{
-        _htmlTabla += `<thead>`;
-        _htmlTabla += `<tr>`;
-        _htmlTabla += `<th></th><th></th><th>No hay datos disponibles...</th>`;
-        _htmlTabla += `</tr>`;
-        _htmlTabla += `</thead>`;
-        _htmlTabla += `<tbody></tbody>`;
-    }
-    varDump( _htmlTabla );
-    $(_target).html( _htmlTabla );
-    aplicarDataTable( _tipo );
-    //
-}
 /* ------------------------------------------------------------- */
 function dibujarTabla_detalle( json , _target )
 {
