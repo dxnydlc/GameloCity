@@ -8,6 +8,8 @@ var table, tblDetalle;
 /* ------------------------------------------------------------- */
 var _urlServicio = `${_URL_NODE3}/api/lap_req_material/`;
 /* ------------------------------------------------------------- */
+var _urlExcel = `${_URL_NODE3}/api/excel_carga/`;
+/* ------------------------------------------------------------- */
 var urlPDF = ``;
 var thePdf = null;
 var scale2 = 2.1;
@@ -402,7 +404,7 @@ function getAll()
 {
     try {
         //
-    $('#wrapperTable').waitMe({
+    $('#TablaHome').waitMe({
         effect  : 'facebook',
         text    : 'Espere...',
         bg      : 'rgba(255,255,255,0.7)',
@@ -421,7 +423,7 @@ function getAll()
         .done(function(  json ) {
             switch (json.codigo) {
                 case 200:
-                    dibuja_tablita( json.data , '#wrapperTable' , 'CAB' )
+                    dibuja_tablita( json.data , '#TablaHome' , 'CAB' )
                 break;
                 default:
                 break;
@@ -429,10 +431,10 @@ function getAll()
         })
         .fail(function(xhr, status, error) {
             get_Error( xhr );
-            $('#wrapperTable').waitMe('hide');
+            $('#TablaHome').waitMe('hide');
         })
         .always(function() {
-            $('#wrapperTable').waitMe('hide');
+            $('#TablaHome').waitMe('hide');
         });
     } catch (error) {
         alert( error );
