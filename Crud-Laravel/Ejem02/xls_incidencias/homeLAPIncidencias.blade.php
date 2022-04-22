@@ -24,6 +24,9 @@ Incidencias LAP
 <!-- Toast -->
 <link href="{{ asset('plugins/jquery-toast-plugin-master/src/jquery.toast.css') }}" rel="stylesheet"/>
 
+<script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@2.13.216/build/pdf.min.js" integrity="sha256-Yjn9rQHDeN29XFpZN9iixcSI5lf9Spfmv/3g+w3gqao=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.13.216/pdf.worker.min.js"></script>
+
 
 @endsection
 
@@ -87,8 +90,9 @@ Incidencias LAP
                                     <!-- ./col -->
                                 </div>
                                 <hr>
-                                <table class=" table table-hover cell-border compact hover nowrap row-border table-striped table-hover " id="wrapperTable" cellspacing="0" width="100%" style="width:100%">
-                                </table>
+                                <div id="TablaHome"></div>
+                                <!--<table class=" table table-hover cell-border compact hover nowrap row-border table-striped table-hover " id="wrapperTable" cellspacing="0" width="100%" style="width:100%">
+                                </table>-->
                             </div>
                         <!-- ./box-body -->
                         <div class="box-footer" >

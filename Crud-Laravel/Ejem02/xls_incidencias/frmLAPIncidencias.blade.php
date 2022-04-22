@@ -79,7 +79,7 @@
                     <hr>
                     <a id="btnOpenModalFiles" href="#" class="btn btn-primary ">Cargar archivo.</a>
                     <hr>
-                    <div class="row" id="wrapper_imgs" ></div>
+                    <div id="wrapper_thumbs_files"></div>
                     <hr>
 
                 </div>
