@@ -714,8 +714,7 @@ function listarExcelByIdFile( IdFile )
 			switch (json.codigo) {
                 case 200:
                     // negocio...
-                    dibujarTabla_detalle( json.data , '#tblDetalle' );
-                    //tostada( json.resp.titulo , json.resp.texto , json.resp.clase );
+                    dibuja_tablita( json.data , '#tableDetalle' , 'DET' );
                 break;
                 default:
                 break;
