@@ -76,18 +76,12 @@
                         <!-- ./col -->
                     </div>
                     <!-- ./row -->
-                    <hr>
-                    <a id="btnOpenModalFiles" href="#" class="btn btn-primary ">Cargar archivo.</a>
-                    <hr>
-                    <div id="wrapper_thumbs_files"></div>
-                    <hr>
-
                 </div>
                 <!-- /.box-body -->
                 <div class="box-footer">
-                    <a href="#" id="btn-updateLista" ><i class="fa fa-refresh"  ></i> Actualizar</a>
-                    <table class=" table table-hover cell-border compact hover nowrap row-border table-striped table-hover " id="tblDetalle" cellspacing="0" width="100%" style="width:100%">
-                    </table>
+                    <a id="btnOpenModalFiles" href="#" class="btn btn-primary ">Cargar archivo.</a>
+                    <hr>
+                    <div id="wrapper_thumbs_files"></div>
                 </div>
             </div>
         </div>
