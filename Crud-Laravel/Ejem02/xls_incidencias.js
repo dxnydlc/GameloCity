@@ -184,6 +184,28 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = '//mozilla.github.io/pdf.js/build/pdf.w
         $(document).delegate('.docDelete', 'click', function(event) {
             event.preventDefault();
             var _id = $(this).data('id'), _uuid = $(this).data('uuid'), _nombre = $(this).data('nombre');
+            $.confirm({
+                title: 'Confirmar',
+                type    : 'orange',
+                content: 'Confirme anular el documento',
+                autoClose: 'Cancelar|10000',
+                buttons: {
+                    Confirmar: {
+                        keys: [ 'enter','Y' ],
+                        text : 'Confirmar (Y)',
+                        btnClass: 'btn-blue',
+                        action : function () {
+                            anularDoc( $uuid );
+                        },
+                    },
+                    Cancelar: {
+                        keys: [ 'N' ],
+                        action : function () {
+                            //
+                        }
+                    },
+                }
+            });
         });
         /* ------------------------------------------------------------- */
         $(document).delegate('.itemDelete', 'click', function(event) {
@@ -201,7 +223,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = '//mozilla.github.io/pdf.js/build/pdf.w
                         text : 'Confirmar (Y)',
                         btnClass: 'btn-blue',
                         action : function () {
-                            delDocumento( $uuid );
+                            delDocumento( _uuid );
                         },
                     },
                     Cancelar: {
@@ -660,6 +682,10 @@ function guardar_Data()
                     $('#frmDocumento #id').val( json.item.id );
                     $('#frmDocumento #Codigo').val( json.item.Codigo );
                 break;
+                case 202:
+                    // denegado...
+                    tostada( json.title , json.texto , json.clase );
+                break;
                 default:
                 break;
             }
@@ -735,6 +761,58 @@ function listarExcelByIdFile( IdFile )
 	//
 }
 /* ------------------------------------------------------------- */
+function anularDoc( uuid )
+{
+	//
+	try {
+		$('body').waitMe({
+			effect  : 'facebook',
+			text    : 'Espere...',
+			bg      : 'rgba(255,255,255,0.7)',
+			color   : '#146436',fontSize:'20px',textPos : 'vertical',
+			onClose : function() {}
+		});
+		var _dataSerie = { 'Codigo' : $('#frmDocumento #Codigo').val() };
+		$.ajax({
+			url     : `${_urlServicio}${uuid}`,
+			method  : "DELETE",
+            data    : _dataSerie,
+			dataType: "json",
+			headers : {
+				"api-token"  : _TokenUser,
+				"user-token" : _token_node
+			}
+		})
+		.done(function(  json ) {
+			/**/
+			switch (json.codigo) {
+                case 200:
+                    // negocio...
+                    tostada2( json.resp );
+                    getAll();
+                break;
+                case 202:
+                    // denegado...
+                    tostada( json.title , json.texto , json.clase );
+                break;
+                default:
+                break;
+            }
+			/**/
+		})
+		.fail(function(xhr, status, error) {
+			get_Error( xhr );
+			$('body').waitMe('hide');
+		})
+		.always(function() {
+			$('body').waitMe('hide');
+		});
+	} catch (error) {
+		alert( error );
+		$('body').waitMe('hide');
+	}
+	//
+}
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
@@ -1144,7 +1222,7 @@ function dibuja_tablita( json , _target , _tipo )
         _htmlTabla += `<tbody></tbody>`;
     }
     _htmlTabla += `</table>`;
-    varDump( _htmlTabla );
+    // varDump( _htmlTabla );
     $(_target).html( _htmlTabla );
     // ##################### D ###########################
     setTimeout(function () {

@@ -79,8 +79,8 @@ if( $('#correlativo').val() == '' ){
   var b = moment( $('#fecFi').val() );
   var $dias = parseInt( b.diff(a, 'days') );
   if( $dias > 90 ){
-	alert('sÃ³lo se puede buscar por un rango mÃ¡ximo de 90 dÃ­as.');
-	return true;
+	alert('Solo se puede buscar por un rango maximo de 90 dias.');
+	//return true;
   }
 }
 

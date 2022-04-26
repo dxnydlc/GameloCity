@@ -61,30 +61,21 @@ function call_ajax()
 			}
 		})
 		.done(function(  json ) {
-			/**
+			/**/
 			switch (json.codigo) {
                 case 200:
                     // negocio...
-                    tostada( json.resp.titulo , json.resp.texto , json.resp.clase );
-                    $('#frmDocumento #id').val( json.item.id );
-                    $('#frmDocumento #Codigo').val( json.item.Codigo );
+                    tostada2( json.resp );
+                    getAll();
+                break;
+                case 202:
+                    // denegado...
+                    tostada( json.title , json.texto , json.clase );
                 break;
                 default:
                 break;
             }
 			/**/
-			switch(json.estado)
-			{
-				case 'ERROR':
-					Swal.fire(json.error);
-				break;
-				case 'OK':
-					// negocio...
-					var $jsonData = populateCC( json );
-					table.clear();
-					table.rows.add($jsonData).draw();
-				break;
-			}
 		})
 		.fail(function(xhr, status, error) {
 			capturaError( xhr );
