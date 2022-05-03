@@ -1527,7 +1527,8 @@ function dibujarCargador()
         varDump( previewId.response );
 
         try {
-            var json = previewId.response.adjuntos[0];
+            var _NroItems = previewId.response.adjuntos.length;
+            var json = previewId.response.adjuntos[ _NroItems-1 ];
             var _Token = $('#frmDocumento #uu_id').val();
             populateArchivoThumbs( previewId.response.adjuntos );
             // CallBack
