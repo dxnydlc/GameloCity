@@ -195,7 +195,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = '//mozilla.github.io/pdf.js/build/pdf.w
                         text : 'Confirmar (Y)',
                         btnClass: 'btn-blue',
                         action : function () {
-                            anularDoc( $uuid );
+                            anularDoc( _uuid );
                         },
                     },
                     Cancelar: {
@@ -1512,6 +1512,7 @@ function dibujarCargador()
         '_token': $('meta[name="csrf-token"]').attr('content') , 
         'Token' : $('#frmDocumento #uu_id').val(),
         'Id'    : $('#frmDocumento #id').val(),
+        'Cod01' : $('#frmDocumento #Codigo').val(),
         'Flag' : _AuthFormulario
     };
     $('#formData').fileinput({
