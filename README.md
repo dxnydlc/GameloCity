@@ -16,6 +16,9 @@ Codigos que más vamos a usar en el proyecto, así como ejemplos de uso.
 | JConfirm | https://craftpip.github.io/jquery-confirm/ |
 | pdf xml | https://dsiscom.com/convertir-xml-a-pdf-para-peru/ |
 | Validar xml | https://www.xmlvalidation.com/ |
+| Texto a voz | http://texttospeechrobot.com/tts/es/texto-a-voz/ |
+| Paleta de colores | https://colors.dopely.top/palettes |
+
 
 
 ## License
