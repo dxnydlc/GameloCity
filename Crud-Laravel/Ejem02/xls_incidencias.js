@@ -61,6 +61,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = '//mozilla.github.io/pdf.js/build/pdf.w
         $(document).delegate('.cerrarFrame','click',function(e){
             e.preventDefault();
             $('a[href="#tabHome"]').tab('show');
+            table.columns.adjust().draw();
         });
         /* ------------------------------------------------------------- */
         $(document).delegate('.docEdit', 'click', function(event) {
@@ -681,6 +682,7 @@ function guardar_Data()
                     tostada( json.resp.titulo , json.resp.texto , json.resp.clase );
                     $('#frmDocumento #id').val( json.item.id );
                     $('#frmDocumento #Codigo').val( json.item.Codigo );
+                    getAll();
                 break;
                 case 202:
                     // denegado...
