@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "ssays-orquesta-252414",
+  "private_key_id": "c07b008d78880cbaacf6dcc9817d976f30c6c07c",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCPlDLlO93wvxT4\n87c4V5hGdX52SP6NnblOiJjw+hlRTbp1HoWBiRT8STwZMEwTIivknQRxkRDf9w7H\n21W4sW/rqdNbSOemgDZWkBxCn4Vm47b6py/0cKVGNGlflB9JGo6ReIpRzWCBee0c\n/y0U0lRzGfgWsDmOu+xEgMWTp9m8JlSQSxBUTwFBMgy5/BuBBKNpK23JkV11X0qm\nQ7ROcT8ukHjkYAiYJcoETAuw0/4Ga46V5JpMb9x5lhIUXYJ/q8P6fVemaduZkJac\nzS5TQfTTWULzbLI+GSMCbV9x29L0SJhm1K3J/JhEDz+KZgJGjKASzL3Szt9k7bTY\nGxR6cjVxAgMBAAECggEAAdsX1OtMrf9ySg0WzOIikQqUvpR1jqc/jW3QXqqegcGg\nJUJmb5Gx7th6SXypbXfigSgSz7r6lyjoDOcSkq2sdV6l4W16tqXvZ3gH/XtDxXXJ\n2C/DO9G27GAVQP7qCc8pKsuX+IDpYrlzBw4FuA0UU8NXd+E1C6Zb+/JKjq/u09k8\n1GQUA4wBA0erboayGqiVNaQ/RAkEuh/JppD/OMdKpw1PXTp5WdsqZuF55UgFOAlX\nt8u19EO3reVOZ++UVDqMjStHyjgADeWL3I+iZ2Ijgg5Z9f7l6lQ8Y4MDA+pUJtS5\nSWxxnt8D7BUTuRm9fZ1YWgvN/2Q6erGXtTTXD0KePwKBgQC/4nYkaXcK51eG4y5d\nIKL55TOh35Z+4rLHHI3qjOp3ylslyrtlAJkaastBRlJFxpimAPaSCvvGQgp3D6k3\n64Ie9Ojg5PqHrVwGFbcldU4cIh5PB/vzO8dBx3kYJMGEySNIXah2Leg9KdJ6LBms\nc+tTp2V8CQC0s3kcIlXEdlxlEwKBgQC/jbwjm0wVJprA5EYakEkKunBYS3JX7TX3\nJWxa8aJFN6yZ3ZU7kCP0GJaGy3rzQNUwWC1rmUiV/H+TwK6Hn0phM3IGTe8juLV/\nuQMRDSy5edFTfmLXW9kz9dbV2CKYhhZg0wIEBLFiiZnhJeMb9rPstouZbfyf+SXH\nw5jttS9/6wKBgQChlv5Sz5X2Ure82hgzSMa2lzQR/45nMFXJo9xHR4A0fO6hNsb0\n2boVKxYb1DJ4nDP0qB79Ac7hOMBDX6brdqLPmwN6UJpCI9W5MhRXsR+kRX8sotak\nERVN6cOqd1mYjyHtUSIK08Idr9iWFglQ1xW4DuJBv/seMX2uGaQMnHhWjQKBgGSc\n1sBBFsJZR5mfjS7wsFzhNpc58bI7V0gcMQDHwHro1lDvMS5a9HeG3rGoeUkBubit\n6BWHKrgVKxF5eHKl+VR6yB6FmuFBaJvQmsq/B8nYMVnQnawOg1SmgRRLdUh1zZVH\n39wqdt2R9vBqjRKoDzN7YnHRcoq4O97kXxQkQfHHAoGBAILfJy+K6lTunwhjy6+G\nU+0N/MeH2WR9oUTwb6F2s1QQkRHc7U/xrCuviG/27vB7PaQuxoikhrC/wBdpeDZe\n2vKSK3Ycjl6sD1NxlH8VH03mXTg9P7cWTMI9qARUXZ+9dQ44ics93IoWCcbPcXGX\nyFpvB0/kquWOhb5tXq3vkF8v\n-----END PRIVATE KEY-----\n",
+  "client_email": "ssayspdf@ssays-orquesta-252414.iam.gserviceaccount.com",
+  "client_id": "116639650247873476333",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/ssayspdf%40ssays-orquesta-252414.iam.gserviceaccount.com"
+}
