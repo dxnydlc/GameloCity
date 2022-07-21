@@ -18,6 +18,7 @@ Codigos que más vamos a usar en el proyecto, así como ejemplos de uso.
 | Validar xml | https://www.xmlvalidation.com/ |
 | Texto a voz | http://texttospeechrobot.com/tts/es/texto-a-voz/ |
 | Paleta de colores | https://colors.dopely.top/palettes |
+| Admin lte iconos | http://localhost/plantillas/AdminLTE-2.4.0/pages/UI/icons.html |
 
 
 
