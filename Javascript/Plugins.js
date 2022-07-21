@@ -78,8 +78,8 @@ function call_ajax()
 			/**/
 		})
 		.fail(function(xhr, status, error) {
-			capturaError( xhr );
-			// get_Error( xhr );
+			// capturaError( xhr );
+			get_Error( xhr );
 			$('#wrapperTable').waitMe('hide');
 		})
 		.always(function() {

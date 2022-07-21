@@ -1,0 +1,76 @@
+// CertificadoModel.js
+
+module.exports = (sequelize, type) => {
+	return sequelize.define('utb_certificadonumerado',{
+		IdCertificadoNum:{
+			type : type.INTEGER,
+			primaryKey : true,
+			autoIncrement: false
+		},
+		uu_id 			: type.STRING,
+		IdClienteProv 	: type.DOUBLE,
+		nombre_cliente 	: type.STRING,
+		FechaServicio 	: type.DATEONLY,
+		FechaVencimiento: type.DATEONLY,
+		Direccion 		: type.TEXT,
+		AreaTratada 	: type.TEXT,
+		NroOS 			: type.TEXT,
+		NroFactura 		: type.TEXT,
+		Frecuencia 	: type.STRING,
+		C010 		: type.TEXT,
+		C011 		: type.TEXT,
+		Desinsectacion 		: type.TEXT,
+		Desratizacion 		: type.TEXT,
+		Desinfeccion 		: type.TEXT,
+		LimpCisternaAgua 	: type.TEXT,
+		LimpTanqueAgua 		: type.TEXT,
+		LimpTanqueSeptico 	: type.TEXT,
+		C018 			: type.INTEGER,
+		Correspondido 	: type.TEXT,
+		IdSucursal 		: type.TEXT,
+		sucursal 		: type.TEXT,
+		Estado 			: type.TEXT,
+		C022 			: type.TEXT,
+		IdGiro 			: type.INTEGER,
+		nombre_giro 	: type.STRING,
+		TipoDocOrigen 	: type.TEXT,
+		NroDocOrigen 	: type.TEXT,
+		C026 			: type.TEXT,
+		AprobadoPor 	: type.TEXT,
+		FechaAprobado 	: type.DATE,
+		FechaAnulado 	: type.DATE,
+		UsuarioAnulado 	: type.STRING,
+		MotivoAnulacion : type.TEXT,
+		FechaMod 		: type.DATE,
+		UsuarioMod 		: type.INTEGER,
+		UsuarioCreado 	: type.STRING,
+		NroOT 			: type.TEXT,
+		FechaEmision 	: type.DATEONLY,
+		NomComercial 	: type.TEXT,
+		Nota 			: type.TEXT,
+		url_imagen 		: type.STRING,
+		url_pdf 		: type.STRING,
+		url_zip 		: type.STRING,
+		chk_ExtraFecha_Servicio : type.STRING,
+		ExtraFecha_Servicio : type.STRING,
+		Extra_Corresp 		: type.STRING,
+		Extra_Vencimiento 	: type.STRING,
+		Extra_NomComercial 	: type.STRING,
+		Extra_InfAdicional 	: type.TEXT,
+		id_empresa 			: type.INTEGER,
+		empresa 			: type.STRING,
+		FechaFacturacion 	: type.DATE,
+		deleted_at 			: type.DATE,
+		createdAt: {
+			type: type.DATE,
+			field: 'created_at',
+		},
+		updatedAt: {
+			type: type.DATE,
+			field: 'updated_at'
+		}
+	},{
+		timestamps: true,
+		freezeTableName: true
+	})
+}

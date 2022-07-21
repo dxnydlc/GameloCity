@@ -1,0 +1,415 @@
+<?php 
+$fecha_out = '';
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Certificado# {{ $data['data']->IdCertificadoNum }}</title>
+
+        <!-- <link href="formato.css" rel="stylesheet" type="text/css"></link>-->
+<style type="text/css">
+#divContenedor{
+    margin: auto;
+}
+/* 
+    Document   : formato_certificado
+    Created on : 05-mar-2013, 16:35:20
+    Author     : ssayspc082
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/* 
+   TODO customize this sample style
+   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
+*/
+
+root { 
+    display: block;
+}
+
+body{
+    border: 0px;
+    margin: 0px;
+    padding: 0px;
+    font-size: 13pt;
+    font-family: serif; 
+}
+#divContenedor{
+    position: relative;
+    border: 0px solid;
+    width: 297mm;
+    height: 210mm;
+    /*margin-top:-5px;*/
+  /* background-image: url(/sisorquesta/img/formatos/Frontal.jpg);*/
+    background-size:297mm 210mm;
+    background-position:1mm -4.3mm;
+    background-repeat:no-repeat;
+    border:0px solid #000;
+}
+#divDetalle{
+    border: 0px solid;
+    position: absolute;
+    top:163mm;
+    left:42mm;
+    font-size: 15pt;
+    width: 113mm;
+    /*background-color:#ccc;    */
+    
+}
+#divNomCliente{
+    border: 0px solid; 
+    position: absolute;
+    top:224mm;
+    left:20mm;
+    width: 255mm;
+}
+#divDireccion{
+    border: 0px solid;
+    position: absolute;
+    top:235mm;
+    left:37mm;
+    /*background-color:#CCC;*/
+    width: 222mm;
+}
+#divDireccionPeque{
+    border: 0px solid;
+    position: absolute;
+    font-size:10pt;
+    top:235mm;
+    left:37mm;
+    width: 222mm;
+}
+#divDireccionPequem{
+    border: 0px solid;
+    position: absolute;
+    font-size:9pt;
+    top:235mm;
+    left:37mm;
+    width: 222mm;
+}
+#divDireccionPequem1{
+    border: 0px solid;
+    position: absolute;
+    font-size:7.5pt;
+    top:235mm;
+    left:37mm;
+    width: 222mm;
+}
+
+/*GIRO*/
+
+#divGiro{
+    border: 0px solid; 
+    position: absolute;
+    top:248mm;
+    /*font-size:10px;*/
+    left:22mm;
+    width: 125mm;
+    /*background-color:#CCC;*/
+}
+#divGiroPeque{
+    border: 0px solid; 
+    position: absolute;
+    top:248mm;
+    font-size:12px;
+    left:22mm;
+    width: 113mm;
+/*  background-color:#CCC;*/
+    }
+    
+    /*FIN DE GIRO*/
+        
+#divArea{
+    border: 0px solid;
+    position: absolute;
+    top:248mm;
+    left:221mm;
+    width: 80mm;
+    /*background-color:#CC3;*/
+}
+
+#divAreaPeque{
+    border: 0px solid;
+    position: absolute;
+    top:248mm;
+    left:221mm;
+    width: 80mm;
+    font-size:12px;
+    /*background-color:#CC3;*/
+}
+
+#divFechaServicio{
+    border: 0px solid;
+    position: absolute;
+    top:261mm;
+    font-size: 15pt;
+    left:78mm;
+}
+#divVencimiento{
+    border: 0px solid;
+    position: absolute;
+    top:146mm;
+    left:62mm;
+    width: 30mm;
+}
+#divFactura{
+    border: 0px solid;
+    position: absolute;
+    top:143mm;
+    left:130mm;
+    width: 50mm;
+    height: 18px;
+}
+#divOS{
+    border: 0px solid; 
+    position: absolute;
+    font-size:10px;
+    top:149mm;
+    left:225mm;
+    width: 48mm;
+}
+
+#divDiaSist{
+    border: 0px solid; 
+    position: absolute;
+    top:286mm;
+    left:100mm;
+    font-size: 15pt;
+    width: 10mm;
+}
+#divMesSist{
+    border: 0px solid; 
+    position: absolute;
+    top:286mm;
+    left:140mm;
+    font-size: 15pt;
+    width: 30mm;
+}
+#divAnioSist{
+    border: 0px solid; 
+    position: absolute;
+    top:286mm;
+    font-size: 15pt;
+    left:215mm;
+    width: 20mm;
+}
+
+
+/*Posterior*/
+
+#divContenedorP{
+    position: relative;
+    border: 0px solid;
+    width: 297mm;
+    height: 210mm;
+    font-size:13pt;
+    /*margin-top:-5px;*/
+ /* background-image: url(/sisorquesta/img/formatos/Posterior.jpg);*/
+    background-size:297mm 210mm;
+    background-position:1mm -4.3mm;
+    background-repeat:no-repeat;
+    /*border:1px solid #000;*/
+}
+
+.postP{position:relative; left:155mm;}
+#divOSP{top:50mm; left:188mm; font-size:25pt;}
+#divAreaP{top:70mm; left:188mm; font-size:25pt;}
+#divCorresP{top:93mm; height:20px; left:188mm; font-size:25pt;}
+#divFecVenP{top:117mm; height:20px; left:188mm;font-size:25pt;}
+#divFactP{top:148mm; left:188mm; font-size:25pt;}
+#numcert{ position:absolute; top:204mm; left:188mm; font-size:25pt;}
+#nomcert{position:absolute; top:197mm; left:36mm; font-size:27pt;}
+#divInfP{position:absolute; top:252mm; left:38mm;}
+
+</style>
+
+    </head>
+<body onload="window.print()">
+    
+
+<style type="text/css" media="print">
+  @page { size: landscape; }
+</style>
+
+    <div id="divContenedor">
+
+        <!-- DETALLE -->
+        <div id="divDetalle">
+
+            <table  align="left" border="0" cellspacing="0" cellpadding="0">
+                <tr height="38" valign="middle">
+                    <td class="centro" width="17" ><?php echo ''.$data["data"]->Desinsectacion ?></td>
+                    <td class="izquierda" width="310" ></td>
+                    <td class="centro" width="101" ><?php echo ''.$data["data"]->LimpCisternaAgua ?></td>
+                    <td class="izquierda" width="10"></td>
+                    
+                </tr>
+                <tr height="33" valign="middle">
+                    <td colspan="4"></td>
+                </tr>
+                <tr height="40" valign="middle">
+                    <td class="centro"><?php echo ''.$data["data"]->Desratizacion ?></td>
+                    <td class="izquierda" ></td>
+                    <td class="centro"><?php echo ''.$data["data"]->LimpTanqueSeptico ?></td>
+                    
+                    <td class="izquierda"></td>
+                    
+                </tr >
+                <tr height="41" valign="middle">
+                    <td colspan="4"></td>
+                </tr>
+                <tr height="20" valign="middle">
+                    <td class="centro"><?php echo '' . $data["data"]->Desinfeccion ?></td>
+                    <td class="izquierda" ></td>
+                    <td class="centro"><?php //echo '' . $rs["OPT6"] ?></td>
+                    <td class="izquierda"></td>
+                    
+                </tr>
+
+            </table>
+
+        </div>
+
+        <div id="divNomCliente">                
+            <?php 
+            
+        //  $temporal = explode("-",$rs["NOMC"]);
+            
+            if( $data["data"]->NomComercial == '' ){
+                echo '' . htmlspecialchars( $data["data"]->nombre_cliente );
+            }
+            else{
+                echo '' .htmlspecialchars($data["data"]->NomComercial);
+            }
+            /*
+                else{
+                if( $data['data']->Extra_NomComercial == 0 || $data['data']->Extra_NomComercial == '' ){
+
+            echo '' . htmlspecialchars($data["data"]->nombre_cliente).' / '.htmlspecialchars($data["data"]->NomComercial);     
+                    }else{
+            echo '' .htmlspecialchars($data["data"]->NomComercial);         
+                    }   
+            
+                }
+                /**/
+             ?>
+        </div>
+             
+        <!-- Direccion-->  
+        <?php $longdir =strlen($data["data"]->Direccion); ?>
+                
+        <?php if($longdir>100 and $longdir<=139){?>
+        
+        <div id="divDireccionPeque">
+
+            <?php echo ''.htmlspecialchars($data["data"]->Direccion) ?>
+        </div>
+            <?php
+            }else if($longdir>139 and $longdir<=172){?>
+        <div id="divDireccionPequem">
+            <?php echo ''.$data["data"]->Direccion ?>
+        </div>
+         <?php
+            }else if($longdir>172){?>
+        <div id="divDireccionPequem1">
+            <?php echo ''.$data["data"]->Direccion ?>
+        </div>
+        <?php
+            }else{?>
+        <div id="divDireccion">
+            <?php echo '' . $data["data"]->Direccion?>
+        </div>
+        <?php }?>
+        <!--/Direccion -->
+                
+      <!-- Giro-->          
+                
+        <?php $longgiro =strlen($data["data"]->nombre_giro); ?>
+        
+        <?php if($longgiro>=52){?>
+        
+         <div id="divGiroPeque">
+            <?php echo '' .$data["data"]->nombre_giro?>
+        </div>  
+            <?php
+            }else{?>
+        <div id="divGiro">
+            <?php echo '' .$data["data"]->nombre_giro?>
+        </div>
+        <?php }?>
+        <!-- /Giro-->
+
+        <?php $longarea =strlen($data["data"]->AreaTratada); ?>
+        
+        <?php if($longarea>=52){?>
+        
+         <div id="divAreaPeque">
+            <?php echo '' . htmlspecialchars($data["data"]->AreaTratada) ?> " 
+        </div>  
+        <?php
+        }else{?>
+        <div id="divArea">
+            <?php echo '' . htmlspecialchars($data["data"]->AreaTratada) ?> " 
+        </div>
+        <?php }?>
+
+                
+
+
+                <div id="divFechaServicio">
+
+                    <?php
+                    #echo '>>>>>>>>>>'.$rs['chk_ExtraFecha_Servicio'];
+                    if( $data['data']->ExtraFecha_Servicio == '' ){
+                        list($anio,$mes,$dia) = explode('-', $data["data"]->FechaServicio );
+                        $fecha_out = $dia.'/'.$mes.'/'.$anio;
+                        echo '' . $fecha_out;
+                    }else{
+                        echo ''.$data['data']->ExtraFecha_Servicio;
+                    }
+                    ?>
+                </div>
+
+                <div id="divVencimiento">
+                    <?php echo '' //. $rs["FEC.VEN"] ?>
+                </div>
+
+                <div id="divFactura">
+
+                    <?php #echo '' . $rs["FACTURA"] ?>
+                </div>
+                <div id="divOS">
+
+                    <?php  echo '';  ?>
+                </div>  
+
+<?php
+list($anio,$mes,$dia) = explode('-', $data['data']->FechaServicio );
+$mesA = ['','enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+
+?>
+                <div id="divDiaSist">
+
+                    <?php echo $dia ?>
+                </div>  
+                <div id="divMesSist" align="center">
+
+                    <?php echo '' . ucfirst( $mesA[ intval($mes) ]) ?>
+                </div>  
+                <div id="divAnioSist">
+
+                    <?php echo $anio ?>
+                </div>  
+
+            </div>
+
+
+
+
+
+    </body>
+
+</html>

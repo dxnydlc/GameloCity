@@ -1,0 +1,96 @@
+//activosModel231.js
+
+// activosModel
+module.exports = (sequelize, type) => {
+	return sequelize.define('utb_activos',{
+		IdActivos : {
+			type : type.INTEGER,
+			primaryKey : true,
+			autoIncrement: true
+		},
+        Codigo          : type.STRING,
+        uu_id           : type.STRING,
+        FechaAltaBien   : type.DATE,
+        IdClaseBien     : type.INTEGER,
+		clase_bien      : type.STRING,
+		Marca           : type.STRING,
+        Modelo          : type.STRING,
+        NroEtiqFisica   : type.INTEGER,
+        NroMotor        : type.INTEGER,
+        MaterialPred    : type.STRING,
+        Color           : type.STRING,
+        AnioFab         : type.STRING,
+        Accesorio       : type.STRING,
+		Alto            : type.DECIMAL(20,2),
+        Ancho           : type.DECIMAL(20,2),
+        Largo           : type.DECIMAL(20,2),
+        Peso            : type.DECIMAL(20,2),
+		IdClienteProv   : type.INTEGER,
+        cliente         : type.STRING,
+        IdSucursal      : type.INTEGER,
+        sucursal        : type.STRING,
+        Direccion       : type.STRING,
+        AreaLocal       : type.INTEGER,
+        Piso            : type.INTEGER,
+        CodEmp          : type.INTEGER,
+        nombre_custodio : type.STRING,
+        FechaInicioCust : type.DATE,
+        FechaFinCustodia: type.DATE,
+        NroDocumento    : type.STRING,
+        CompaniaSeg     : type.STRING,
+        PolizaSeg       : type.STRING,
+        Vigencia        : type.STRING,
+        Placa           : type.STRING,
+        serie           : type.STRING,
+        TarjPropiedad   : type.STRING,
+        Certificado     : type.STRING,
+        SoatVigente     : type.STRING,
+        NroRevTecnica   : type.STRING,
+        FechaBaja       : type.STRING,
+        MotivoBaja      : type.STRING,
+        CuentaContAsoc  : type.STRING,
+        NroVoucher      : type.STRING,
+        IdProveedor     : type.INTEGER,
+        Proveedor       : type.STRING,
+        TelProveedor    : type.STRING,
+        NroFactura      : type.STRING, // ok
+        GuiaRemision    : type.STRING, // ok
+        OrdenCompra       : type.STRING, // ok
+        Costo           : type.DECIMAL(20,2), 
+        EstadoConserv   : type.STRING,
+        CodigoAnterior  : type.STRING,
+        CodInvent       : type.INTEGER,
+        Observaciones   : type.STRING,
+        Estado          : type.STRING,
+        UsuarioMod      : type.STRING,
+        nombre_usuario  : type.STRING,
+        FechaMod        : type.DATE,
+        IdProvincia     : type.INTEGER,
+        provincia       : type.STRING,
+        IdTipoActivo    : type.INTEGER,
+        FechaCompra     : type.DATE,
+        IdSubClase      : type.INTEGER,
+        sub_clase       : type.STRING,
+        IdRegion        : type.INTEGER,
+        region          : type.STRING,
+        IdCentro        : type.INTEGER,
+        centro_costo    : type.STRING,
+        UsuarioCrea     : type.STRING,
+        FechaCrea       : type.DATE,
+        Capacidad       : type.STRING,
+        id_empresa      : type.INTEGER,
+        empresa         : type.STRING,
+        deleted_at      : type.DATE,
+		createdAt: {
+			type: type.DATE,
+			field: 'created_at',
+		},
+		updatedAt: {
+			type: type.DATE,
+			field: 'updated_at'
+		}
+	},{
+		timestamps: true,
+		freezeTableName: true
+	})
+}
