@@ -1,11 +1,11 @@
 
 
 <div class="row">
-    <div class="col s12"></div>
-    <div class="col s3"></div>
-    <div class="col s3"></div>
-    <div class="col s3"></div>
-    <div class="col s3"></div>
+    <div class="col s12 m12"></div>
+    <div class="col s12 m3"></div>
+    <div class="col s12 m3"></div>
+    <div class="col s12 m3"></div>
+    <div class="col s12 m3"></div>
 </div>
 <!-- ./row -->
 <div class="row">
@@ -23,6 +23,7 @@
     <div class="col s1">12</div>
 </div>
 <!-- ./row -->
+
 <div class="row">
     <div class="col s12">
         <span class="flow-text">This div is 12-columns wide on all screen sizes</span>
@@ -32,6 +33,25 @@
     </div>
 </div>
 <!-- ./row -->
+
+<div class="row">
+    <div class="col m2 s12 ">
+    </div>
+    <div class="col m2 s12 "></div>
+    <div class="col m2 s12 "></div>
+    <div class="col m2 s12 "></div>
+    <div class="col m2 s12 "></div>
+    <div class="col m2 s12 ">
+        <a id="btnGuardarFicha" class="waves-effect waves-light btn green darken-3  " ><i class="material-icons left">save</i>Guardar ficha</a>
+        <div id="updatedAt" class=" center-align " ></div>
+        <hr/>
+    </div>
+</div>
+<!-- ./row -->
+
+
+
+
 
 <!-- Caja de texto -->
 <div class=" input-field " >
@@ -50,6 +70,7 @@
     <textarea id="textarea1" name="Solicitud" class="materialize-textarea" ></textarea>
     <label for="textarea1">Textarea</label>
 </div>
+<!-- M.updateTextFields(); -->
 
 <!-- Simple combo -->
 <div class="input-field" >
@@ -70,7 +91,7 @@
         <p>A bunch of text</p>
     </div>
     <div class="modal-footer">
-        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+        <a href="#!" id="btnCerraModalA" class="modal-close waves-effect btn-flat grey lighten-1 " >Cerrar</a>
     </div>
 </div>
 <!--
@@ -81,9 +102,10 @@
 -->
 
 
+<a class="waves-effect waves-light btn green darken-3 "><i class="material-icons left">save</i>Guardar ficha</a>
 
 <a class="waves-effect waves-light btn">button</a>
-<a class="waves-effect waves-light btn"><i class="material-icons left">cloud</i>button</a>
+<a class="waves-effect waves-light btn"><i class="material-icons left">save</i>button</a>
 <a class="waves-effect waves-light btn"><i class="material-icons right">cloud</i>button</a>
 
 
@@ -128,6 +150,10 @@
 
 <!--
     $('.fixed-action-btn').floatingActionButton();
+    $('.fixed-action-btn').floatingActionButton({
+        direction    : 'left',
+        hoverEnabled : false
+    });
 -->
 
 
