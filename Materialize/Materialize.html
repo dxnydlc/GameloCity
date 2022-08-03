@@ -520,6 +520,29 @@ function aplicarDataTable( tipo )
     //
 }
 /* ------------------------------------------------------------- */
+$('#btnCrear').click(function (e) { 
+    e.preventDefault();
+    $('#frmDocumento #lblTitulo').html(`Nuevo archivo operarios`);
+    $('a[href="#tabDoc"]').tab('show');
+    $('#frmDocumento input[type="text"]').each(function(e){
+        $(this).val('');
+    });
+    $('#frmDocumento input[type="hidden"]').each(function(e){
+        $(this).val('');
+    });
+    $('#frmDocumento input[type="number"]').each(function(e){
+        $(this).val('0');
+    });
+    $('#frmDocumento textarea').each(function(e){
+        $(this).val('');
+    });
+    $('#frmDocumento #Codigo').val(0);
+    $('#frmDocumento #id').val(0);
+    renovarToken( '#frmDocumento #uu_id' );
+    //tblDetalle.columns.adjust().draw();
+});
+
+
 
 
 -->
