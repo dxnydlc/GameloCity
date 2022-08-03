@@ -1,4 +1,13 @@
 
+<form id="frmDiagPlaga" autocomplete="off" >
+	<input type="hidden" id="id" name="id" value="" />
+	<input type="hidden" id="uu_id" name="uu_id" value="" />
+	<input type="hidden" id="Codigo" name="Codigo" value="" />
+
+	<input type="hidden" id="Token" name="Token" value="" />
+	<input type="hidden" id="IdLocal" name="IdLocal" value="" />
+	<input type="hidden" id="Local" name="Local" value="" />
+</form>
 
 <div class="row">
     <div class="col s12 m12"></div>
@@ -172,6 +181,59 @@
 
 
 <!--
+    
+function call_ajax()
+{
+	//
+	try {
+		$('#wrapperTable').waitMe({
+			effect  : 'facebook',
+			text    : 'Espere...',
+			bg      : 'rgba(255,255,255,0.7)',
+			color   : '#146436',fontSize:'20px',textPos : 'vertical',
+			onClose : function() {}
+		});
+		var _dataSerie = $('#frmDocumento').serialize();
+		$.ajax({
+			url     : `${_URL_NODE3}/api/`,
+			method  : "POST",
+			data    : _dataSerie ,
+			dataType: "json",
+			headers : {
+				"api-token"  : _TokenUser,
+				"user-token" : _token_node
+			}
+		})
+		.done(function(  json ) {
+			/**/
+			switch (json.codigo) {
+                case 200:
+                    // negocio...
+                    tostada2( json.resp );
+                break;
+                case 202:
+                    // denegado...
+                    tostada( json.title , json.texto , json.clase );
+                break;
+                default:
+                break;
+            }
+			/**/
+		})
+		.fail(function(xhr, status, error) {
+			get_Error( xhr );
+			$('#wrapperTable').waitMe('hide');
+		})
+		.always(function() {
+			$('#wrapperTable').waitMe('hide');
+		});
+	} catch (error) {
+		alert( error );
+		$('#wrapperTable').waitMe('hide');
+	}
+	//
+}
+
 function call_ajax()
 {
 	// - //
@@ -231,4 +293,67 @@ function call_ajax()
 	}
 	//
 }
+
+
+function renovarToken( obj )
+{
+    var length = 25;
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    result += '-';
+    for ( var i = 0; i < length; i++ ) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    result += '-';
+    for ( var i = 0; i < length; i++ ) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    $( obj ).val( result );   
+}
+
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+//
+(function($){
+	$(document).ready(function()
+		{
+			/* ------------------------------------------------------------- */
+			/* ------------------------------------------------------------- */
+			/* ------------------------------------------------------------- */
+			/* ------------------------------------------------------------- */
+			/* ------------------------------------------------------------- */
+			/* ------------------------------------------------------------- */
+			/* ------------------------------------------------------------- */
+			/* ------------------------------------------------------------- */
+			/* ------------------------------------------------------------- */
+			/* ------------------------------------------------------------- */
+		});
+
+})(jQuery);
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+
 -->
