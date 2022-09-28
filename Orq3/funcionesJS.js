@@ -594,3 +594,142 @@ function guardarDoc()
 	//
 }
 /* ------------------------------------------------------------- */
+var favorite = [];
+$.each($("input[name='sport']:checked"), function(){
+	favorite.push($(this).val());
+});
+alert("My favourite sports are: " + favorite.join(", "));
+/* ------------------------------------------------------------- */
+$('#ddddd').click(function (e) { 
+	e.preventDefault();
+});
+/* ------------------------------------------------------------- */
+$("#ddddd").on( "click", function(e) {
+	e.preventDefault();
+});
+/* ------------------------------------------------------------- */
+setTimeout(function(){ alert("Hello"); }, 3000);
+/* ------------------------------------------------------------- */
+$("input[type='button']").click(function(){
+	var radioValue = $("input[name='gender']:checked").val();
+	if(radioValue){
+		alert("Your are a - " + radioValue);
+	}
+});
+/* ------------------------------------------------------------- */
+// url: _URL_NODE3+'/api/src/usuarios_select2/',
+// select2_productos
+// cc_select2
+// giros_select2
+var $eventCliente = $('#frmDocumento #cboCliente').select2({
+	ajax: {
+		url: _URL_NODE3+'/api/src/clientes2_select2/',
+		dataType: 'json',
+		data: function (params) {
+			var query = {
+				q : params.term,
+				"user_token" : _token_node
+			}
+			// Query parameters will be ?search=[term]&type=public
+			return query;
+		}
+	},
+	processResults: function (data) {
+		return {
+		results: data
+		};
+	},
+	minimumInputLength : 3,width : '100%'
+});
+/* ------------------------------------------------------------- */
+var num = 5.56789;
+var n = num.toFixed(2);
+/* ------------------------------------------------------------- */
+$(document).delegate('.delData', 'click', function(event) {
+	event.preventDefault();
+	var $id = $(this).data('id'), $uuid = $(this).data('uuid'), $nombre = $(this).data('nombre');
+});
+/* ------------------------------------------------------------- */
+$.confirm({
+	title: 'Confirmar',
+	type    : 'orange',
+	content: 'Confirme eliminar documento',
+	autoClose: 'Cancelar|10000',
+	buttons: {
+		Confirmar: {
+			keys: [ 'enter','Y' ],
+			text : 'Confirmar (Y)',
+			btnClass: 'btn-blue',
+			action : function () {
+				delDocumento( $uuid );
+			},
+		},
+		Cancelar: {
+			keys: [ 'N' ],
+			action : function () {
+				//
+			}
+		},
+	}
+});
+/* ------------------------------------------------------------- */
+$.confirm({
+	title   : 'Correcto',
+	content : 'Se cambió el estado de las OS<br>Pulse <b>Y</b> para continuar',
+	autoClose: 'Ok|30000',
+	type    : 'blue',
+	typeAnimated: true,
+	buttons: {
+		Ok: {
+			text : 'OK (Y)',
+			keys: ['Y'],
+			action: function () {
+				//
+			}
+		},
+	}
+});
+/* ------------------------------------------------------------- */
+$.dialog({
+	title   : 'Correcto',
+	content : 'Se quitó al personal de la lista.',
+});
+/* ------------------------------------------------------------- */
+$.confirm({
+	title   : 'Error',
+	content : 'Para aprobar el documento primero debe guardarlo.............................',
+	type    : 'red',
+	buttons : {
+		heyThere: {
+		  text: 'OK (Y)', // text for button
+		  btnClass: 'btn-blue', // class for the button
+		  keys: ['enter', 'y'], // keyboard event for button
+		  isHidden: false, // initially not hidden
+		  isDisabled: false, // initially not disabled
+		  action: function(heyThereButton){
+			  // longhand method to define a button
+			  // provides more features
+		  }
+		},
+	}
+});
+/* ------------------------------------------------------------- */
+$('#mdlArticulos').on('shown.bs.modal', function (e) {
+	// Pre seleccionar un combo select2
+	$("#frmDetalle #IdArticulo").select2('open');
+	$(".select2-search__field")[0].focus();
+});
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+
