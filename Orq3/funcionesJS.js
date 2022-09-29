@@ -600,6 +600,18 @@ $.each($("input[name='sport']:checked"), function(){
 });
 alert("My favourite sports are: " + favorite.join(", "));
 /* ------------------------------------------------------------- */
+// salto de linea a ,
+var arrCerts = NroCertificados.split("\n");
+var arrSeries = arrCerts.join(',');
+/* ------------------------------------------------------------- */
+// Seleccionar todo el texto on focus
+$("input[type='text']").click(function () {
+    $(this).select();
+});
+$("input[type='text']").on("click", function () {
+    $(this).select();
+});
+/* ------------------------------------------------------------- */
 $('#ddddd').click(function (e) { 
 	e.preventDefault();
 });
