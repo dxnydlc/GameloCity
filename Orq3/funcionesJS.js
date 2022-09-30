@@ -885,25 +885,30 @@ $("input[type='button']").click(function(){
 // select2_productos
 // cc_select2
 // giros_select2
-var $eventCliente = $('#frmDocumento #cboCliente').select2({
-	ajax: {
-		url: _URL_NODE3+'/api/src/clientes2_select2/',
-		dataType: 'json',
-		data: function (params) {
-			var query = {
-				q : params.term,
-				"user_token" : _token_node
-			}
-			// Query parameters will be ?search=[term]&type=public
-			return query;
-		}
-	},
-	processResults: function (data) {
-		return {
-		results: data
-		};
-	},
-	minimumInputLength : 3,width : '100%'
+// clientes2_select2
+let _IdAutorizado = $('#frmDocumento #IdAutorizado').select2({
+    ajax: {
+        url : `${_URL_NODE3}/api/src/usuarios_select2/` ,
+        dataType : 'json',
+        data : function (params) {
+            var query = {
+                q : params.term,
+                "user_token" : _token_node
+            }
+            return query;
+        }
+    },
+    processResults: function (data) {
+        return {
+        results: data
+        };
+    },
+    minimumInputLength : 3,width : '100%'
+});
+/* ------------------------------------------------------------- */
+_IdAutorizado.on("select2:select", function (e) { 
+    var _Id = e.params.data.id, _Texto = e.params.data.text;
+    console.log("select2:select", _Id );
 });
 /* ------------------------------------------------------------- */
 var num = 5.56789;
