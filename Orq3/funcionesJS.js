@@ -594,6 +594,258 @@ function guardarDoc()
 	//
 }
 /* ------------------------------------------------------------- */
+
+
+
+
+// ARCHIVOS
+$("#btnOpenModalFiles").on( "click", function(e) {
+    e.preventDefault();
+    /**/
+    try {
+        $('#formData').fileinput('destroy');
+    } catch (error) {
+        console.error(error);
+    }
+    dibujarCargador();
+    /**/
+    $('#mdlArchivos56').modal('show');
+});
+/**
+<!-- Modal -->
+<div class=" modal fade " id="mdlArchivos56" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false" >
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel" >Cargar archivos.</h4>
+			</div>
+			<div class="modal-body">
+
+                <div class="file-loading">
+                    
+                    <input id="formData" name="formData" type="file" multiple data-browse-on-zone-click="true" data-show-preview="true" >
+                </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class=" row " >
+    <div class=" col-lg-3 col-md-3 " >
+        <a id="btnOpenModalFiles" href="#" class="btn btn-primary "><i class="fa fa-cloud-upload" ></i> Cargar archivos.</a>
+    </div>
+    <!-- ./col -->
+    <div class=" col-lg-3 col-md-3 " ></div>
+    <!-- ./col -->
+    <div class=" col-lg-3 col-md-3 " ></div>
+    <!-- ./col -->
+    <div class=" col-lg-3 col-md-3 " ></div>
+    <!-- ./col -->
+</div>
+<!-- ./row -->
+<hr>
+<div class=" row " >
+    <div class=" col-lg-12 col-md-12 " >
+        <div id="wrapper_thumbs_files"></div>
+    </div>
+    <!-- ./col -->
+</div>
+<!-- ./row -->
+<hr>
+/**/
+function dibujarCargador()
+{
+    //
+    var _dataEnvio ={
+        '_token': $('meta[name="csrf-token"]').attr('content') , 
+        'Token' : $('#frmDocumento #uu_id').val(),
+        'Id'    : $('#frmDocumento #id').val(),
+        'IdDoc' : $('#frmDocumento #Codigo').val(),
+        'Flag' : _AuthFormulario
+    };
+    $('#formData').fileinput({
+        theme       : 'fas',
+        language    : 'es',
+        uploadUrl   : `${_URL_NODE3}/api/archivos_todos/carga/`,
+        allowedFileExtensions: [ 'xls' , 'xlsx' , 'pdf' , 'jpg' , 'jpeg' , 'png' , 'doc' , 'docx' , 'ppt' , 'pptx' ],
+        showPreview     : true ,
+        uploadExtraData : _dataEnvio,
+    }).on('fileuploaded', function( event, previewId, index, fileId) {
+        // >>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        console.log('File Uploaded', 'ID: ' + fileId + ', Thumb ID: ' + previewId);
+        varDump( previewId.response );
+
+        try {
+            var _NroItems = previewId.response.adjuntos.length;
+            var json = previewId.response.adjuntos[ _NroItems-1 ];
+            var _Token = $('#frmDocumento #uu_id').val();
+            populateArchivoThumbs( previewId.response.adjuntos );
+        } catch (error) {
+            alert(error);
+        }
+
+        // >>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    }).on('filebatchuploadcomplete', function(event, preview, config, tags, extraData) {
+        // >>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        
+        $('#formData').fileinput('refresh');
+        tostada2( { titulo : 'Correcto' , texto : 'Archivo(s) cargado' , clase : 'success' } );
+
+        // >>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    }).on('fileuploaderror', function(event, data, msg) {
+        // >>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        console.log('File Upload Error', 'ID: ' + data.fileId + ', Thumb ID: ' + data.previewId);
+        // >>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    });
+}
+/* ------------------------------------------------------------- */
+function populateArchivoThumbs( json )
+{
+    var _html = ``;
+    if( json )
+    {
+        $.each( json , function( key, rs ) {
+            switch (rs.extension) {
+                // ---------------------------------------------------------------
+                case 'xls':
+                case 'xlsx':
+                    _html += `
+                    <div class="col-xs-6 col-md-3 col-lg-2 " id="wrap_pdf${rs.id}" >
+                        <a target="_blank" data-id="${rs.id}" data-ext="${rs.extension}" data-uuid="${rs.uu_id}" data-codigo="${rs.Cod001}" href="${rs.url}" class=" thumbnail verFile " >
+                            <img src="https://ssays-orquesta.com/ico/excel-ico.png" alt="${rs.nombre_archivo}" />
+                            <small>${rs.nombre_archivo}</small>
+                            <a href="#" data-nombre="${rs.nombre_archivo}" data-id="${rs.id}" data-uuid="${rs.uu_id}" class=" delPDf text-danger" ><i class="fa fa-close" ></i> quitar archivo</a>
+                        </a>
+                    </div>`;
+                break;
+                // ---------------------------------------------------------------
+                case 'doc':
+                case 'docx':
+                    _html += `
+                    <div class="col-xs-6 col-md-3 col-lg-2 " id="wrap_pdf${rs.id}" >
+                        <a target="_blank" data-id="${rs.id}" data-ext="${rs.extension}" data-uuid="${rs.uu_id}" data-codigo="${rs.Cod001}" href="${rs.url}" class=" thumbnail verFile " >
+                            <img src="https://ssays-orquesta.com/ico/word-ico.png" alt="${rs.nombre_archivo}" />
+                            <small>${rs.nombre_archivo}</small>
+                            <a href="#" data-nombre="${rs.nombre_archivo}" data-id="${rs.id}" data-uuid="${rs.uu_id}" class=" delPDf text-danger" ><i class="fa fa-close" ></i> quitar archivo</a>
+                        </a>
+                    </div>`;
+                break;
+                // ---------------------------------------------------------------
+                case 'ppt':
+                case 'pptx':
+                    _html += `
+                    <div class="col-xs-6 col-md-3 col-lg-2 " id="wrap_pdf${rs.id}" >
+                        <a target="_blank" data-id="${rs.id}" data-ext="${rs.extension}" data-uuid="${rs.uu_id}" data-codigo="${rs.Cod001}" href="${rs.url}" class=" thumbnail verFile " >
+                            <img src="https://ssays-orquesta.com/ico/ppt-ico.png" alt="${rs.nombre_archivo}" />
+                            <small>${rs.nombre_archivo}</small>
+                            <a href="#" data-nombre="${rs.nombre_archivo}" data-id="${rs.id}" data-uuid="${rs.uu_id}" class=" delPDf text-danger" ><i class="fa fa-close" ></i> quitar archivo</a>
+                        </a>
+                    </div>`;
+                break;
+                // ---------------------------------------------------------------
+                case 'pdf':
+                    _html += `
+                    <div class="col-xs-6 col-md-3 col-lg-2 " id="wrap_pdf${rs.id}" >
+                        <a target="_blank" data-id="${rs.id}" data-ext="${rs.extension}" data-uuid="${rs.uu_id}" data-codigo="${rs.Cod001}" href="${rs.url}" class=" thumbnail verFile " >
+                            <img src="https://ssays-orquesta.com/ico/pdf-ico.png" alt="${rs.nombre_archivo}" />
+                            <small>${rs.nombre_archivo}</small>
+                            <a href="#" data-nombre="${rs.nombre_archivo}" data-id="${rs.id}" data-uuid="${rs.uu_id}" class=" delPDf text-danger" ><i class="fa fa-close" ></i> quitar archivo</a>
+                        </a>
+                    </div>`;
+                break;
+                // ---------------------------------------------------------------
+                default:
+                    _html += `<div data-ext="${rs.extension}" data-uuid="${rs.uu_id}" data-codigo="${rs.Cod001}" class="col-xs-6 col-md-3 col-lg-2 " id="wrap_pdf${rs.id}" >
+                        <a target="_blank" data-id="${rs.id}" data-fancybox="gallery" href="${rs.url}" class=" thumbnail verFile " >
+                            <img src="${rs.url}" alt="${rs.nombre_archivo}" />
+                            <small>${rs.nombre_archivo}</small>
+                            <a href="#" data-nombre="${rs.nombre_archivo}" data-id="${rs.id}" data-uuid="${rs.uu_id}" class=" delPDf text-danger" ><i class="fa fa-close" ></i> quitar imagen</a>
+                        </a>
+                    </div>`;
+                break;
+                // ---------------------------------------------------------------
+            }
+                    
+		});
+    }
+    $('#wrapper_thumbs_files').html( _html );
+}
+/* ------------------------------------------------------------- */
+function getArchivos()
+{
+	//
+	try {
+		$('#Contenedor').waitMe({
+			effect  : 'facebook',
+			text    : 'Espere...',
+			bg      : 'rgba(255,255,255,0.7)',
+			color   : '#146436',fontSize:'20px',textPos : 'vertical',
+			onClose : function() {}
+		});
+		var _dataSerie = {
+            Flag    : `SOL_CAMBIO_ESTADO_DOC` ,
+            Token   : $('#frmDocumento #uu_id').val() , 
+            Codigo  : $('#frmDocumento #Codigo').val() , 
+            Id : $('#frmDocumento #id').val() 
+        };
+		$.ajax({
+			url     : `${_URL_NODE3}/api/archivos22/get_archivos/`,
+			method  : "POST",
+			data    : _dataSerie ,
+			dataType: "json",
+			headers : {
+				"api-token"  : _TokenUser,
+				"user-token" : _token_node
+			}
+		})
+		.done(function(  json ) {
+			/**/
+			switch (json.codigo) {
+                case 200:
+                    // negocio...
+                break;
+                case 202:
+                    // denegado...
+                    tostada( json.title , json.texto , json.clase );
+                break;
+                default:
+                break;
+            }
+			/**/
+		})
+		.fail(function(xhr, status, error) {
+			get_Error( xhr );
+			$('#Contenedor').waitMe('hide');
+		})
+		.always(function() {
+			$('#Contenedor').waitMe('hide');
+		});
+	} catch (error) {
+		alert( error );
+		$('#Contenedor').waitMe('hide');
+	}
+	//
+}
+/* ------------------------------------------------------------- */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ------------------------------------------------------------- */
 var favorite = [];
 $.each($("input[name='sport']:checked"), function(){
 	favorite.push($(this).val());
