@@ -292,7 +292,7 @@ function get_Error( xhr )
 function dibuja_tablita( json , _target , _tipo )
 {
     //
-    var _htmlTabla = ``, _tableName = `wrapperTable`;
+    let _htmlTabla = ``, _tableName = `wrapperTable`;
     switch (_tipo) {
         case 'CAB':
             _tableName = `wrapperTable`
@@ -304,6 +304,12 @@ function dibuja_tablita( json , _target , _tipo )
             _tableName = `tblDetalle`
             try {
                 tblDetalle.destroy();
+            } catch (error) {}
+        break;
+        case 'AUTH':
+            _tableName = `tblAuth`
+            try {
+                tblAuth.destroy();
             } catch (error) {}
         break;
     }
@@ -361,7 +367,7 @@ function dibuja_tablita( json , _target , _tipo )
 function aplicarDataTable( tipo )
 {
     //
-    var _opciones = {
+    let _opciones = {
         "pagingType": "full_numbers",
         "lengthMenu": [
         [25, 50, 100],
@@ -464,6 +470,17 @@ function aplicarDataTable( tipo )
                 //
             }
             tblDetalle = $('#tblDetalle').DataTable( _opciones );
+            //tblDetalle.columns.adjust().draw();
+            //
+        break;
+        case 'AUTH':
+            //
+            try {
+                tblAuth.destroy();
+            } catch (error) {
+                //
+            }
+            tblAuth = $('#tblAuth').DataTable( _opciones );
             //tblDetalle.columns.adjust().draw();
             //
         break;
