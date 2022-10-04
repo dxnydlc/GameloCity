@@ -2,6 +2,35 @@
 // @drdelacruzm
 
 
+// ******* NODE JS *******
+socket.emit('accion:audit',{
+	user  : $nomU,
+	msg   : `Aprobar Req.Mat. # ${$('#frmDocumento #IdRequerimientoCab').val()}`,
+	dni   : $dniU,
+	serie : 0,
+	corr  : 0,
+	form  : _AuthFormulario,
+	url   : window.location.href,
+	token : ''
+});
+// ******* NODE JS *******
+
+
+// ******* NODE JS *******
+socket.emit('accion:audit',{
+	user  : $nomU,
+	msg   : `Aprobar Req.Mat. # ${$('#frmDocumento #IdRequerimientoCab').val()}`,
+	dni   : $dniU,
+	serie : $('#frmDocumento #Serie').val(),
+	corr  : $('#frmDocumento #Correlativo').val(),
+	form  : _AuthFormulario,
+	url   : window.location.href,
+	token : $('#frmDocumento #uu_id').val()
+});
+// ******* NODE JS *******
+
+
+
 // ######### FUNCION GENERAL #########
 
 function call_ajax()
