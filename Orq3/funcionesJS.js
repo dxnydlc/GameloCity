@@ -889,8 +889,11 @@ function getArchivos()
 
 
 
-
-
+/* ------------------------------------------------------------- */
+// Cargar datos formulario
+$.each( json.data , function( key , value ){
+    $('#frmDocumento #'+key).val(value);
+});
 /* ------------------------------------------------------------- */
 var favorite = [];
 $.each($("input[name='sport']:checked"), function(){
