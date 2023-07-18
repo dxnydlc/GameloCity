@@ -387,8 +387,127 @@ function getLocales( IdClienteProv )
 	//
 } 
 // ==============================================================================
+/*
+<table id="TablaHomePs" class=" table table-striped table-no-bordered table-hover " style="width:100%" >
+    <thead>
+        <tr>
+            <th></th>
+            <th></th>
+            <th>Local</th>
+            <th>IdArticulo</th>
+            <th>Articulo</th>
+            <th>Cantidad</th>
+            <th>U.Medida</th>
+            <th>Costo</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+*/
+var TablaHomePs;
+TablaHomePs = $('#TablaHomePs').DataTable({
+    pagingType : "full_numbers",
+    lengthMenu : [
+        [ 100 , 200, 100 ],
+        [ 100 , 200, 100 ],
+    ],
+    buttons: [
+        {
+            extend: 'collection',
+            exportOptions: {
+            modifier: {
+            page: 'all',
+            search: 'none'   
+            }
+            },
+            text: 'Exportar',
+            buttons: [
+            'copy','excel','csv','pdf', 'print'
+            ]
+        }
+    ],
+    "searching" : true,
+    "order"     : [[ 2, "desc" ]],
+    "scrollX"   : true,
+    language : {
+        sProcessing : "Procesando...",
+        sLengthMenu : "Mostrar _MENU_ registros",
+        sZeroRecords: "No se encontraron resultados",
+        sEmptyTable : "Ningún dato disponible en esta tabla",
+        sInfo       : "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+        sInfoEmpty  : "Mostrando registros del 0 al 0 de un total de 0 registros",
+        sInfoFiltered   : "(filtrado de un total de _MAX_ registros)",
+        sInfoPostFix    : "",
+        sSearch         : "Buscar:",
+        sUrl            : "",
+        sInfoThousands  : ",",
+        sLoadingRecords : "Cargando...",
+        oPaginate: {
+            sFirst: "|<",
+            sLast: ">|",
+            sNext: ">",
+            sPrevious: "<",
+        },
+        oAria: {
+            sSortAscending: ": Activar para ordenar la columna de manera ascendente",
+            sSortDescending: ": Activar para ordenar la columna de manera descendente",
+        }
+    },
+    dom: "<'row'<'col-sm-3'l><'col-sm-3'f><'col-sm-6'p>>" +
+    "<'row'<'col-sm-12'tr>>" +
+    "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+    "initComplete": function(settings, json) {
+        $('#tblDatos').waitMe('hide');
+    },
+    columns : [
+        { "data" : null ,
+            render: (data,type,row) => {
+            return `<div class=" edit_wrapper " data-idarti="${data.IdArticulo}" ><a href='#' data-uuid="${data.uu_id}" data-id="${data.id}" class=" editarItem btn btn-primary btn-sm" ><i class="fa fa-edit" ></i></a></div>`;
+            }
+        },
+        { "data" : null ,
+            render: (data,type,row) => {
+            return `<div class=" del_wrapper " data-idarti="${data.IdArticulo}" ><a href='#' data-uuid="${data.uu_id}" data-id="${data.id}" data-idarti="${data.IdArticulo}" class=" anularItem btn btn-danger btn-sm" ><i class="fa fa-trash" ></i></a></div>`;
+            }
+        },
+        { "data" : "Local" } , 
+        { "data" : "IdArticulo" } , 
+        { "data" : "Articulo" } , 
+        { "data" : "Cantidad" } , 
+        { "data" : "UMedida" } , 
+        { "data" : "CostoUnit" } , 
+        { "data" : "Total" } , 
+        
+        
+    ]
+});
+/* ------------------------------------------------------------- */
+var buttonsPS = new $.fn.dataTable.Buttons( TablaHomePs , {
+    buttons: [
+    'copyHtml5',
+    'excelHtml5',
+    'csvHtml5',
+    'pdfHtml5'
+    ]
+}).container().appendTo( $('#botonesPS') );
+//TablaHomePs.columns.adjust().draw();
+/* ------------------------------------------------------------- */
+TablaHomePs.clear();
+TablaHomePs.rows.add( json.data ).draw();
+TablaHomePs.columns.adjust().draw();
 // ==============================================================================
+// contar array
+var fruits = ["Banana", "Orange", "Apple", "Mango"];
+fruits.length;
 // ==============================================================================
+// texto combo seleccionado 
+var $texto = $( "#frmDocumento #id_ambiente option:selected" ).text();
+
+var $id = $(this).data('id'),$uuid = $(this).data('uuid');
+
+// setTimeout
+setTimeout(function(){ alert("Hello"); }, 3000);
 // ==============================================================================
 // ==============================================================================
 // ==============================================================================
