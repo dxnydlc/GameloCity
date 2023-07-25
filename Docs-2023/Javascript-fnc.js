@@ -388,6 +388,23 @@ function getLocales( IdClienteProv )
 } 
 // ==============================================================================
 /*
+
+<link rel="stylesheet" href="https://cdn.datatables.net/select/1.7.0/css/select.dataTables.min.css" />
+<link rel="stylesheet" href="https://unpkg.com/datatables-contextual-actions@latest/dist/dataTables.contextualActions.min.css"/>
+
+
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js" ></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js" ></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js" ></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js" ></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js" ></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js" ></script>
+<script src="https://cdn.datatables.net/select/1.7.0/js/dataTables.select.min.js" ></script>
+<script src="https://unpkg.com/datatables-contextual-actions@latest/dist/dataTables.contextualActions.min.js"></script>
+<!-- Bootbox -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.0/bootbox.min.js"></script>
+
+
 <table id="TablaHomePs" class=" table table-striped table-no-bordered table-hover " style="width:100%" >
     <thead>
         <tr>
@@ -475,7 +492,7 @@ TablaHomePs = $('#TablaHomePs').DataTable({
         
     },
     columns : [
-        { "data" : null ,
+        /* { "data" : null ,
             render: (data,type,row) => {
             return `<div class=" edit_wrapper " data-idarti="${data.IdArticulo}" ><a href='#' data-uuid="${data.uu_id}" data-id="${data.id}" class=" editarItem btn btn-primary btn-sm" ><i class="fa fa-edit" ></i></a></div>`;
             }
@@ -484,7 +501,7 @@ TablaHomePs = $('#TablaHomePs').DataTable({
             render: (data,type,row) => {
             return `<div class=" del_wrapper " data-idarti="${data.IdArticulo}" ><a href='#' data-uuid="${data.uu_id}" data-id="${data.id}" data-idarti="${data.IdArticulo}" class=" anularItem btn btn-danger btn-sm" ><i class="fa fa-trash" ></i></a></div>`;
             }
-        },
+        }, */
         { "data" : "Local" } , 
         { "data" : "IdArticulo" } , 
         { "data" : "Articulo" } , 
@@ -534,6 +551,146 @@ TablaDetalleGE.on( 'deselect', function ( e, dt, type, indexes ) {
     $('#msgDetalle').html('');
 });
 // ==============================================================================
+// PARA EDITORES CON CLICK DERECHO
+// Then set up some action options https://github.com/torrobinson/datatables-contextual-actions
+var actionOptions = {
+    iconPrefix: 'fa',
+    classes: [],
+    contextMenu: {
+        enabled: true,
+        isMulti: true,
+        xoffset: -10,
+        yoffset: -10,
+        headerRenderer: function (rows) {
+            if (rows.length > 1) {
+                // For when we have contextMenu.isMulti enabled and have more than 1 row selected
+                return rows.length + ' people selected';
+            } else {
+                let row = rows[0];
+                if (row?.role !== '')
+                    return row.Articulo + ' (' + row.IdArticulo + ')';
+                else return row.Articulo;
+            }
+        },
+        headerIsFollowedByDivider: true,
+        showStaticOptions: false
+    },
+    // Using bootbox? Customize how you confirm an action
+    showConfirmationMethod: bootbox.confirm,
+    buttonList: {
+        enabled: true,
+        iconOnly: false,
+        containerSelector: '#my-button-container',
+        groupClass: 'btn-group',
+        disabledOpacity: 0.4,
+        dividerSpacing: 10,
+    },
+    deselectAfterAction: true,
+    items: [
+        // Empty starter seperator to demonstrate that it won't render
+        {
+            type: 'divider',
+        },
+
+        {
+            type: 'static',
+            title: 'Static Button',
+            iconClass: 'fa-lock',
+            buttonClasses: ['btn', 'btn-outline-primary'],
+            contextMenuClasses: ['text-primary'],
+            action: function () {
+                bootbox.alert(
+                    "I am a static button that doesn't care about what row is selected. I'm always clickable!"
+                );
+            },
+        },
+
+        // Demonstrate not rendering 3 back to back dividers, only 1
+        {
+            type: 'divider',
+        },
+
+        {
+            type: 'option',
+            multi: false,
+            title: 'Editar',
+            iconClass: 'fa-edit',
+            buttonClasses: ['btn', 'btn-outline-secondary'],
+            contextMenuClasses: ['text-secondary'],
+            action: function (row) {
+                bootbox.alert(
+                    'Edit here for ' + row[0].Articulo
+                );
+            },
+            isDisabled: function (row) {
+                // Si comienza con A, s desabilita.
+                //return row.Articulo.charAt(0) === 'A'; // 'A' name's can't edit, for example
+            },
+        },
+
+        {
+            type: 'divider',
+        },
+
+        {
+            type: 'option',
+            title: 'Eliminar',
+            multi: true,
+            multiTitle: 'Eliminar articulo',
+            iconClass: 'fa-trash',
+            buttonClasses: ['btn', 'btn-outline-danger'],
+            contextMenuClasses: ['text-danger'],
+            confirmation: function (rows) {
+                var message =
+                    rows.length > 1
+                        ? 'Are you sure you want to delete ' +
+                            rows.length +
+                            ' employees?'
+                        : 'Confirme eliminar:' +
+                            rows[0].Articulo +
+                            '?';
+                return {
+                    title:
+                        rows.length > 1
+                            ? 'Delete Employees'
+                            : 'Elimnar articulo',
+                    message: message,
+                    buttons: {
+                        cancel: {
+                            className: 'btn-link',
+                            label: 'Cancelar',
+                        },
+                        confirm: {
+                            className: 'btn-danger',
+                            label: '<i class="fa fa-trash"></i> Confirmar',
+                        },
+                    },
+                };
+            },
+            action: function (rows) {
+                // Change source data and redraw
+                alert('tu no mete cabra zarambiche' + rows[0].Articulo);
+                /* window.sampleData = window.sampleData.filter(
+                    (data) =>
+                        !rows
+                            .map((row) => row.Articulo)
+                            .includes(data.Articulo)
+                );
+                myTable
+                    .clear()
+                    .rows.add(window.sampleData)
+                    .draw(); */
+            },
+        },
+
+        {
+            type: 'divider',
+        },
+    ],
+};
+/* ------------------------------------------------------------- */
+// And initialize our plugin.
+TablaDetalleGE.contextualActions( actionOptions );
 // ==============================================================================
 // ==============================================================================
 // ==============================================================================
