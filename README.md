@@ -14,6 +14,7 @@ Codigos que más vamos a usar en el proyecto, así como ejemplos de uso.
 | dillinger | https://dillinger.io/ |
 | Sequelize | https://sequelize.org/master/manual/model-querying-basics.html#simple-insert-queries |
 | JConfirm | https://craftpip.github.io/jquery-confirm/ |
+| Bootbox | https://bootboxjs.com/examples.html |
 | pdf xml | https://dsiscom.com/convertir-xml-a-pdf-para-peru/ |
 | Validar xml | https://www.xmlvalidation.com/ |
 | Texto a voz | http://texttospeechrobot.com/tts/es/texto-a-voz/ |
