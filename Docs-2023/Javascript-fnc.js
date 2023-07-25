@@ -460,6 +460,20 @@ TablaHomePs = $('#TablaHomePs').DataTable({
     "initComplete": function(settings, json) {
         $('#tblDatos').waitMe('hide');
     },
+    createdRow : function (row, data, rowIndex) {
+        // Per-cell function to do whatever needed with cells
+        $.each($('td', row), function (colIndex) {
+            // For example, adding data-* attributes to the cell
+            /* varDump( data );
+            varDump( data[colIndex] ); */
+            $(this).attr('data-id', data.id );
+            $(this).attr('data-uuid', data.uu_id );
+        });
+        $(row).attr('data-id', data.id );
+        $(row).attr('data-uuid', data.uu_id );
+        $(row).attr('data-nombre', data.Articulo );
+        
+    },
     columns : [
         { "data" : null ,
             render: (data,type,row) => {
@@ -478,9 +492,10 @@ TablaHomePs = $('#TablaHomePs').DataTable({
         { "data" : "UMedida" } , 
         { "data" : "CostoUnit" } , 
         { "data" : "Total" } , 
-        
-        
-    ]
+    ],
+    select: {
+        style: 'single'
+    },
 });
 /* ------------------------------------------------------------- */
 var buttonsPS = new $.fn.dataTable.Buttons( TablaHomePs , {
@@ -496,6 +511,33 @@ var buttonsPS = new $.fn.dataTable.Buttons( TablaHomePs , {
 TablaHomePs.clear();
 TablaHomePs.rows.add( json.data ).draw();
 TablaHomePs.columns.adjust().draw();
+// ==============================================================================
+TablaDetalleGE.on('click', 'tbody tr', function (e) {
+    //e.currentTarget.classList.toggle('success');
+});
+// ==============================================================================
+TablaDetalleGE.on( 'select', function ( e, dt, type, indexes ) {
+    TablaDetalleGE[ type ]( indexes ).nodes().to$().addClass( 'success' );
+    if ( type === 'row' ) {
+        var data = TablaDetalleGE.rows( indexes ).data().pluck( 'id' );
+        var node = dt.rows( indexes ).nodes()[0];
+        var bid =  $(node).attr("bankid","gaaaa");
+        let id      = $(node).data('id');
+        let uuid    = $(node).data('uuid');
+        let nombre  = $(node).data('nombre');
+        $('#msgDetalle').html(`<div class="alert alert-success" role="alert">Seleccionado: <strong>${nombre}</strong></div>`);
+    }
+});
+// ==============================================================================
+TablaDetalleGE.on( 'deselect', function ( e, dt, type, indexes ) {
+    TablaDetalleGE[ type ]( indexes ).nodes().to$().removeClass( 'success' );
+    $('#msgDetalle').html('');
+});
+// ==============================================================================
+// ==============================================================================
+// ==============================================================================
+// ==============================================================================
+// ==============================================================================
 // ==============================================================================
 // contar array
 var fruits = ["Banana", "Orange", "Apple", "Mango"];
