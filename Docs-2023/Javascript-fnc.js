@@ -489,6 +489,38 @@ TablaHomePs = $('#TablaHomePs').DataTable({
         $(row).attr('data-id', data.id );
         $(row).attr('data-uuid', data.uu_id );
         $(row).attr('data-nombre', data.Articulo );
+
+        // Cliente VARIOS (4)
+        if( data.IdClienteProv == 0 ){
+            $('td' ,row ).eq(4).html( data.ClienteVarios );
+        }else{
+            $('td' ,row ).eq(4).html( data.Cliente );
+        }
+        
+        if( data.EstadoBlzk == 'SIGNED' ){
+            $('td' ,row ).eq(7).html(`<span class="label label-success">${data.EstadoBlzk}</span>`);
+        }else{
+            $('td' ,row ).eq(7).html(`<span class="label label-danger">${data.EstadoBlzk}</span>`);
+        }
+
+        switch ( data.Estado ) {
+            case 'Digitado':
+                $('td' ,row ).eq(6).html(`<span class="label label-primary">${data.Estado}</span>`);
+            break;
+            case 'Aprobado':
+                $('td' ,row ).eq(6).html(`<span class="label label-success">${data.Estado}</span>`);
+            break;
+            case 'Anulado':
+                $('td' ,row ).eq(6).html(`<span class="label label-danger">${data.Estado}</span>`);
+            break;
+            case 'Emitido':
+                $('td' ,row ).eq(6).html(`<span class="label label-success">${data.Estado}</span>`);
+            break;
+        }
+
+        // Fecha Mod 12
+        $('td' ,row ).eq( 12 ).html( moment( data.updated_at ).format('YYYY-MM-DD HH:mm:ss') );
+
         
     },
     columns : [
