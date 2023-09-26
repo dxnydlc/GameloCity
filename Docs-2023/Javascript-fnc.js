@@ -47,8 +47,88 @@ $(document).delegate('.paginador_x', 'click', function(event) {
 /* ------------------------------------------------------------- */
 
 // ==============================================================================
+
+function gardarDoc()
+{
+	//
+	try {
+		$('#wrapper_form').waitMe({
+			effect  : 'facebook',
+			text    : 'Espere...',
+			bg      : 'rgba(255,255,255,0.7)',
+			color   : '#146436',fontSize:'20px',textPos : 'vertical',
+			onClose : function() {}
+		});
+        var url = `${_urlServicio}`, metodo = `POST`;
+        // - //
+        var _dataSerializada = $('#frmDocumento').serialize();
+        var Id = parseInt( $('#frmDocumento #id').val() ),uu_id = $('#frmDocumento #uu_id').val()
+        if( Id > 0 ){
+            url = `${_urlServicio}${uu_id}`;
+            metodo = `PUT`;
+        }
+		$.ajax({
+			url     : url,
+            data    : _dataSerializada , 
+			method  : metodo,
+			dataType: "json",
+			headers : {
+				Authorization : `Bearer ${_session3001}`
+			}
+		})
+		.done(function(  json ,textStatus, xhr ) {
+			//
+            console.log(xhr.status);
+			switch ( xhr.status )
+            {
+                case 200:
+                    //
+                    let data = json.data;
+                    $('#frmDocumento #id').val( data.id );
+                    $('#frmDocumento #uu_id').val( data.uu_id );
+                    //
+                break;
+                case 202:
+                    // denegado...
+                    tostada( json.title , json.texto , json.clase );
+                break;
+                default:
+                break;
+            }
+			/**/
+		})
+		.fail(function(xhr, status, error) {
+            switch (xhr.status) {
+                case 400://varios mensajes
+                    let responseJSON = xhr.responseJSON;
+                    let message = responseJSON.message;
+                    if( message.length > 0 ){
+                        for (let index = 0; index < message.length; index++) {
+                            const item = message[index];
+                            tostada2( { titulo : 'Error' , 'texto' : item , clase : 'error' } );
+                        }
+                    }else{
+                        tostada2( { titulo : 'Error' , 'texto' : `${xhr.status}-${error}` , clase : 'error' } );
+                    }
+                break;
+                default:
+                    tostada2( { titulo : 'Error' , 'texto' : `${xhr.status}-${error}` , clase : 'error' } );
+                break;
+            }
+			$('#wrapper_form').waitMe('hide');
+		})
+		.always(function() {
+			$('#wrapper_form').waitMe('hide');
+		});
+	} catch (error) {
+		alert( error );
+		$('#wrapper_form').waitMe('hide');
+	}
+	//
+}
+
 // ==============================================================================
-function getAll( url )
+function getAll()
 {
 	//
 	try {
