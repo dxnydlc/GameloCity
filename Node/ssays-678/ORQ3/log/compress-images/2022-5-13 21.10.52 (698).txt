@@ -1,8 +1,0 @@
-File from: [/home/dxny/Repo/nodejs/ORQ3//adjuntos/archivos/IMG_1655172650615_dPECQDaACJIWKJRYaJSScFUSDDAaLP.png]
-
-File to: [/home/dxny/Repo/nodejs/ORQ3/adjuntos/img_compress/IMG_1655172650615_dPECQDaACJIWKJRYaJSScFUSDDAaLP.pngIMG_1655172650615_dPECQDaACJIWKJRYaJSScFUSDDAaLP.png]
-
-Compression algorithm: [pngquant]
-
-Description: Error: Command failed: /home/dxny/Repo/nodejs/ORQ3/node_modules/pngquant-bin/vendor/pngquant --quality=20-50 -o /home/dxny/Repo/nodejs/ORQ3/adjuntos/img_compress/IMG_1655172650615_dPECQDaACJIWKJRYaJSScFUSDDAaLP.pngIMG_1655172650615_dPECQDaACJIWKJRYaJSScFUSDDAaLP.png /home/dxny/Repo/nodejs/ORQ3//adjuntos/archivos/IMG_1655172650615_dPECQDaACJIWKJRYaJSScFUSDDAaLP.png
-/home/dxny/Repo/nodejs/ORQ3/node_modules/pngquant-bin/vendor/pngquant: error while loading shared libraries: libpng12.so.0: cannot open shared object file: No such file or directory

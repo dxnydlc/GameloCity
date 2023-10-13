@@ -178,6 +178,10 @@ function getAll()
                         tostada2( { titulo : 'Error' , 'texto' : `${xhr.status}-${error}` , clase : 'error' } );
                     }
                 break;
+                case 409:
+                case 404:
+                    tostada2( { titulo : `${xhr.status}-${error}` , 'texto' : `${xhr.responseJSON.message}` , clase : 'error' } );
+                break;
                 default:
                     tostada2( { titulo : 'Error' , 'texto' : `${xhr.status}-${error}` , clase : 'error' } );
                 break;
