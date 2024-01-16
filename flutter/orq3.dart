@@ -16,6 +16,10 @@ ElevatedButton(
 )
 
 ==================================================== NUEVA PANTALLA ====================================================
+static const String routerPantalla = 'lista-monitoreo';
+...
+..
+.
 // ...................................................
 final Medida = MediaQuery.of(context).size;
 // ...................................................
@@ -179,6 +183,110 @@ set NuevaClave ( String value )
   _NuevaClave = value;
   notifyListeners();
 }
+
+
+
+==================================================== DETALLE DE CARD ==================================
+
+body: ListView.builder(
+        itemCount   : srvTrampas.arrTrampas.length ,
+        itemBuilder : ( BuildContext context , int index )  => CardTrampa_Widget(data: srvTrampas.arrTrampas[ index ],)
+      ),
+
+
+
+....
+final TrampasModel data;
+....
+// ...................................................
+    final Medida = MediaQuery.of(context).size;
+    // ...................................................
+    TextStyle txt14_rg = TextStyle(
+      fontFamily: 'FiraCode-Regular', fontSize: 14 , color : Color( 0XFF1B4332 )
+    );
+    // ...................................................
+    TextStyle txt12_rg = TextStyle(
+      fontFamily: 'FiraCode-Regular', fontSize: 12 , color : Color( 0XFF40916C )
+    );
+    // ...................................................
+    // ...................................................
+    // ...................................................
+    // ...................................................
+    // ...................................................
+    final srvTrampas = Provider.of<TrampasService>(context);
+    // ...................................................
+    // ...................................................
+    // ...................................................
+    // ...................................................
+    // ...................................................
+    // ...................................................
+    // ...................................................
+    return SizedBox(
+      width : Medida.width , 
+      child: Padding(
+        padding: const EdgeInsets.symmetric( horizontal: 10 , vertical: 5 ) ,
+        child: GestureDetector(
+          onTap : (){
+            //
+          } ,
+          child: Card(
+            child: Column(
+              children: [
+                // ...................................................
+                ListTile(
+                  leading : data.estado == 'Digitado' 
+                  ? Icon( Icons.check_box_outline_blank , color : Color( 0XFFB7E4C7 ) )
+                  : Icon( Icons.check_box , color : Color( 0XFF1B4332 ) )
+                  ,
+                  title     : Text( '${data.descripcion}' , style : txt14_rg ) ,
+                  subtitle  : Text( '${data.codigo!} | ${data.tipo}' , style : txt14_rg ) ,
+                  onTap: ()async{
+                    srvTrampas.selectData = data;
+                    Navigator.pushReplacementNamed(context, AddTrampa_Screen.routerPantalla );
+                  },
+                ),
+                // ...................................................
+                Text( '#${data.codigo}, Actualizado: ${data.Actualizado}' , style: txt12_rg ),
+                // ...................................................
+                // ...................................................
+                // ...................................................
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+    // ...................................................
+
+
+==================================================== ACTUALIZADO ==================================
+
+get Actualizado{
+    String strFecha = updatedAt!;
+    final arFec1 = strFecha.split('T');
+    String Date1 = arFec1[0];
+    final arFec2 = Date1.split('-');
+    // horas
+    String Horas1 = arFec1[1];
+    final arHoras = Horas1.split('.');
+
+    return '${arFec2[2]}/${arFec2[1]}/${arFec2[0]} ${arHoras[0]}';
+  }
+
+==================================================== CARGANDO ==================================
+
+//quitar teclado
+                        FocusScope.of(context).unfocus();
+                        await EasyLoading.show(
+                          status   : 'Revisando...',
+                          maskType : EasyLoadingMaskType.black,
+                        );
+
+                        EasyLoading.dismiss();
+
+
+
+
 
 
 */
