@@ -285,6 +285,36 @@ get Actualizado{
                         EasyLoading.dismiss();
 
 
+==================================================== COMBO FROM JSON ==================================
+
+const jsonIndv = [
+      {'id' : '-' , 'txt' : 'Seleccione' } , 
+      {'id' : 'Mus' , 'txt' : 'Mus Musculus' } , 
+      {'id' : 'Ratr' , 'txt' : 'Rattus rattus' } , 
+      {'id' : 'Ratn' , 'txt' : 'Rattus novergicus' }
+    ];
+
+Container(
+                      decoration : BoxDecoration(
+                        borderRadius: BorderRadius.circular(10 ) , border: Border.all( color :  Colors.grey )
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric( horizontal : 20 ) ,
+                        child: DropdownButton<String>(
+                          value       : data.espec , 
+                          onChanged: (String? value) {
+                            setState(() { data.espec = value; });
+                          },
+                          items:jsonIndv.map((Map val){
+                            return DropdownMenuItem<String>(
+                              value: val["id"],
+                              child: new Text(val["txt"]),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ),
+
 
 
 
