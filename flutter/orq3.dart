@@ -68,6 +68,7 @@ const txtBtn16W = TextStyle(
 // ...................................................
 return Scaffold(
   appBar: AppBar(
+    automaticallyImplyLeading: false,
     title : Text( 'Monitoreo' , style : txtTitulo ),
     actions: [
       IconButton(
