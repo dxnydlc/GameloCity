@@ -316,6 +316,62 @@ Container(
                       ),
                     ),
 
+==================================================== SELECCIONAR DE UN LIST VIEW ==================================
+
+ListTile(
+                  leading : data.isSelect 
+                  ? Icon( Icons.check_box , color : Color( 0XFF1B4332 ) )
+                  : Icon( Icons.check_box_outline_blank , color : Color( 0XFFB7E4C7 ) )
+                  ,
+                  title     : Text( '${data.producto}' , style : txt12_rg ) ,
+                  subtitle  : Text( '${data.idProducto!}' , style : txt14_rg ) ,
+                  onTap: ()async{
+                    /* srvMonitoreo.selectData = data;
+                    Navigator.pushReplacementNamed(context, AddTrampa_Screen.routerPantalla ); */
+                  },
+                  onLongPress: ()async{
+                    // ...................................................
+                    data.isSelect = !data.isSelect;
+                    if( data.isSelect )
+                    {
+                      srvMonitoreo.addProdSel( data.id );
+                    }else if(! data.isSelect )
+                    {
+                      srvMonitoreo.remProdSel( data.id );
+                    }
+                    // ...................................................
+                    // ...................................................
+                    // ...................................................
+                  },
+                ),
+
+...... SERVICIO
+// ..................................................
+  List<int> arrProductosSel = [];
+  // ..................................................
+void addProdSel( int IdProd )
+  {
+    arrProductosSel.add( IdProd );
+    notifyListeners();
+  }
+  // ...................................................
+  void remProdSel( int IdProd )
+  {
+    arrProductosSel.removeWhere((element) => element == IdProd );
+    notifyListeners();
+  }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
