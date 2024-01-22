@@ -373,6 +373,24 @@ void addProdSel( int IdProd )
 
 
 
+==================================================== MENSAJE SNACKBAR ==================================
+
+// ==============================================
+                          final snackBar = SnackBar(
+                            elevation: 0,
+                            behavior: SnackBarBehavior.floating,
+                            backgroundColor: Colors.transparent,
+                            content : AwesomeSnackbarContent(
+                              title   : 'Correcto',
+                              message : 'Productos eliminados correctamente' ,
+                              /// change contentType to ContentType.failure, ContentType.success, ContentType.warning or ContentType.help for variant
+                              contentType: ContentType.success ,
+                            ),
+                          );
+                          ScaffoldMessenger.of(context)
+                            ..hideCurrentSnackBar()
+                            ..showSnackBar(snackBar);
+                          // ==============================================
 
 
 
