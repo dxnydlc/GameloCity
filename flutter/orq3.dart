@@ -327,7 +327,7 @@ Container(
                             content : AwesomeSnackbarContent(
                               title   : 'Correcto',
                               message : 'Productos eliminados correctamente' ,
-                              /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variant
+                              /// change contentType to ContentType.failure, ContentType.success, ContentType.warning or ContentType.help for variant
                               contentType: ContentType.success ,
                             ),
                           );
