@@ -394,4 +394,53 @@ void addProdSel( int IdProd )
 
 
 
+
+==================================================== OTP PARA VALIDAR CODIGOS ==================================
+
+
+
+
+OtpTextField(
+                                  numberOfFields: 5,
+                                  borderColor: Color(0xFF512DA8),
+                                  //set to true to show as box or false to show as dash
+                                  showFieldAsBox: true, 
+                                  //runs when a code is typed in
+                                  onCodeChanged: (String code) {
+                                      //handle validation or checks here
+                                      //srvLogin.CodigoUsuario = code;
+                                  },
+                                  //runs when every textfield is filled
+                                  onSubmit: (String verificationCode){
+                                      String codigoU = verificationCode;
+                                      codigoU = codigoU.toString().trim().toLowerCase();
+                                      String codigoSt = srvLogin.CodigoSistema.toLowerCase();
+                                      print('codigoU: $codigoU , codigoSt: $codigoSt');
+                                      if( codigoU == codigoSt )
+                                      {
+                                        print('Correcto');
+                                        srvLogin.CodigoCorrecto = true;
+                                      }else{
+                                        print('Incorrecto ==> ${codigoSt}');
+                                        srvLogin.CodigoCorrecto = false;
+                                        final snackBar = SnackBar(
+                                          elevation: 0, behavior: SnackBarBehavior.floating,backgroundColor: Colors.transparent,
+                                          content: AwesomeSnackbarContent(
+                                            title       : 'Error',
+                                            message     : 'Código incorrecto' ,
+                                            contentType : ContentType.failure ,
+                                          ),
+                                        );
+
+                                        ScaffoldMessenger.of(context)
+                                          ..hideCurrentSnackBar()
+                                          ..showSnackBar(snackBar);
+                                        //
+                                      }
+                                  }, // end onSubmit
+                                ),
+
+
+
+
 */
