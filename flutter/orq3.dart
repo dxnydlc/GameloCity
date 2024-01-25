@@ -24,7 +24,7 @@ static const String routerPantalla = 'lista-monitoreo';
 final Medida = MediaQuery.of(context).size;
 // ...................................................
 TextStyle txtTitulo = TextStyle(
-  fontFamily: 'FiraCode-Regular', fontSize: 18 , color : Color( 0xFF081C15 ) 
+  fontFamily: 'FiraCode-Regular', fontSize: 18 , color : Color( 0XFFD8F3DC ) 
 );
 // ...................................................
 const txtReg12 = TextStyle(
@@ -73,6 +73,7 @@ return Scaffold(
     actions: [
       IconButton(
         onPressed: (){
+          FocusScope.of(context).unfocus();
           Navigator.pushReplacementNamed(context, HomeMonitoreo_Screen.routerPantalla );
         }, 
         icon : const Icon( IconlyLight.close_square , color : Color( 0XFFD8F3DC ) , )
@@ -439,6 +440,77 @@ OtpTextField(
                                       }
                                   }, // end onSubmit
                                 ),
+
+
+==================================================== PROMPT
+
+var message = '';
+          QuickAlert.show(
+            context: context,
+            type: QuickAlertType.custom,
+            barrierDismissible: true,
+            confirmBtnText: 'Guardar',
+            //customAsset: 'assets/custom.gif',
+            widget: TextFormField(
+              decoration: const InputDecoration(
+                alignLabelWithHint: true,
+                hintText: 'Ingrese nombre',
+                prefixIcon: Icon(
+                  Icons.phone_outlined,
+                ),
+              ),
+              textInputAction: TextInputAction.next,
+              keyboardType: TextInputType.text,
+              onChanged: (value) => message = value,
+            ),
+            onConfirmBtnTap: () async {
+              if (message.length < 5) {
+                await QuickAlert.show(
+                  context: context,
+                  type: QuickAlertType.error,
+                  text: 'Please input something',
+                );
+                return;
+              }
+              Navigator.pop(context);
+              /* if (mounted) {
+                QuickAlert.show(
+                  context: context,
+                  type: QuickAlertType.success,
+                  text: "Phone number '$message' has been saved!.",
+                );
+              } */
+            },
+          );
+
+
+==================================================== BADGE
+
+
+import 'package:badges/badges.dart' as badges;
+
+
+badges.Badge(
+                  badgeStyle: badges.BadgeStyle(
+                    badgeColor   : Colors.blue,
+                    padding      : EdgeInsets.all(7),
+                    borderRadius : BorderRadius.circular(4),
+                    borderSide   : BorderSide(color: Colors.white, width: 2),
+                  ),
+                  badgeContent: Text( '${data.id!}'  , style : txtBadge ),
+                  child: Texte('Hola')
+                  ),
+
+
+
+
+
+
+
+
+
+
+
 
 
 
