@@ -105,6 +105,28 @@ return Scaffold(
       ),
     ),
   ),
+  floatingActionButton: FloatingActionButton(
+    onPressed : ()async{
+      // ============================================
+        var uuid = Uuid();
+      String uuIdDoc       = uuid.v4();
+      Preferencias.uuIdDoc = uuIdDoc;
+      Preferencias.idDoc   = 0;
+      // xxxxxxxxxxxxxx Nueva instancia xxxxxxxxxxxxxx
+      /* srvZona.ZonaSelect = ZonaLocalModel(
+        uuId          : uuIdDoc , 
+        id            : 0 ,
+        idClienteProv : Preferencias.IdClienteProv , 
+        idSucursal    : Preferencias.IdSucursal ,
+        descripcion   : '' , 
+        estado        : 'Activo'
+      ); */
+      // xxxxxxxxxxxxxx Nueva instancia xxxxxxxxxxxxxx
+
+      //Navigator.pushReplacementNamed( context , CrudZonas_Screen.routerPantalla );
+    },
+  child : Icon( LineIcons.plus , color : Color( 0XFFD8F3DC ) )
+  )
 );
 // ...................................................
 
