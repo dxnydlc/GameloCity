@@ -506,7 +506,7 @@ var message = '';
           );
 
 
-==================================================== BADGE
+==================================================== BADGE ====================================================
 
 
 import 'package:badges/badges.dart' as badges;
@@ -524,10 +524,63 @@ badges.Badge(
                   ),
 
 
+==================================================== COMBITO COMBO ====================================================
+
+DropdownButtonFormField(
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                    color: Color( 0XFF95D5B2 ) , 
+                                    width: 2,
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                    color: Color( 0XFF0077b6 ) , 
+                                    width: 3,
+                                  ),
+                                ),
+                              ),
+                              hint: Text('Seleccione' , style : txtReg12 ),
+                              icon: const Icon( LineIcons.angleDown , size: 16 , color : Color( 0XFF1B4332 ) ),
+                              isExpanded: true,
+                              value : srvSupDiaria.SuperDiariaSelect!.idZona ,
+                              items : lstZonas.map((e){
+                                return DropdownMenuItem(
+                                  value: e.id,
+                                  child: Text( e.descripcion! , style : txtReg12 )
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                //
+                                setState(() {
+                                  srvSupDiaria.SuperDiariaSelect!.idZona = value;
+                                  print( srvSupDiaria.SuperDiariaSelect!.idZona );
+                                });
+                              },
+                            ),
+
+
+==================================================== TEXTAREA ====================================================
 
 
 
-
+TextFormField(
+                        maxLines: 4,
+                        autocorrect: false,
+                        keyboardType: TextInputType.text,
+                        initialValue:  srvSupDiaria.SuperDiariaSelect!.glosa ,
+                        decoration: InputDecorations.AuthInpuDecoration(
+                          hintText    : 'Comentarios' ,
+                          labelText   : 'Comentarios' ,
+                          prefixIcon  : LineIcons.textHeight
+                        ),
+                        onChanged: (value){
+                          srvSupDiaria.SuperDiariaSelect!.glosa = value;
+                        },
+                        style : txtReg14 ,
+                      ),
 
 
 
