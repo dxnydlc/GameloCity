@@ -37,6 +37,17 @@ const txtBtn16W = TextStyle(
 // ...................................................
 // ...................................................
 // ...................................................
+TextStyle txtTitulo2 = TextStyle(
+  fontFamily: 'DMSans-Regular', fontSize: 18 , color : Color( 0XFFffffff ) 
+);
+// ...............................................
+TextStyle txtCliente = TextStyle(
+  fontFamily: 'DMSans-Regular', fontSize: 11 , color : Color( 0XFF2D6A4F ) 
+);
+// ...............................................
+TextStyle txtSucursal = TextStyle(
+  fontFamily: 'DMSans-Regular', fontSize: 11 , color : Color( 0XFF0077b6 ) 
+);
 // ...................................................
 // ...................................................
 // ...................................................
@@ -76,7 +87,7 @@ return Scaffold(
           FocusScope.of(context).unfocus();
           Navigator.pushReplacementNamed(context, HomeMonitoreo_Screen.routerPantalla );
         }, 
-        icon : const Icon( IconlyLight.close_square , color : Color( 0XFFD8F3DC ) , )
+        icon : const Icon( IconlyLight.close_square , color : Colors.white , )
       ),
     ],
   ),
@@ -582,6 +593,43 @@ TextFormField(
                         style : txtReg14 ,
                       ),
 
+
+
+==================================================== BADGES
+https://pub.dev/packages/badges
+
+
+
+==================================================== FULL SCREEN MENU
+https://pub.dev/packages/full_screen_menu
+
+
+
+==================================================== CAMERA 3.0.0
+https://pub.dev/packages/camera_camera/example
+
+
+
+==================================================== CAJA DE TEXTO FLEXIBLE
+Flexible(
+  child: new Container(
+    padding: new EdgeInsets.only(right: 13.0),
+    child: new Text(
+      'Text largeeeeeeeeeeeeeeeeeeeeeee',
+      overflow: TextOverflow.ellipsis,
+      style: new TextStyle(
+        fontSize: 13.0,
+        fontFamily: 'Roboto',
+        color: new Color(0xFF212121),
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+  ),
+),
+
+
+==================================================== DETECTABLE TEXT FIELD
+https://pub.dev/packages/detectable_text_field
 
 
 
