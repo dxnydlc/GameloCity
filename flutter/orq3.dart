@@ -317,6 +317,8 @@ get Actualizado{
                           maskType : EasyLoadingMaskType.black,
                         );
 
+                        EasyLoading.showSuccess('Guardado');
+
                         EasyLoading.dismiss();
 
 
