@@ -91,25 +91,52 @@ return Scaffold(
       ),
     ],
   ),
-  body: Container(
-    width: double.infinity , 
-    child: Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: SizedBox(
-        child: Card(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                // ...................................................
-                Text('Ingrese Nro de OT'),
-                // ...................................................
-                // ...................................................
-                // ...................................................
-                // ...................................................
-                // ...................................................
-                // ...................................................
-              ],
+  body: PopScope(
+    canPop: false,
+    onPopInvoked:(bool didPop) async {
+      Vibration.vibrate(duration: 1000, amplitude: 128);
+      if (didPop) {
+        return;
+      }
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("¿Desea salir de esta pantalla?"),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: Text("No"),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pushReplacementNamed( context , homeScreen.routerPantalla ) ,
+                child: Text("Sí"),
+              ),
+            ],
+          );
+        },
+      );
+    },
+    child: Container(
+      width: double.infinity , 
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: SizedBox(
+          child: Card(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  // ...................................................
+                  Text('Ingrese Nro de OT'),
+                  // ...................................................
+                  // ...................................................
+                  // ...................................................
+                  // ...................................................
+                  // ...................................................
+                  // ...................................................
+                ],
+              ),
             ),
           ),
         ),
