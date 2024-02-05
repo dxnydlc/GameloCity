@@ -24,7 +24,7 @@ static const String routerPantalla = 'lista-monitoreo';
 final Medida = MediaQuery.of(context).size;
 // ...................................................
 TextStyle txtTitulo = TextStyle(
-  fontFamily: 'FiraCode-Regular', fontSize: 18 , color : Color( 0XFFD8F3DC ) 
+  fontFamily: 'DMSans-Regular', fontSize: 18 , color : Color( 0XFFD8F3DC ) 
 );
 // ...................................................
 const txtReg12 = TextStyle(
