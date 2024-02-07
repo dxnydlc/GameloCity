@@ -664,6 +664,153 @@ https://pub.dev/packages/detectable_text_field
 
 
 
+==================================================== SELECT 2
+
+https://medium.com/@romanjrdykyj/select2-on-flutter-266e0c00b1cf
+
+
+const List<SingleCategoryModel> dataAccion = [
+      SingleCategoryModel(
+        singleItemCategoryList: [
+          SingleItemCategoryModel(nameSingleItem: 'Colocación de Jaula Tomahawk' , value : 'CJ' ),
+          SingleItemCategoryModel(nameSingleItem: 'Colocación de Trampas pegantes' , value : 'CP'),
+          SingleItemCategoryModel(nameSingleItem: 'Cambio de señalizaciónes' , value : 'CS' ),
+          SingleItemCategoryModel(nameSingleItem: 'Recebado', value : 'RC') ,
+          SingleItemCategoryModel(nameSingleItem: 'Evaluación de cebaderos' , value : 'EC' ),
+          SingleItemCategoryModel(nameSingleItem: 'Cambio de atrayente' , value : 'CA'),
+          SingleItemCategoryModel(nameSingleItem: 'Desinfección' , value : 'DF'),
+        ],
+      ),
+    ];
+    // ...................................................
+    List<SingleItemCategoryModel> selAccion = [];
+    // ...................................................
+    if( data!.accionTomada != '-' ){
+      //
+      List<String>  arrAcc2 = data.accionTomada!.split(',');
+      for (var i = 0; i < arrAcc2.length; i++) {
+        switch ( arrAcc2[i] ) {
+          case 'CJ':
+            selAccion.add( SingleItemCategoryModel( nameSingleItem : 'Colocación de Jaula Tomahawk', value : 'CJ' ) );
+          break;
+          case 'CP':
+            selAccion.add( SingleItemCategoryModel( nameSingleItem : 'Colocación de Trampas pegantes', value : 'CP' ) );
+          break;
+          case 'CS':
+            selAccion.add( SingleItemCategoryModel( nameSingleItem : 'Cambio de señalizaciónes', value : 'CS' ) );
+          break;
+          case 'RC':
+            selAccion.add( SingleItemCategoryModel( nameSingleItem : 'Recebado', value : 'RC' ) );
+          break;
+          case 'EC':
+            selAccion.add( SingleItemCategoryModel( nameSingleItem : 'Evaluación de cebaderos', value : 'EC' ) );
+          break;
+          case 'CA':
+            selAccion.add( SingleItemCategoryModel( nameSingleItem : 'Cambio de atrayente', value : 'CA' ) );
+          break;
+          case 'DF':
+            selAccion.add( SingleItemCategoryModel( nameSingleItem : 'Desinfección', value : 'DF' ) );
+          break;
+        }
+      }
+      //
+    }
+
+// ...................................................
+                        // SELECT 2
+                        Select2dot1(
+                          selectDataController: 
+                            SelectDataController(
+                              data          : dataAccion, 
+                              isMultiSelect : true, 
+                              initSelected  : selAccion ,
+                            ),
+                            onChanged: ( value ){
+                              var arFinal = [];
+                              if( value.length > 0 ){
+                                for (var i = 0; i < value.length; i++) {
+                                  arFinal.add( value[i].value );
+                                }
+                                data.accionTomada = arFinal.join(',');
+                              }else{
+                                data.accionTomada = '-';
+                              }
+                            },
+                          globalSettings: const GlobalSettings(
+                            fontFamily: 'DMSans-Regular',
+                            mainColor: Colors.blue,
+                          ),
+                          doneButtonModalSettings: DoneButtonModalSettings(
+                            title: 'Listo'
+                          ),
+                          selectEmptyInfoSettings: SelectEmptyInfoSettings(
+                            text: 'Seleccione'
+                          ),
+                          searchEmptyInfoModalSettings: SearchEmptyInfoModalSettings(
+                            text: 'Buscar'
+                          ),
+                        ),
+                        // ...................................................
+
+
+
+
+
+==================================================== MULTI SELECT
+import 'package:multiselect_formfield/multiselect_formfield.dart';
+
+
+
+// ...................................................
+    List jsonEspecies = [
+      { 'value' : 'Mus' , 'display' : 'Mus Musculus' } , 
+      { 'value' : 'Ratr' , 'display' : 'Rattus rattus' } , 
+      { 'value' : 'Ratn' , 'display' : 'Rattus novergicus' }
+    ];
+    // ...................................................
+    List<String> selEspec = [];
+    if( data!.espec != '-' ){
+      //
+      selEspec = data.espec!.split(',');
+      //
+    }
+    // ...................................................
+
+
+
+MultiSelectFormField(
+                          chipBackGroundColor : Color( 0XFFD8F3DC ),
+                          chipLabelStyle      : TextStyle( fontFamily: 'DMSans-Regular' ),
+                          dialogTextStyle     : TextStyle( fontWeight: FontWeight.bold , fontFamily: 'DMSans-Regular' ),
+                          checkBoxActiveColor : Color( 0XFFFFFFFF ),
+                          checkBoxCheckColor  : Color( 0XFF2D6A4F ),
+                          dialogShapeBorder   : RoundedRectangleBorder(
+                          borderRadius        : BorderRadius.all(Radius.circular(12.0))),
+                          title: Text(
+                            'Especie :',
+                            style: TextStyle(fontSize: 16 , fontFamily: 'DMSans-Regular' ),
+                          ),
+                          dataSource: jsonEspecies,
+                          textField     : 'display',
+                          valueField    : 'value',
+                          okButtonLabel : 'Aceptar',
+                          cancelButtonLabel : 'Cancelar',
+                          hintWidget        : Text('Seleccione uno o más' , style : TextStyle( fontFamily: 'DMSans-Regular' ) ),
+                          initialValue      : selEspec,
+                          onSaved: (value) {
+                            print( value );
+                            if (value == null) return;
+                            setState(() {
+                              data.espec = value.join(',');
+                            });
+                          },
+                        ),
+                        // ...................................................
+
+
+
+
+
 
 
 
