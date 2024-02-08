@@ -158,6 +158,16 @@ constructor(
 // ======================================== SERVICE
 
 
+import { readFileSync, writeFileSync } from 'fs';
+const execShPromise = require("exec-sh").promise;
+
+import * as moment from 'moment';
+import 'moment/locale/pt-br';
+import { v4 as uuidv4 } from 'uuid';
+
+
+
+
 // ...................................................................
 
   constructor(
@@ -167,6 +177,27 @@ constructor(
   ){}
 
   // ...................................................................
+
+  async create( dto : CreateDatoDto ) {
+    
+    const newArea = await this.datosModel.create( dto );
+    let dataSave  = await this.datosModel.save( newArea );
+    //let Codigo = await this.util.addZeros( dataSave.id , 4 );
+    //await this.datosModel.update({ id : dataSave.id },{ Codigo : `RM${Codigo}` });
+
+    let data = await this.datosModel.findOne({
+      where : {
+        id : dataSave.id
+      }
+    });
+
+    return {
+      data , 
+      version : '1'
+    }
+
+  }
+
   // ...................................................................
 
   async findAll() {
