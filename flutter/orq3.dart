@@ -49,6 +49,9 @@ TextStyle txtSucursal = TextStyle(
   fontFamily: 'DMSans-Regular', fontSize: 11 , color : Color( 0XFF0077b6 ) 
 );
 // ...................................................
+TextStyle txtCerrar = TextStyle(
+  fontFamily: 'DMSans-Bold', fontSize: 16 , color : Color( 0XFFfb8500 ) , 
+);
 // ...................................................
 // ...................................................
 // ...................................................
@@ -102,16 +105,16 @@ return Scaffold(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text("¿Desea salir de esta pantalla?"),
+            title: Text("Cerrar en la [X] superior" , style : txtCerrar ),
             actions: <Widget>[
               TextButton(
                 onPressed: () => Navigator.of(context).pop(false),
-                child: Text("No"),
+                child: Text("Aceptar"),
               ),
-              TextButton(
-                onPressed: () => Navigator.pushReplacementNamed( context , homeScreen.routerPantalla ) ,
+              /* TextButton(
+                onPressed: () => Navigator.pushReplacementNamed( context , HomeRepInspec_Screen.routerPantalla ) ,
                 child: Text("Sí"),
-              ),
+              ), */
             ],
           );
         },
