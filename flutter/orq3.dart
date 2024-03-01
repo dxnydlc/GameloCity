@@ -171,6 +171,24 @@ return Scaffold(
 );
 // ...................................................
 
+DESPUES DE LA LLAVE DE LA CLASE...
+void showInSnackBar( String message , String Tipo ) {
+  // ...................................................
+  TextStyle txtSnackBar = TextStyle(
+    fontFamily: 'DMSans-Regular', fontSize: 12 , color : Color( 0XFFffffff ) 
+  );
+  // ...............................................
+  switch (Tipo ) {
+    case 'OK':
+      ScaffoldMessenger.of(context)
+      .showSnackBar(SnackBar( content: Text(message , style : txtSnackBar ) , backgroundColor: Color( 0XFF40916C ) ));
+    break;
+    case 'ERROR':
+      ScaffoldMessenger.of(context)
+      .showSnackBar(SnackBar(content: Text(message , style : txtSnackBar ) , backgroundColor: Color( 0XFFf94144 ), ));
+    break;
+}
+
 ==================================================== BOTON ====================================================
 
 ElevatedButton.icon(
@@ -888,4 +906,34 @@ class MonitoreoService extends ChangeNotifier
 
 
 
+==================================================== MODAL
+Modal bottomsdheet border
+https://www.flutterbeads.com/bottom-sheet-with-rounded-corners-in-flutter/
+
+showModalBottomSheet(
+  context: context,
+  isScrollControlled: true,
+  shape: const RoundedRectangleBorder( // <-- SEE HERE
+    borderRadius: BorderRadius.vertical( 
+      top: Radius.circular(25.0),
+    ),
+  ),
+  builder: (context) {
+    return SizedBox(
+      height: 200,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: const <Widget>[
+          ...
+        ],
+      ),
+    );
+  });
+
+
+
 */
+
+
+
