@@ -933,6 +933,48 @@ showModalBottomSheet(
 
 
 
+
+
+
+==================================================== CARD DETALLE 2.0
+
+// xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+class CardTurnoCambioTurno extends StatelessWidget {
+  final TurnosModel data;
+  const CardTurnoCambioTurno({super.key, required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    // ...........................................................
+    TextStyle txtItem = TextStyle(
+      fontFamily: 'DMSans-Regular', fontSize: 14 , color : Color( 0XFF0077b6 ) 
+    );
+    // ...........................................................
+    // ...........................................................
+    // ...........................................................
+    // ...........................................................
+    // ...........................................................
+    // ...........................................................
+    // ...........................................................
+    return Padding(
+      padding : EdgeInsets.symmetric( horizontal: 10 , vertical: 5 ) , 
+      child: SizedBox(
+        child: TextButton.icon(
+          onPressed: ()async{
+            // =====================================
+            // =====================================
+          }, 
+          icon  : Icon( LineIcons.calendarCheck , size : 22 ) , 
+          label : Text('${data.nombre}' , style : txtItem ) ,
+        ),
+      ),
+    );
+  }
+}
+
+// xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
 */
 
 
