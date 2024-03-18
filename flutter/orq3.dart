@@ -28,11 +28,11 @@ TextStyle txtTitulo = TextStyle(
 );
 // ...................................................
 const txtReg12 = TextStyle(
-  fontFamily: 'FiraCode-Regular', fontSize: 12 , color : Color( 0XFF1B4332 )
+  fontFamily: 'DMSans-Regular', fontSize: 12 , color : Color( 0XFF1B4332 )
 );
 // ...................................................
 const txtBtn16W = TextStyle(
-  fontFamily: 'FiraCode-Bold', fontSize: 18 , color : Color( 0XFFD8F3DC )
+  fontFamily: 'DMSans-Regular', fontSize: 16 , color : Color( 0XFFD8F3DC )
 );
 // ...................................................
 // ...................................................
@@ -195,7 +195,7 @@ ElevatedButton.icon(
   style: ElevatedButton.styleFrom(
     foregroundColor : Color( 0XFFD8F3DC ) ,
     backgroundColor : Color( 0XFF2D6A4F ) , // Text Color (Foreground color),
-    fixedSize       : const Size( 180 , 40 )
+    //fixedSize       : const Size( 180 , 40 )
   ),
   onPressed: ()async{
     //
@@ -285,11 +285,11 @@ final TrampasModel data;
     final Medida = MediaQuery.of(context).size;
     // ...................................................
     TextStyle txt14_rg = TextStyle(
-      fontFamily: 'FiraCode-Regular', fontSize: 14 , color : Color( 0XFF1B4332 )
+      fontFamily: 'DMSans-Regular', fontSize: 14 , color : Color( 0XFF1B4332 )
     );
     // ...................................................
     TextStyle txt12_rg = TextStyle(
-      fontFamily: 'FiraCode-Regular', fontSize: 12 , color : Color( 0XFF40916C )
+      fontFamily: 'DMSans-Regular', fontSize: 12 , color : Color( 0XFF40916C )
     );
     // ...................................................
     // ...................................................
