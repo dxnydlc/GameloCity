@@ -28,11 +28,11 @@ TextStyle txtTitulo = TextStyle(
 );
 // ...................................................
 const txtReg12 = TextStyle(
-  fontFamily: 'FiraCode-Regular', fontSize: 12 , color : Color( 0XFF1B4332 )
+  fontFamily: 'DMSans-Regular', fontSize: 12 , color : Color( 0XFF1B4332 )
 );
 // ...................................................
 const txtBtn16W = TextStyle(
-  fontFamily: 'FiraCode-Bold', fontSize: 18 , color : Color( 0XFFD8F3DC )
+  fontFamily: 'DMSans-Regular', fontSize: 16 , color : Color( 0XFFD8F3DC )
 );
 // ...................................................
 // ...................................................
@@ -195,7 +195,7 @@ ElevatedButton.icon(
   style: ElevatedButton.styleFrom(
     foregroundColor : Color( 0XFFD8F3DC ) ,
     backgroundColor : Color( 0XFF2D6A4F ) , // Text Color (Foreground color),
-    fixedSize       : const Size( 180 , 40 )
+    //fixedSize       : const Size( 180 , 40 )
   ),
   onPressed: ()async{
     //
@@ -285,11 +285,11 @@ final TrampasModel data;
     final Medida = MediaQuery.of(context).size;
     // ...................................................
     TextStyle txt14_rg = TextStyle(
-      fontFamily: 'FiraCode-Regular', fontSize: 14 , color : Color( 0XFF1B4332 )
+      fontFamily: 'DMSans-Regular', fontSize: 14 , color : Color( 0XFF1B4332 )
     );
     // ...................................................
     TextStyle txt12_rg = TextStyle(
-      fontFamily: 'FiraCode-Regular', fontSize: 12 , color : Color( 0XFF40916C )
+      fontFamily: 'DMSans-Regular', fontSize: 12 , color : Color( 0XFF40916C )
     );
     // ...................................................
     // ...................................................
@@ -974,6 +974,116 @@ class CardTurnoCambioTurno extends StatelessWidget {
 }
 
 // xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+
+==================================================== BUSCAR EN UN ARREGLO JSON MODEL
+
+// xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+class _CambioTurno_ScreenState extends State<CambioTurno_Screen> {
+  // ...............................................
+  // ...............................................
+  // ...............................................
+  // ...............................................
+  List<MarcarPersonalModal> _users = <MarcarPersonalModal>[];
+  List<MarcarPersonalModal> _usersDisplay = <MarcarPersonalModal>[];
+  // ...............................................
+  // ...............................................
+  // ...............................................
+  // ...............................................
+  bool _isLoading = true;
+  // ...............................................
+  // ...............................................
+  // ...............................................
+  // ...............................................
+  // ...............................................
+
+  .
+  .
+  .
+
+  // ...................................................
+                          // ...................................................
+                          // CAJA DE TEXTO PARA BUSCAR
+                          // ...................................................
+                          srvMarcacion.arrMarcacion.length == 0
+                          ? SizedBox()
+                          : TextFormField(
+                            autocorrect: false,
+                            keyboardType: TextInputType.text,
+                            decoration: InputDecorations.AuthInpuDecoration(
+                                hintText  : 'Buscar',
+                                labelText : 'Buscar',
+                                prefixIcon: LineIcons.search ),
+                            onChanged: (searchText) {
+                              searchText = searchText.toLowerCase();
+                              setState(() {
+                                _usersDisplay = _users.where((u) {
+                                  var fName = u.trabajador!.toLowerCase();
+                                  return fName.contains(searchText) ;
+                                }).toList();
+                              });
+                            },
+                            style : TextStyle( fontFamily : 'FiraCode-Regular' ),
+                          ),
+                          // ...................................................
+                          // ...................................................
+                          // ...................................................
+                          // ...................................................
+
+
+                          // CLIC AL BUSCAR
+                          // ...................................................
+                          // ...................................................
+                          // ...................................................
+                          // ...................................................
+                          _isLoading = false;
+                          _users = [];
+                          _users.addAll( srvMarcacion.arrMarcacion );
+                          _usersDisplay = _users;
+                          // ...................................................
+                          // ...................................................
+                          // ...................................................
+                          // ...................................................
+
+                          .
+                          .
+                          .
+
+                          // .........................................
+                          // .........................................
+                          // LISTVIEW
+                          // .........................................
+                          // .........................................
+                          Container(
+                            color: Color(0XFFccd5ae),
+                            //color: Color.fromRGBO( 255 , 254 , 250 , 1 ) ,
+                            height: Medida.height * 0.64,
+                            child: ListView.builder(
+                                itemCount: _usersDisplay.length,//srvMarcacion.arrMarcacion.length,
+                                itemBuilder: (BuildContext context, int index) =>
+                                    CardMarcaWidget(
+                                      data: _usersDisplay[index],
+                                    )),
+                          ),
+                          // ...................................................
+                          // ...................................................
+
+
+
+
+// xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+
+
+
+
+
+
+
+
+
+
 
 */
 
