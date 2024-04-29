@@ -98,23 +98,7 @@ function guardarDoc()
 			/**/
 		})
 		.fail(function(xhr, status, error) {
-            switch (xhr.status) {
-                case 400://varios mensajes
-                    let responseJSON = xhr.responseJSON;
-                    let message = responseJSON.message;
-                    if( message.length > 0 ){
-                        for (let index = 0; index < message.length; index++) {
-                            const item = message[index];
-                            tostada2( { titulo : 'Error' , 'texto' : item , clase : 'error' } );
-                        }
-                    }else{
-                        tostada2( { titulo : 'Error' , 'texto' : `${xhr.status}-${error}` , clase : 'error' } );
-                    }
-                break;
-                default:
-                    tostada2( { titulo : 'Error' , 'texto' : `${xhr.status}-${error}` , clase : 'error' } );
-                break;
-            }
+            getError01(xhr, status, error);
 			$('#wrapper_form').waitMe('hide');
 		})
 		.always(function() {
@@ -125,6 +109,30 @@ function guardarDoc()
 		$('#wrapper_form').waitMe('hide');
 	}
 	//
+}
+function getError01(xhr, status, error) 
+{
+    //
+    let responseJSON = xhr.responseJSON;
+    let message = responseJSON.message;
+    switch (xhr.status) {
+        case 400://varios mensajes
+            if( message.length > 0 ){
+                for (let index = 0; index < message.length; index++) {
+                    const item = message[index];
+                    tostada2( { titulo : 'Error' , 'texto' : item , clase : 'error' } );
+                }
+            }else{
+                tostada2( { titulo : 'Error' , 'texto' : `${xhr.status}-${error}` , clase : 'error' } );
+            }
+        break;
+        case 409:
+            tostada2( { titulo : 'Error' , 'texto' : `${message}` , clase : 'error' } );
+        break;
+        default:
+            tostada2( { titulo : 'Error' , 'texto' : `${xhr.status}-${error}` , clase : 'error' } );
+        break;
+    }
 }
 
 // ==============================================================================
