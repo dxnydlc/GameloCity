@@ -306,7 +306,8 @@ import { UtilidadesService } from 'src/utilidades/utilidades.service';
 
     const bodyProocolo = {
       ...dto , 
-      created_at : createdAt
+      created_at : createdAt , 
+      updated_at : createdAt , 
     };
 
     return this.datosService.create( bodyProocolo );
