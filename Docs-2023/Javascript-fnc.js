@@ -110,6 +110,7 @@ function guardarDoc()
 	}
 	//
 }
+// ==============================================================================
 function getError01(xhr, status, error) 
 {
     //
@@ -173,27 +174,7 @@ function getAll()
 			/**/
 		})
 		.fail(function(xhr, status, error) {
-            switch (xhr.status) {
-                case 400://varios mensajes
-                    let responseJSON = xhr.responseJSON;
-                    let message = responseJSON.message;
-                    if( message.length > 0 ){
-                        for (let index = 0; index < message.length; index++) {
-                            const item = message[index];
-                            tostada2( { titulo : 'Error' , 'texto' : item , clase : 'error' } );
-                        }
-                    }else{
-                        tostada2( { titulo : 'Error' , 'texto' : `${xhr.status}-${error}` , clase : 'error' } );
-                    }
-                break;
-                case 409:
-                case 404:
-                    tostada2( { titulo : `${xhr.status}-${error}` , 'texto' : `${xhr.responseJSON.message}` , clase : 'error' } );
-                break;
-                default:
-                    tostada2( { titulo : 'Error' , 'texto' : `${xhr.status}-${error}` , clase : 'error' } );
-                break;
-            }
+            getError01(xhr, status, error);
 			$('#wrapper_form').waitMe('hide');
 		})
 		.always(function() {
