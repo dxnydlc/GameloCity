@@ -104,6 +104,17 @@ export class DatosModel {
 
 
 
+// ======================================== MODULE
+imports : [
+  TypeOrmModule.forFeature([
+    SupCronogramaModel 
+  ]) , 
+  SucursalesModule , 
+  ClientesModule , 
+  UtilidadesModule , 
+],
+exports     : [SupCronogramaService]
+
 
 
 
