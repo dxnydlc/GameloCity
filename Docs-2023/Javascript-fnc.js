@@ -137,6 +137,15 @@ function getError01(xhr, status, error)
 }
 
 // ==============================================================================
+
+// LLENAR UN FORMULARIO
+let data = json.data;
+$.each( json.data , function( key , value ){
+    $('#frmDetalle #'+key).val(value);
+});
+
+// ==============================================================================
+
 function getAll()
 {
 	//
