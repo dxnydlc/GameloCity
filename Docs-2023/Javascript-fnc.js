@@ -24,6 +24,17 @@ socket.emit('accion:audit',{
 });
 // ******* NODE JS *******
 
+// ESCUCHAR RESPUESTA
+socket.on('emitir_doc_ventas', function( data ){
+    $('#mdlEmitir').modal('hide');
+    if( data.data.dni == $dniU ){
+      // Leer el XML
+      if( data != undefined ){
+        leerXML();
+      }
+    }
+});
+
 // ==============================================================================
 
 function initOrq()
