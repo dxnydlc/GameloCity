@@ -172,7 +172,7 @@ return Scaffold(
 // ...................................................
 
 DESPUES DE LA LLAVE DE LA CLASE...
-void showInSnackBar( String message , String Tipo ) {
+void showInSnackBar(BuildContext context , String message , String Tipo ) {
   // ...................................................
   TextStyle txtSnackBar = TextStyle(
     fontFamily: 'DMSans-Regular', fontSize: 12 , color : Color( 0XFFffffff ) 
@@ -187,7 +187,11 @@ void showInSnackBar( String message , String Tipo ) {
       ScaffoldMessenger.of(context)
       .showSnackBar(SnackBar(content: Text(message , style : txtSnackBar ) , backgroundColor: Color( 0XFFf94144 ), ));
     break;
+  }
 }
+
+
+
 
 ==================================================== BOTON ====================================================
 
