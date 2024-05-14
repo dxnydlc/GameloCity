@@ -406,6 +406,10 @@ Container(
 
 ==================================================== SELECCIONAR DE UN LIST VIEW ==================================
 
+// MODELO
+
+bool isSelect = false;
+
 ListTile(
                   leading : data.isSelect 
                   ? Icon( Icons.check_box , color : Color( 0XFF1B4332 ) )
