@@ -146,7 +146,7 @@ return Scaffold(
       ),
     ),
   ),
-  floatingActionButton: FloatingActionButton(
+  floatingActionButton: FloatingActionButton( 
     onPressed : ()async{
       // ============================================
         var uuid = Uuid();
@@ -269,6 +269,21 @@ set NuevaClave ( String value )
 {
   _NuevaClave = value;
   notifyListeners();
+}
+
+EN MODELO
+get Porcentaje {
+  if (percent!.isNaN) {
+    return 0;
+  } else {
+    if (percent! >= 1) {
+      return 100;
+    } else {
+      String txtPercent = '${percent}';
+      List<String> arPercent = txtPercent.split('.');
+      return '${arPercent[1]}';
+    }
+  }
 }
 
 
