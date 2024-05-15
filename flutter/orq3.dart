@@ -1123,8 +1123,21 @@ class _CambioTurno_ScreenState extends State<CambioTurno_Screen> {
 
 // xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
+TOAST
 
+/**
 
+Fluttertoast.showToast(
+    msg         : "This is Center Short Toast" , 
+    toastLength : Toast.LENGTH_SHORT , 
+    gravity     : ToastGravity.BOTTOM , 
+    timeInSecForIosWeb  : 1 , 
+    backgroundColor     : Color( 0XFF386641 ) , 
+    textColor   : Colors.white , 
+    fontSize    : 16.0 
+);
+
+/**/
 
 
 
