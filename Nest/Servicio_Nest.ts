@@ -316,6 +316,7 @@ import { UtilidadesService } from 'src/utilidades/utilidades.service';
   // ................................................................
 
   @Get()
+  @HttpCode(200)
   findAll() {
     return this.datosService.findAll();
   }
@@ -323,6 +324,7 @@ import { UtilidadesService } from 'src/utilidades/utilidades.service';
   // ................................................................
 
   @Get(':uuid')
+  @HttpCode(200)
   findOne( @Param('uuid') uuid : string) {
     return this.datosService.findOne( uuid );
   }
@@ -330,13 +332,32 @@ import { UtilidadesService } from 'src/utilidades/utilidades.service';
   // ................................................................
 
   @Patch(':uuid')
-  update(@Param('uuid') uuid : string, @Body() updateDatoDto: UpdateDatoDto) {
-    return this.datosService.update( uuid , updateDatoDto);
+  @HttpCode(200)
+  update(@Param('uuid') uuid : string, @Body() dot: UpdateDatoDto , @Req() req : Request ) {
+    const createdAt = moment().format('YYYY-MM-DD HH:mm:ss');
+    let headerToken = req.headers.authorization;
+    let Usuario = '' , IdUsuario = 0;
+
+    if( headerToken ){
+      let arTOken = headerToken.split(' ');
+      let dataT = await this.util.decodificaToken( arTOken[1] );
+      if( dataT ){
+        Usuario   = dataT['name'];
+        IdUsuario = dataT['dni'];
+      }
+    }
+    const bodyProocolo = {
+      ...dto , 
+      updated_at : createdAt , 
+      IdUsuario , Usuario 
+    };
+    return this.datosService.update( uuid , bodyProocolo);
   }
 
   // ................................................................
 
   @Delete(':uuid')
+  @HttpCode(200)
   remove(@Param('uuid') uuid : string) {
     return this.datosService.remove( uuid );
   }
