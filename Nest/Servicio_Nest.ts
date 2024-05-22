@@ -199,7 +199,6 @@ import { v4 as uuidv4 } from 'uuid';
   async update( uuid : string , dto : UpdateDatoDto ) {
     
     await this.datosModel.update({ uu_id : uuid } , dto );
-
     let dataP = await this.datosModel.findOne({
       where : {
         uu_id : uuid
