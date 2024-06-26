@@ -366,7 +366,88 @@ import { UtilidadesService } from 'src/utilidades/utilidades.service';
 
 
 
+// ==================================================== ENVIAR UN COREO 
+await sleep( 2000 ); // Wait for one second
+      await this.util.varDump( `Fin espera...` );
 
+      // archivos
+      //let dataVideos = await this.archivosModel.getFilesbyToken_publicApp({ formulario : 'SOLICITUD-MANTENIMIENTO-VID' , correlativo : data.id });
+      //let dataImgs   = await this.archivosModel.getFilesbyToken_publicApp({ formulario : 'SOLICITUD-MANTENIMIENTO-IMG' , correlativo : data.id });
+      let Contenido = ``;
+      let Destinatarios = `mantenimiento@ssays.com,supervisor.mantto@ssays.pe,asistente.mantenimiento@ssays.com.pe`;
+      // Test
+      //Destinatarios = `ddelacruz@ssays-orquesta.com,hgrados@ssays-orquesta.com,rrendon@ssays-orquesta.com`;
+      let Asunto = `Solicitud atención maquina Nro ${data.Codigo} - ${data.Activo}`;
+      Contenido += `
+      <!--Welcome  Section Starts Here -->
+      <table cellpadding="0" cellspacing="0" border="0" align="center" width="640" style="width: 640px; min-width: 640px;text-align:center;" bgcolor="#FFFFFF" role="presentation" class="table-container ">
+        <tbody>
+          <tr>
+            <td style="color: #45535C; font-family: 'Lato', Arial, Helvetica, sans-serif; font-size: 26px; line-height: 26px;font-weight:bold;text-align: left;padding: 0 40px;">
+              Solicitud de atención de mantenimiento Nro ${data.Codigo}.
+            </td>
+          </tr>
+          <tr>
+            <td align="center" style="color:#5a5a5a;text-align:left;padding:20px 40px 0 40px;font-family: 'Lato', Arial, Helvetica, sans-serif;font-weight:normal;font-size:16px;-webkit-font-smoothing:antialiased;line-height:1.4;">
+              Buen día,
+              El usuario: ${data.Supervisor} esta solicitando la atención siguiente:
+              <br/>
+              Activo : ${data.Activo}
+              <br/>
+              Nro.Placa/Etiq. : ${data.CodActivo}
+              <br/>
+              Cliente : ${data.Cliente}
+              <br/>
+              Sucursal : ${data.Sucursal}
+              <br/>
+              Dirección : ${data.Direccion}
+              <br/>
+              Fecha solicitud : ${data.FechaSolicitud}
+              <br/>
+              Comentarios de la falla de maquina : <br/>
+              ${data.FallaMaquina}
+            </td>
+          </tr>
+          <tr>
+            <td height="10" style="line-height:10px;min-height:10px;">
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      `;
+      // Supervisor
+      let SuperData = await this.usersService.byDNI(`${data.IdSupervisor}`);
+      let ConCopia = SuperData.email;
+      //Test 
+      //ConCopia = 'dany@delacruz.pe';
+      // Adjunto¿?
+      let attachments = [];
+      let pathPhp = `${process.env.URL_PROYECTO}public/html/`;
+      let Archivo = `SOLMA_${data.Codigo}.pdf`;
+      let FullAdjunto = `${pathPhp}${Archivo}`;
+      let buff = readFileSync(FullAdjunto);
+      let base64data = buff.toString('base64');
+      let ext = FullAdjunto
+        .split('.')
+        .filter(Boolean) // removes empty extensions (e.g. `filename...txt`)
+        .slice(1)
+        .join('.');
+      let mimeType = `application/pdf`;
+      let o = {
+        name: `Solicitud-Atencion-${data.Codigo}-SSAYS-SAC.pdf`,
+        type: mimeType,
+        data: base64data
+      };
+      attachments.push(o);
+      // Enviamos el correo...
+      let MailProc = await this.EnvMail.guardar({
+        Asunto: Asunto,
+        Cuerpo: Contenido,
+        Destinatarios: Destinatarios,
+        ConCopia: ConCopia, TipoDoc: 'Sol-Mant', Adjuntos: o.name,
+        Remitente: ConCopia
+      }, Contenido);
+      await this.EnvMail.EnviarCorreo2024(MailProc.uu_id, attachments);
 
 
 **/
