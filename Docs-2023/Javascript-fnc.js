@@ -129,13 +129,13 @@ function getError01(xhr, status, error)
     let message = responseJSON.message;
     switch (xhr.status) {
         case 400://varios mensajes
-            if( message.length > 0 ){
+            if( Array.isArray( message ) ){
                 for (let index = 0; index < message.length; index++) {
                     const item = message[index];
                     tostada2( { titulo : 'Error' , 'texto' : item , clase : 'error' } );
                 }
             }else{
-                tostada2( { titulo : 'Error' , 'texto' : `${xhr.status}-${error}` , clase : 'error' } );
+                tostada2( { titulo : 'Error' , 'texto' : message , clase : 'error' } );
             }
         break;
         case 409:
