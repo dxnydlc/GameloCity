@@ -6,8 +6,8 @@ ElevatedButton(
   onPressed: () {},
   style: ElevatedButton.styleFrom(
     foregroundColor : Colors.white ,
-    backgroundColor : Colors.green.shade300 , // Text Color (Foreground color),
-    fixedSize       : const Size(150, 70)
+    backgroundColor : Colors.green.shade300 , 
+    // fixedSize       : const Size(150, 70)
   ),
   child: const Text(
     'Elevated Button',
@@ -23,35 +23,6 @@ static const String routerPantalla = 'lista-monitoreo';
 // ...................................................
 final Medida = MediaQuery.of(context).size;
 // ...................................................
-TextStyle txtTitulo = TextStyle(
-  fontFamily: 'DMSans-Regular', fontSize: 18 , color : Color( 0XFFD8F3DC ) 
-);
-// ...................................................
-const txtReg12 = TextStyle(
-  fontFamily: 'DMSans-Regular', fontSize: 12 , color : Color( 0XFF1B4332 )
-);
-// ...................................................
-const txtBtn16W = TextStyle(
-  fontFamily: 'DMSans-Regular', fontSize: 16 , color : Color( 0XFFD8F3DC )
-);
-// ...................................................
-// ...................................................
-// ...................................................
-TextStyle txtTitulo2 = TextStyle(
-  fontFamily: 'DMSans-Regular', fontSize: 18 , color : Color( 0XFFffffff ) 
-);
-// ...............................................
-TextStyle txtCliente = TextStyle(
-  fontFamily: 'DMSans-Regular', fontSize: 11 , color : Color( 0XFF2D6A4F ) 
-);
-// ...............................................
-TextStyle txtSucursal = TextStyle(
-  fontFamily: 'DMSans-Regular', fontSize: 11 , color : Color( 0XFF0077b6 ) 
-);
-// ...................................................
-TextStyle txtCerrar = TextStyle(
-  fontFamily: 'DMSans-Bold', fontSize: 16 , color : Color( 0XFFfb8500 ) , 
-);
 // ...................................................
 // ...................................................
 // ...................................................
@@ -83,7 +54,7 @@ TextStyle txtCerrar = TextStyle(
 return Scaffold(
   appBar: AppBar(
     automaticallyImplyLeading: false,
-    title : Text( 'Monitoreo' , style : txtTitulo ),
+    title : Text( 'Monitoreo' , style : txtTitulo(context) ),
     actions: [
       IconButton(
         onPressed: (){
@@ -105,7 +76,7 @@ return Scaffold(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text("Cerrar en la [X] superior" , style : txtCerrar ),
+            title: Text("Cerrar en la [X] superior" , style : txtCerrar(context) ),
             actions: <Widget>[
               TextButton(
                 onPressed: () => Navigator.of(context).pop(false),
@@ -149,7 +120,7 @@ return Scaffold(
   floatingActionButton: FloatingActionButton( 
     onPressed : ()async{
       // ============================================
-        var uuid = Uuid();
+      var uuid = Uuid();
       String uuIdDoc       = uuid.v4();
       Preferencias.uuIdDoc = uuIdDoc;
       Preferencias.idDoc   = 0;
