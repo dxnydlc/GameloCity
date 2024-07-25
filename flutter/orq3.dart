@@ -1,4 +1,5 @@
 /**
+// Paleta de colores: https://coolors.co/palettes/trending
 // Color en elevatedbutton icon
 // https://www.flutterbeads.com/elevated-button-color-in-flutter/
 
@@ -6,17 +7,21 @@ ElevatedButton(
   onPressed: () {},
   style: ElevatedButton.styleFrom(
     foregroundColor : Colors.white ,
-    backgroundColor : Colors.green.shade300 , 
+    backgroundColor : Color( 0XFF8ecae6 ) , 
     // fixedSize       : const Size(150, 70)
   ),
   child: const Text(
     'Elevated Button',
-    style: TextStyle(fontSize: 40),
+    style: TextStyle(fontSize: 14),
   ),
 )
 
 ==================================================== NUEVA PANTALLA ====================================================
+// ...................................................
 static const String routerPantalla = 'lista-monitoreo';
+// ...................................................
+
+
 ...
 ..
 .
@@ -169,14 +174,15 @@ void showInSnackBar(BuildContext context , String message , String Tipo ) {
 ElevatedButton.icon(
   style: ElevatedButton.styleFrom(
     foregroundColor : Color( 0XFFD8F3DC ) ,
-    backgroundColor : Color( 0XFF2D6A4F ) , // Text Color (Foreground color),
+    backgroundColor : Color( 0XFF0077b6 ) , 
     //fixedSize       : const Size( 180 , 40 )
   ),
   onPressed: ()async{
-    //
+    // =========================================
+    // =========================================
   }, 
   icon    : Icon( IconlyLight.arrow_right_2 ) , 
-  label   : Text( 'Continuar' , style : txtBtn16W ) , 
+  label   : Text( 'Continuar' , style : txtBtn16W( context ) ) , 
 ),
 
 
@@ -274,13 +280,6 @@ final TrampasModel data;
 // ...................................................
     final Medida = MediaQuery.of(context).size;
     // ...................................................
-    TextStyle txt14_rg = TextStyle(
-      fontFamily: 'DMSans-Regular', fontSize: 14 , color : Color( 0XFF1B4332 )
-    );
-    // ...................................................
-    TextStyle txt12_rg = TextStyle(
-      fontFamily: 'DMSans-Regular', fontSize: 12 , color : Color( 0XFF40916C )
-    );
     // ...................................................
     // ...................................................
     // ...................................................
@@ -914,16 +913,42 @@ showModalBottomSheet(
   ),
   builder: (context) {
     return SizedBox(
-      height: 200,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: const <Widget>[
-          ...
-        ],
+      height: Medida.height * 0.2 ,
+      width: Medida.width,
+      child: Padding(
+        padding: const EdgeInsets.symmetric( vertical: 15 , horizontal: 10 ) ,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            // .............................................
+            // .............................................
+            // .............................................
+            // .............................................
+            ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                foregroundColor : Colors.white ,
+                backgroundColor : Color( 0XFF8ecae6 ) , 
+              ),
+              child: const Text(
+                'Confirmar anular',
+                style: TextStyle(fontSize: 18),
+              ),
+            )
+            // .............................................
+            // .............................................
+            // .............................................
+            // .............................................
+            // .............................................
+            // .............................................
+            // .............................................
+          ],
+        ),
       ),
     );
-  });
+  }
+);
 
 
 
