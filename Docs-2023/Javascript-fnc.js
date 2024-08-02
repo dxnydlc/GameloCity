@@ -37,6 +37,13 @@ socket.on('emitir_doc_ventas', function( data ){
 
 // ==============================================================================
 
+// Abril URL
+let _file = json.file;
+let _url = `${_URL_NODE3}api/imgs/descargar_home/${_file}/Req.Dinero.xlsx`;
+location.href = _url;
+
+// ==============================================================================
+
 function initOrq()
 {
     //
