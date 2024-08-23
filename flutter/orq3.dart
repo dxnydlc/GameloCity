@@ -192,45 +192,53 @@ ElevatedButton.icon(
 ==================================================== GUARDAR ==================================
 Future<String> guardar ()async{
 
-  isLoading = true;
-  notifyListeners();
+  try {
+    isLoading = true;
+    notifyListeners();
 
-  String token = await _storage.read(key: 'token_session') ?? '';
-  final headers = {
-    'Content-Type'  : 'application/json',
-    'Charset'       : 'utf-8',
-    'Authorization' : 'Bearer $token'
-  };
-  var url;
-  var resp;
+    String token = await _storage.read(key: 'token_session') ?? '';
+    final headers = {
+      'Content-Type'  : 'application/json',
+      'Charset'       : 'utf-8',
+      'Authorization' : 'Bearer $token'
+    };
+    var url;
+    var resp;
 
-  //
-  if( TurnoSelect?.id == 0 ){
-    url = Uri.https( _baseMysql , 'v1/asistencia-turnos/guardar' );
-    resp = await http.post( url , headers : headers , body: TurnoSelect?.toRawJson() );
     //
-  }else{
-    //
-    url = Uri.https( _baseMysql , 'v1/asistencia-turnos/actualizar/${TurnoSelect?.uuId}' );
-    resp = await http.patch( url , headers : headers , body: TurnoSelect?.toRawJson() );
+    if( TurnoSelect?.id == 0 ){
+      url = Uri.https( _baseMysql , 'v1/asistencia-turnos/guardar' );
+      resp = await http.post( url , headers : headers , body: TurnoSelect?.toRawJson() );
+      //
+    }else{
+      //
+      url = Uri.https( _baseMysql , 'v1/asistencia-turnos/actualizar/${TurnoSelect?.uuId}' );
+      resp = await http.patch( url , headers : headers , body: TurnoSelect?.toRawJson() );
+    }
+    print( resp.body );
+
+    CodigoResp = resp.statusCode;
+
+    if( resp.statusCode == 200 )
+    {
+      TurnoSelect = TurnosModel.fromRawJson( resp.body );
+      //
+    }else{
+      //
+      final Map<String, dynamic> prevData = json.decode( resp.body );
+      MessageResp = prevData['message'].toString();
+    }
+
+    isLoading = false;
+    notifyListeners();
+    return '';
+  } on SocketException {
+    await Future.delayed(const Duration(milliseconds: 1800));
+    throw Exception('No Internet Connection');
+  } on TimeoutException {
+    throw Exception('');
   }
-  print( resp.body );
-
-  CodigoResp = resp.statusCode;
-
-  if( resp.statusCode == 200 )
-  {
-    TurnoSelect = TurnosModel.fromRawJson( resp.body );
-    //
-  }else{
-    //
-    final Map<String, dynamic> prevData = json.decode( resp.body );
-    MessageResp = prevData['message'].toString();
-  }
-
-  isLoading = false;
-  notifyListeners();
-  return '';
+  throw Exception('error fetching data');
 }
 
 
