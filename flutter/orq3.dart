@@ -920,40 +920,47 @@ showModalBottomSheet(
     ),
   ),
   builder: (context) {
-    return SizedBox(
-      height: Medida.height * 0.2 ,
-      width: Medida.width,
-      child: Padding(
-        padding: const EdgeInsets.symmetric( vertical: 15 , horizontal: 10 ) ,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            // .............................................
-            // .............................................
-            // .............................................
-            // .............................................
-            ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                foregroundColor : Colors.white ,
-                backgroundColor : Color( 0XFF8ecae6 ) , 
-              ),
-              child: const Text(
-                'Confirmar anular',
-                style: TextStyle(fontSize: 18),
-              ),
-            )
-            // .............................................
-            // .............................................
-            // .............................................
-            // .............................................
-            // .............................................
-            // .............................................
-            // .............................................
-          ],
-        ),
-      ),
+    return StatefulBuilder(
+      builder: (BuildContext context, setState) {
+        // ...................................................
+        final srvAsist = Provider.of<Asistencia204Service>(context);
+        // ...................................................
+        return SizedBox(
+          height: Medida.height * 0.2 ,
+          width: Medida.width,
+          child: Padding(
+            padding: const EdgeInsets.symmetric( vertical: 15 , horizontal: 10 ) ,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                // .............................................
+                // .............................................
+                // .............................................
+                // .............................................
+                ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor : Colors.white ,
+                    backgroundColor : Color( 0XFF8ecae6 ) , 
+                  ),
+                  child: const Text(
+                    'Confirmar anular',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                )
+                // .............................................
+                // .............................................
+                // .............................................
+                // .............................................
+                // .............................................
+                // .............................................
+                // .............................................
+              ],
+            ),
+          ),
+        );
+      }
     );
   }
 );
