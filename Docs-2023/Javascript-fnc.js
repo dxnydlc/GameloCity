@@ -129,6 +129,65 @@ function guardarDoc()
 	//
 }
 // ==============================================================================
+function cargarDoc()
+{
+	//
+	try {
+		$('#wrapper_form').waitMe({
+			effect  : 'facebook',
+			text    : 'Espere...',
+			bg      : 'rgba(255,255,255,0.7)',
+			color   : '#146436',fontSize:'20px',textPos : 'vertical',
+			onClose : function() {}
+		});
+        var url = `${_urlServicio}`, metodo = `POST`;
+        // - //
+        var _dataSerializada = $('#frmDocumento').serialize();
+        //
+		$.ajax({
+			url     : url,
+            data    : _dataSerializada , 
+			method  : metodo,
+			dataType: "json",
+			headers : {
+				Authorization : `Bearer ${_session3001}`
+			}
+		})
+		.done(function(  json ,textStatus, xhr ) {
+			//
+			switch ( xhr.status )
+            {
+                case 200:
+                    //
+                    let data = json.data;
+                    $.each( json.data , function( key , value ){
+                        $('#frmDocumento #'+key).val(value);
+                    });
+                    //
+                break;
+                case 202:
+                    // denegado...
+                    tostada( json.title , json.texto , json.clase );
+                break;
+                default:
+                break;
+            }
+			/**/
+		})
+		.fail(function(xhr, status, error) {
+            getError01(xhr, status, error);
+			$('#wrapper_form').waitMe('hide');
+		})
+		.always(function() {
+			$('#wrapper_form').waitMe('hide');
+		});
+	} catch (error) {
+		alert( error );
+		$('#wrapper_form').waitMe('hide');
+	}
+	//
+}
+// ==============================================================================
 function getError01(xhr, status, error) 
 {
     //
@@ -523,6 +582,31 @@ function getLocales( IdClienteProv )
 </table>
 */
 var TablaHomePs;
+let optsLangDatatable = {
+    sProcessing : "Procesando...",
+    sLengthMenu : "Mostrar _MENU_ registros",
+    sZeroRecords: "No se encontraron resultados",
+    sEmptyTable : "Ningún dato disponible en esta tabla",
+    sInfo       : "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+    sInfoEmpty  : "Mostrando registros del 0 al 0 de un total de 0 registros",
+    sInfoFiltered   : "(filtrado de un total de _MAX_ registros)",
+    sInfoPostFix    : "",
+    sSearch         : "Buscar:",
+    sUrl            : "",
+    sInfoThousands  : ",",
+    sLoadingRecords : "Cargando...",
+    oPaginate: {
+        sFirst: "|<",
+        sLast: ">|",
+        sNext: ">",
+        sPrevious: "<",
+    },
+    oAria: {
+        sSortAscending: ": Activar para ordenar la columna de manera ascendente",
+        sSortDescending: ": Activar para ordenar la columna de manera descendente",
+    }
+};
+
 TablaHomePs = $('#TablaHomePs').DataTable({
     pagingType : "full_numbers",
     lengthMenu : [
@@ -547,30 +631,7 @@ TablaHomePs = $('#TablaHomePs').DataTable({
     "searching" : true,
     "order"     : [[ 2, "desc" ]],
     "scrollX"   : true,
-    language : {
-        sProcessing : "Procesando...",
-        sLengthMenu : "Mostrar _MENU_ registros",
-        sZeroRecords: "No se encontraron resultados",
-        sEmptyTable : "Ningún dato disponible en esta tabla",
-        sInfo       : "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-        sInfoEmpty  : "Mostrando registros del 0 al 0 de un total de 0 registros",
-        sInfoFiltered   : "(filtrado de un total de _MAX_ registros)",
-        sInfoPostFix    : "",
-        sSearch         : "Buscar:",
-        sUrl            : "",
-        sInfoThousands  : ",",
-        sLoadingRecords : "Cargando...",
-        oPaginate: {
-            sFirst: "|<",
-            sLast: ">|",
-            sNext: ">",
-            sPrevious: "<",
-        },
-        oAria: {
-            sSortAscending: ": Activar para ordenar la columna de manera ascendente",
-            sSortDescending: ": Activar para ordenar la columna de manera descendente",
-        }
-    },
+    language : optsLangDatatable,
     dom: "<'row'<'col-sm-3'l><'col-sm-3'f><'col-sm-6'p>>" +
     "<'row'<'col-sm-12'tr>>" +
     "<'row'<'col-sm-5'i><'col-sm-7'p>>",
@@ -619,21 +680,21 @@ TablaHomePs = $('#TablaHomePs').DataTable({
         }
 
         // Fecha Mod 12
-        $('td' ,row ).eq( 12 ).html( moment( data.updated_at ).format('YYYY-MM-DD HH:mm:ss') );
+        $('td' ,row ).eq( 12 ).html( moment( data.updated_at ).format('DD/MM/YYYY HH:mm') );
 
         
     },
     columns : [
-        /* { "data" : null ,
+        { "data" : null ,
             render: (data,type,row) => {
-            return `<div class=" edit_wrapper " data-idarti="${data.IdArticulo}" ><a href='#' data-uuid="${data.uu_id}" data-id="${data.id}" class=" editarItem btn btn-primary btn-sm" ><i class="fa fa-edit" ></i></a></div>`;
+            return `<a href='#' data-uuid="${data.uu_id}" data-id="${data.id}" data-idarti="${data.IdArticulo}" class=" editarItem btn btn-primary btn-sm" ><i class="fa fa-edit" ></i></a>`;
             }
         },
         { "data" : null ,
             render: (data,type,row) => {
-            return `<div class=" del_wrapper " data-idarti="${data.IdArticulo}" ><a href='#' data-uuid="${data.uu_id}" data-id="${data.id}" data-idarti="${data.IdArticulo}" class=" anularItem btn btn-danger btn-sm" ><i class="fa fa-trash" ></i></a></div>`;
+            return `<a href='#' data-uuid="${data.uu_id}" data-id="${data.id}" data-idarti="${data.IdArticulo}" class=" anularItem btn btn-danger btn-sm" ><i class="fa fa-trash" ></i></a>`;
             }
-        }, */
+        },
         { "data" : "Local" } , 
         { "data" : "IdArticulo" } , 
         { "data" : "Articulo" } , 
@@ -645,7 +706,29 @@ TablaHomePs = $('#TablaHomePs').DataTable({
     select: {
         style: 'single'
     },
+    columnDefs: [
+        // Para agregar contador, donde el 2 es el Nro de la columna a sobre escribir
+        {
+            searchable  : false,
+            orderable   : false,
+            targets     : 2
+        }
+    ],
 });
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+TablaHomePs.on('order.dt search.dt', function () {
+    let i = 1;
+    // Para agregar contador, donde el 2 es el Nro de la columna a sobre escribir
+    TablaHomePs
+        .cells(null, 2 , { search: 'applied', order: 'applied' })
+        .every(function (cell) {
+            this.data(i++);
+        });
+})
+.draw();
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
 var buttonsPS = new $.fn.dataTable.Buttons( TablaHomePs , {
     buttons: [
