@@ -1,3 +1,20 @@
+// =========================== TABLA
+DROP TABLE if exists ssays01.orq_protocolo_medico;
+
+
+CREATE TABLE `orq_protocolo_medico` (
+	`id` 		 INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`uu_id` 	 VARCHAR(150) DEFAULT NULL,
+
+	`Codigo` 	   VARCHAR(150) DEFAULT NULL,
+    `Descripcion`  VARCHAR(150) DEFAULT NUll,
+	
+	`deleted_at` 	TIMESTAMP NULL DEFAULT NULL,
+	`created_at` 	TIMESTAMP NULL DEFAULT NULL,
+	`updated_at` 	TIMESTAMP NULL DEFAULT NULL,
+	PRIMARY KEY (`id`)
+)
+ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=UTF8MB4_UNICODE_CI;
 
 /**
  * 
