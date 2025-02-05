@@ -27,14 +27,6 @@ Contratos
 <!-- ************************************************** -->
 <?= $this->section('los_css') ?>
 
-<link href="https://nestjs-mysql.ssays-orquesta.com/web/plugins/jquery-upload-file-master/css/uploadfile.css" rel="stylesheet" />
-
-<link rel="stylesheet" href="https://nestjs-mysql.ssays-orquesta.com/web/plugins/fancybox-master/dist/jquery.fancybox.min.css" />
-
-<link rel="stylesheet" href="https://nestjs-mysql.ssays-orquesta.com/web/plugins/daterangepicker-master/daterangepicker.css" />
-
-<link rel="stylesheet" href="https://nestjs-mysql.ssays-orquesta.com/web/plugins/bootstrap-fileinput-master/css/fileinput.css" />
-
 
 <?= $this->endSection() ?>
 <!-- ************************************************** -->
@@ -52,7 +44,7 @@ Contratos
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        Carga de boletas.
+        Unidad de negocios.
         <small>SSAYS</small>
     </h1>
 </section>
@@ -110,11 +102,11 @@ Contratos
 
 
 <!-- Formulario -->
-<?= $this->include('envio_boletas/frmEnvBoleta') ?>
+<?= $this->include('unidad_negocio/formUndNegocio') ?>
 
 
 <!-- MOdal -->
-<?= $this->include('envio_boletas/mdlEnvBoleta') ?>
+<?= $this->include('unidad_negocio/mdlUndNegocio') ?>
 
 
 </section>
@@ -133,35 +125,14 @@ Contratos
 <?= $this->section('los_js') ?>
 
 
-<script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js" ></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js" ></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js" ></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js" ></script>
-<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js" ></script>
-<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js" ></script>
 
-
-
-
-
-
-
-<script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@2.13.216/build/pdf.min.js" integrity="sha256-Yjn9rQHDeN29XFpZN9iixcSI5lf9Spfmv/3g+w3gqao=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.13.216/pdf.worker.min.js"></script>
-
-<script src="https://nestjs-mysql.ssays-orquesta.com/web/plugins/bootstrap-fileinput-master/js/fileinput.min.js" ></script>
-<script src="https://nestjs-mysql.ssays-orquesta.com/web/plugins/bootstrap-fileinput-master/js/locales/es.js" ></script>
-<script src="https://nestjs-mysql.ssays-orquesta.com/web/plugins/bootstrap-fileinput-master/js/plugins/piexif.js" ></script>
-<script src="https://nestjs-mysql.ssays-orquesta.com/web/plugins/bootstrap-fileinput-master/js/plugins/sortable.js" ></script>
-
-
-
-<script src="<?= esc($APP_URL) ?>librerias/envio_boletas/homeEnvBoletas.js?v=<?= $VERSION ?>"></script>
+<script src="<?= esc($APP_URL) ?>librerias/unidad_negocio/home_unidad_negocio.js?v=<?= $VERSION ?>"></script>
 
 
 
 <?= $this->endSection() ?>
 <!-- ************************************************** -->
+
 
 
 
