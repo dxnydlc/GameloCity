@@ -77,12 +77,9 @@ Contratos
                         <tr>
                             <th></th>
                             <th></th>
+                            <th>Nro</th>
                             <th>Código</th>
-                            <th>Tipo</th>
-                            <th>Mes</th>
-                            <th>Año</th>
-                            <th>Cliente</th>
-                            <th>Local</th>
+                            <th>Descripción</th>
                             <th>Estado</th>
                             <th>Creado por</th>
                             <th>Modificado</th>
