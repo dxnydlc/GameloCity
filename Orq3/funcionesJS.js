@@ -403,8 +403,9 @@ let _IdAutorizado = $('#frmDocumento #IdAutorizado').select2({
 });
 /* ------------------------------------------------------------- */
 _IdAutorizado.on("select2:select", function (e) { 
-    var _Id = e.params.data.id, _Texto = e.params.data.text;
+    let _Id = e.params.data.id, _Texto = e.params.data.text;
     console.log("select2:select", _Id );
+	$('#frmDocumento #ClaseServicio').val( _Texto );
 });
 /* ------------------------------------------------------------- */
 var num = 5.56789;
