@@ -92,6 +92,7 @@
             <!-- /.box-footer -->
         </div>
         <!-- ./box -->
+	</div>
         <!-- ./col -->
     </div>
     <!-- ./row -->
