@@ -413,7 +413,7 @@ var n = num.toFixed(2);
 /* ------------------------------------------------------------- */
 $(document).delegate('.delData', 'click', function(event) {
 	event.preventDefault();
-	var $id = $(this).data('id'), $uuid = $(this).data('uuid'), $nombre = $(this).data('nombre');
+	let id = $(this).data('id'), uuID = $(this).data('uuid'), $nombre = $(this).data('nombre');
 });
 /* ------------------------------------------------------------- */
 $.confirm({
