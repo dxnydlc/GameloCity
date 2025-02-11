@@ -103,7 +103,7 @@ function guardarDoc()
                     //
                     let data = json.data;
                     $('#frmDocumento #id').val( data.id );
-                    $('#frmDocumento #uu_id').val( data.uu_id );
+                    tostada( 'Correcto' , 'Registro guardado' , 'success' );
                     //
                 break;
                 case 202:
