@@ -14,7 +14,7 @@ socket.emit('accion:todos',{
 // ******* NODE JS *******
 socket.emit('accion:audit',{
 	user  : $nomU,
-	msg   : 'Aprobar Req.Mat. #'+$('#frmDocumento #IdRequerimientoCab').val(),
+	msg   : `EVENTO` ,
 	dni   : $dniU,
 	serie : 0,
 	corr  : 0,
