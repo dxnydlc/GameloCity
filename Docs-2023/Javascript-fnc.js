@@ -631,7 +631,7 @@ TablaHomePs = $('#TablaHomePs').DataTable({
             ]
         }
     ],
-    "searching" : true,
+    "searching" : false,
     "order"     : [[ 2, "desc" ]],
     "scrollX"   : true,
     language : optsLangDatatable,
