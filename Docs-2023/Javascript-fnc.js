@@ -1,4 +1,10 @@
 
+/*
+var _TokenUser = '', _token_node = '', _dataUserSESSION = {};
+var _APP_URL = 'http://localhost:8059/', _URL_NODE = 'http://164.90.239.250:8518/', _URL_NODE3 = 'http://164.90.239.250:8518/';
+var _URL_HOME = 'http://localhost:8059/', _URL_API = 'http://api3.yupicode.com/', _URL_API2 = 'http://api3.yupicode.com/', _SessionToken = '', _URL_CONCAR = 'https://ssaysapp.com:1702/api/';
+var _session3001 = '', _URL_NESTMy = 'http://localhost:3001/';
+*/
 // ==============================================================================
 
 // ******* NODE JS *******
