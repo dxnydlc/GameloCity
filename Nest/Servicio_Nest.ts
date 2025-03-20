@@ -64,13 +64,13 @@ export class DatosModel {
     Usuario : string
 
     @Column()
-    deleted_at : Date
+    deleted_at : string
 
     @Column()
-    created_at : Date
+    created_at : string
 
     @Column()
-    updated_at : Date
+    updated_at : string
 
 
 
@@ -95,6 +95,8 @@ export class DatosModel {
 // ************************************************
 
   export class createUserDto{
+
+    // ************************************************
 
     @ApiProperty({
         description : 'Tipo',
@@ -125,8 +127,6 @@ imports : [
   TypeOrmModule.forFeature([
     SupCronogramaModel 
   ]) , 
-  SucursalesModule , 
-  ClientesModule , 
   UtilidadesModule , 
 ],
 exports     : [SupCronogramaService]
@@ -147,8 +147,8 @@ import { v4 as uuidv4 } from 'uuid';
 
 
 
-// ...................................................................
-
+  // ...................................................................
+  // ...................................................................
   constructor(
     @InjectRepository( DatosModel )private readonly datosModel:Repository<DatosModel> ,
     private regEmple: RegistroEmpleadosService , 
@@ -156,96 +156,136 @@ import { v4 as uuidv4 } from 'uuid';
   ){}
 
   // ...................................................................
-
+  // ...................................................................
   async create( dto : CreateDatoDto ) {
     
-    const newArea = await this.datosModel.create( dto );
-    let dataSave  = await this.datosModel.save( newArea );
-    //let Codigo = await this.util.addZeros( dataSave.id , 4 );
-    //await this.datosModel.update({ id : dataSave.id },{ Codigo : `RM${Codigo}` });
+    try {
+      
+      const newArea = await this.votoModel.create( dto );
+      let dataSave  = await this.votoModel.save( newArea );
+      //let Codigo = await this.util.addZeros( dataSave.id , 4 );
+      //await this.datosModel.update({ id : dataSave.id },{ Codigo : `RM${Codigo}` });
 
-    let data = await this.datosModel.findOne({
-      where : {
-        id : dataSave.id
+      let data = await this.votoModel.findOne({
+        where : {
+          id : dataSave.id
+        }
+      });
+
+      return {
+        data , 
+        version : '1' , 
+        msg : { title : 'Correcto' , texto : 'Registro guardado' , clase : 'success' , call : 'tostada2' }
       }
-    });
 
-    return {
-      data , 
-      version : '1'
+    } catch (error) {
+      
+      throw new HttpException( error , HttpStatus.CONFLICT );
+
     }
 
   }
-
   // ...................................................................
-
+  // ...................................................................
   async findAll() {
     
-    let data = await this.datosModel.find({
-      take : 200 ,
-      order : {
-        id : 'DESC'
+    try {
+      
+      let data = await this.votoModel.find({
+        take : 200 ,
+        order : {
+          id : 'DESC'
+        }
+      });
+  
+      return {
+        data , 
+        version : '1' , 
+        msg : { title : 'Correcto' , texto : 'Registros cargados' , clase : 'success' , call : 'tostada2' }
       }
-    });
 
-    return {
-      data , 
-      version : '1'
+    } catch (error) {
+
+      throw new HttpException( error , HttpStatus.CONFLICT );
+
     }
 
   }
-
   // ...................................................................
-
+  // ...................................................................
   async findOne( uuid : string ) {
-    let data = await this.datosModel.findOne({
-      where : {
-        uu_id : uuid
-      }
-    });
+    try {
 
-    return {
-      data , 
-      version : '1'
+      let data = await this.votoModel.findOne({
+        where : {
+          uu_id : uuid
+        }
+      });
+
+      return {
+        data , 
+        version : '1' , 
+        msg : { title : 'Correcto' , texto : 'Registro recibido' , clase : 'success' , call : 'tostada2' }
+      }
+      
+    } catch (error) {
+      
+      throw new HttpException( error , HttpStatus.CONFLICT );
+
     }
   }
-
   // ...................................................................
-
-  async update( uuid : string , dto : UpdateDatoDto ) {
+  // ...................................................................
+  async update( uuID : string , dto : UpdateDatoDto ) {
     
-    await this.datosModel.update({ uu_id : uuid } , dto );
-    let dataP = await this.datosModel.findOne({
-      where : {
-        uu_id : uuid
-      }
-    });
+    try {
 
-    return {
-      data : dataP , 
-      version : '1'
+      await this.votoModel.update({ uu_id : uuID } , dto );
+      let dataP = await this.votoModel.findOne({
+        where : {
+          uu_id : uuID
+        }
+      });
+
+      return {
+        data : dataP , 
+        version : '1' , 
+        msg : { title : 'Correcto' , texto : 'Registro actualizado' , clase : 'success' , call : 'tostada2' }
+      }
+      
+    } catch (error) {
+
+      throw new HttpException( error , HttpStatus.CONFLICT );
+      
     }
 
   }
-
   // ...................................................................
+  // ...................................................................
+  async remove( uuID : string ) {
+    try {
 
-  async remove( uuid : string ) {
-    const updatedAt = moment().format('YYYY-MM-DD HH:mm:ss');
+      const updatedAt = moment().format('YYYY-MM-DD HH:mm:ss');
 
-    await this.datosModel.update({ uu_id : uuid } , { Estado : 'Anulado' , deleted_at : updatedAt , updated_at : updatedAt } );
-    let data = await this.datosModel.findOne({
-      where : {
-        uu_id : uuid
+      await this.votoModel.update({ uu_id : uuid } , { deleted_at : updatedAt , updated_at : updatedAt } );
+      let data = await this.votoModel.findOne({
+        where : {
+          uu_id : uuid
+        }
+      });
+
+      return {
+        data , 
+        version : '1' , 
+        msg : { title : 'Correcto' , texto : 'Registro anulado' , clase : 'success' , call : 'tostada2' }
       }
-    });
+      
+    } catch (error) {
+      
+      throw new HttpException( error , HttpStatus.CONFLICT );
 
-    return {
-      data , 
-      version : '1'
     }
   }
-
   // ...................................................................
   // ...................................................................
   async maxId()
@@ -253,6 +293,7 @@ import { v4 as uuidv4 } from 'uuid';
     let MaxId = await this.areaModel.createQueryBuilder('areas').select("MAX(areas.CodArea)", "max").getRawOne();
     return MaxId.max + 1;
   }
+  // ...................................................................
   // ...................................................................
   async buscaDescri( nombre :string )
   {
@@ -263,6 +304,7 @@ import { v4 as uuidv4 } from 'uuid';
     });
     return data.length;
   }
+  // ...................................................................
   // ...................................................................
 
 -- FUERA DE LA CLASE
@@ -299,7 +341,7 @@ import { UtilidadesService } from 'src/utilidades/utilidades.service';
 
 
 // ................................................................
-
+// ................................................................
   constructor(
     private readonly datosService: DatosService , 
     private readonly util : UtilidadesService , 
