@@ -1,57 +1,36 @@
 /**
+// Paleta de colores: https://coolors.co/palettes/trending
 // Color en elevatedbutton icon
 // https://www.flutterbeads.com/elevated-button-color-in-flutter/
 
 ElevatedButton(
-  onPressed: () {},
+  onPressed: () async{
+    // =================================================
+    // =================================================
+  },
   style: ElevatedButton.styleFrom(
     foregroundColor : Colors.white ,
-    backgroundColor : Colors.green.shade300 , // Text Color (Foreground color),
-    fixedSize       : const Size(150, 70)
+    backgroundColor : Color( 0XFF8ecae6 ) , 
+    // fixedSize       : const Size(150, 70)
   ),
   child: const Text(
     'Elevated Button',
-    style: TextStyle(fontSize: 40),
+    style: TextStyle(fontSize: 14),
   ),
 )
 
 ==================================================== NUEVA PANTALLA ====================================================
+// ...................................................
 static const String routerPantalla = 'lista-monitoreo';
+// ...................................................
+
+
 ...
 ..
 .
 // ...................................................
 final Medida = MediaQuery.of(context).size;
 // ...................................................
-TextStyle txtTitulo = TextStyle(
-  fontFamily: 'DMSans-Regular', fontSize: 18 , color : Color( 0XFFD8F3DC ) 
-);
-// ...................................................
-const txtReg12 = TextStyle(
-  fontFamily: 'DMSans-Regular', fontSize: 12 , color : Color( 0XFF1B4332 )
-);
-// ...................................................
-const txtBtn16W = TextStyle(
-  fontFamily: 'DMSans-Regular', fontSize: 16 , color : Color( 0XFFD8F3DC )
-);
-// ...................................................
-// ...................................................
-// ...................................................
-TextStyle txtTitulo2 = TextStyle(
-  fontFamily: 'DMSans-Regular', fontSize: 18 , color : Color( 0XFFffffff ) 
-);
-// ...............................................
-TextStyle txtCliente = TextStyle(
-  fontFamily: 'DMSans-Regular', fontSize: 11 , color : Color( 0XFF2D6A4F ) 
-);
-// ...............................................
-TextStyle txtSucursal = TextStyle(
-  fontFamily: 'DMSans-Regular', fontSize: 11 , color : Color( 0XFF0077b6 ) 
-);
-// ...................................................
-TextStyle txtCerrar = TextStyle(
-  fontFamily: 'DMSans-Bold', fontSize: 16 , color : Color( 0XFFfb8500 ) , 
-);
 // ...................................................
 // ...................................................
 // ...................................................
@@ -83,7 +62,7 @@ TextStyle txtCerrar = TextStyle(
 return Scaffold(
   appBar: AppBar(
     automaticallyImplyLeading: false,
-    title : Text( 'Monitoreo' , style : txtTitulo ),
+    title : Text( 'Monitoreo' , style : txtTitulo(context) ),
     actions: [
       IconButton(
         onPressed: (){
@@ -105,7 +84,7 @@ return Scaffold(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text("Cerrar en la [X] superior" , style : txtCerrar ),
+            title: Text("Cerrar en la [X] superior" , style : txtCerrar(context) ),
             actions: <Widget>[
               TextButton(
                 onPressed: () => Navigator.of(context).pop(false),
@@ -149,7 +128,7 @@ return Scaffold(
   floatingActionButton: FloatingActionButton( 
     onPressed : ()async{
       // ============================================
-        var uuid = Uuid();
+      var uuid = Uuid();
       String uuIdDoc       = uuid.v4();
       Preferencias.uuIdDoc = uuIdDoc;
       Preferencias.idDoc   = 0;
@@ -198,14 +177,15 @@ void showInSnackBar(BuildContext context , String message , String Tipo ) {
 ElevatedButton.icon(
   style: ElevatedButton.styleFrom(
     foregroundColor : Color( 0XFFD8F3DC ) ,
-    backgroundColor : Color( 0XFF2D6A4F ) , // Text Color (Foreground color),
+    backgroundColor : Color( 0XFF0077b6 ) , 
     //fixedSize       : const Size( 180 , 40 )
   ),
   onPressed: ()async{
-    //
+    // =========================================
+    // =========================================
   }, 
   icon    : Icon( IconlyLight.arrow_right_2 ) , 
-  label   : Text( 'Continuar' , style : txtBtn16W ) , 
+  label   : Text( 'Continuar' , style : txtBtn16W( context ) ) , 
 ),
 
 
@@ -213,47 +193,55 @@ ElevatedButton.icon(
 
 
 ==================================================== GUARDAR ==================================
-Future<String> guardar ()async{
+Future<String> guardar()async{
 
-  isLoading = true;
-  notifyListeners();
+  try {
+    isLoading = true;
+    notifyListeners();
 
-  String token = await _storage.read(key: 'token_session') ?? '';
-  final headers = {
-    'Content-Type'  : 'application/json',
-    'Charset'       : 'utf-8',
-    'Authorization' : 'Bearer $token'
-  };
-  var url;
-  var resp;
+    String token = await _storage.read(key: 'token_session') ?? '';
+    final headers = {
+      'Content-Type'  : 'application/json',
+      'Charset'       : 'utf-8',
+      'Authorization' : 'Bearer $token'
+    };
+    var url;
+    var resp;
 
-  //
-  if( TurnoSelect?.id == 0 ){
-    url = Uri.https( _baseMysql , 'v1/asistencia-turnos/guardar' );
-    resp = await http.post( url , headers : headers , body: TurnoSelect?.toRawJson() );
     //
-  }else{
-    //
-    url = Uri.https( _baseMysql , 'v1/asistencia-turnos/actualizar/${TurnoSelect?.uuId}' );
-    resp = await http.patch( url , headers : headers , body: TurnoSelect?.toRawJson() );
+    if( TurnoSelect?.id == 0 ){
+      url = Uri.https( _baseMysql , 'v1/asistencia-turnos/guardar' );
+      resp = await http.post( url , headers : headers , body: TurnoSelect?.toRawJson() );
+      //
+    }else{
+      //
+      url = Uri.https( _baseMysql , 'v1/asistencia-turnos/actualizar/${TurnoSelect?.uuId}' );
+      resp = await http.patch( url , headers : headers , body: TurnoSelect?.toRawJson() );
+    }
+    print( resp.body );
+
+    CodigoResp = resp.statusCode;
+
+    if( resp.statusCode == 200 )
+    {
+      TurnoSelect = TurnosModel.fromRawJson( resp.body );
+      //
+    }else{
+      //
+      final Map<String, dynamic> prevData = json.decode( resp.body );
+      MessageResp = prevData['message'].toString();
+    }
+
+    isLoading = false;
+    notifyListeners();
+    return '';
+  } on SocketException {
+    await Future.delayed(const Duration(milliseconds: 1800));
+    throw Exception('No Internet Connection');
+  } on TimeoutException {
+    throw Exception('');
   }
-  print( resp.body );
-
-  CodigoResp = resp.statusCode;
-
-  if( resp.statusCode == 200 )
-  {
-    TurnoSelect = TurnosModel.fromRawJson( resp.body );
-    //
-  }else{
-    //
-    final Map<String, dynamic> prevData = json.decode( resp.body );
-    MessageResp = prevData['message'].toString();
-  }
-
-  isLoading = false;
-  notifyListeners();
-  return '';
+  throw Exception('error fetching data');
 }
 
 
@@ -303,13 +291,6 @@ final TrampasModel data;
 // ...................................................
     final Medida = MediaQuery.of(context).size;
     // ...................................................
-    TextStyle txt14_rg = TextStyle(
-      fontFamily: 'DMSans-Regular', fontSize: 14 , color : Color( 0XFF1B4332 )
-    );
-    // ...................................................
-    TextStyle txt12_rg = TextStyle(
-      fontFamily: 'DMSans-Regular', fontSize: 12 , color : Color( 0XFF40916C )
-    );
     // ...................................................
     // ...................................................
     // ...................................................
@@ -608,7 +589,7 @@ badges.Badge(
                   ),
 
 
-==================================================== COMBITO COMBO ====================================================
+==================================================== COMBITO  FROM MODELO ====================================================
 
 DropdownButtonFormField(
                               decoration: const InputDecoration(
@@ -942,17 +923,50 @@ showModalBottomSheet(
     ),
   ),
   builder: (context) {
-    return SizedBox(
-      height: 200,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: const <Widget>[
-          ...
-        ],
-      ),
+    return StatefulBuilder(
+      builder: (BuildContext context, setState) {
+        // ...................................................
+        final srvAsist = Provider.of<Asistencia204Service>(context);
+        // ...................................................
+        return SizedBox(
+          height: Medida.height * 0.2 ,
+          width: Medida.width,
+          child: Padding(
+            padding: const EdgeInsets.symmetric( vertical: 15 , horizontal: 10 ) ,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                // .............................................
+                // .............................................
+                // .............................................
+                // .............................................
+                ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor : Colors.white ,
+                    backgroundColor : Color( 0XFF8ecae6 ) , 
+                  ),
+                  child: const Text(
+                    'Confirmar anular',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                )
+                // .............................................
+                // .............................................
+                // .............................................
+                // .............................................
+                // .............................................
+                // .............................................
+                // .............................................
+              ],
+            ),
+          ),
+        );
+      }
     );
-  });
+  }
+);
 
 
 

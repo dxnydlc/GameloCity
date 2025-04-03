@@ -1,4 +1,10 @@
 
+/*
+var _TokenUser = '', _token_node = '', _dataUserSESSION = {};
+var _APP_URL = 'http://localhost:8059/', _URL_NODE = 'http://164.90.239.250:8518/', _URL_NODE3 = 'http://164.90.239.250:8518/';
+var _URL_HOME = 'http://localhost:8059/', _URL_API = 'http://api3.yupicode.com/', _URL_API2 = 'http://api3.yupicode.com/', _SessionToken = '', _URL_CONCAR = 'https://ssaysapp.com:1702/api/';
+var _session3001 = '', _URL_NESTMy = 'http://localhost:3001/';
+*/
 // ==============================================================================
 
 // ******* NODE JS *******
@@ -14,7 +20,7 @@ socket.emit('accion:todos',{
 // ******* NODE JS *******
 socket.emit('accion:audit',{
 	user  : $nomU,
-	msg   : 'Aprobar Req.Mat. #'+$('#frmDocumento #IdRequerimientoCab').val(),
+	msg   : `EVENTO` ,
 	dni   : $dniU,
 	serie : 0,
 	corr  : 0,
@@ -34,6 +40,13 @@ socket.on('emitir_doc_ventas', function( data ){
       }
     }
 });
+
+// ==============================================================================
+
+// Abril URL
+let _file = json.file;
+let _url = `${_URL_NODE3}api/imgs/descargar_home/${_file}/Req.Dinero.xlsx`;
+location.href = _url;
 
 // ==============================================================================
 
@@ -96,7 +109,66 @@ function guardarDoc()
                     //
                     let data = json.data;
                     $('#frmDocumento #id').val( data.id );
-                    $('#frmDocumento #uu_id').val( data.uu_id );
+                    tostada( 'Correcto' , 'Registro guardado' , 'success' );
+                    //
+                break;
+                case 202:
+                    // denegado...
+                    tostada( json.title , json.texto , json.clase );
+                break;
+                default:
+                break;
+            }
+			/**/
+		})
+		.fail(function(xhr, status, error) {
+            getError01(xhr, status, error);
+			$('#wrapper_form').waitMe('hide');
+		})
+		.always(function() {
+			$('#wrapper_form').waitMe('hide');
+		});
+	} catch (error) {
+		alert( error );
+		$('#wrapper_form').waitMe('hide');
+	}
+	//
+}
+// ==============================================================================
+function cargarDoc()
+{
+	//
+	try {
+		$('#wrapper_form').waitMe({
+			effect  : 'facebook',
+			text    : 'Espere...',
+			bg      : 'rgba(255,255,255,0.7)',
+			color   : '#146436',fontSize:'20px',textPos : 'vertical',
+			onClose : function() {}
+		});
+        var url = `${_urlServicio}`, metodo = `POST`;
+        // - //
+        var _dataSerializada = $('#frmDocumento').serialize();
+        //
+		$.ajax({
+			url     : url,
+            data    : _dataSerializada , 
+			method  : metodo,
+			dataType: "json",
+			headers : {
+				Authorization : `Bearer ${_session3001}`
+			}
+		})
+		.done(function(  json ,textStatus, xhr ) {
+			//
+			switch ( xhr.status )
+            {
+                case 200:
+                    //
+                    let data = json.data;
+                    $.each( json.data , function( key , value ){
+                        $('#frmDocumento #'+key).val(value);
+                    });
                     //
                 break;
                 case 202:
@@ -129,13 +201,13 @@ function getError01(xhr, status, error)
     let message = responseJSON.message;
     switch (xhr.status) {
         case 400://varios mensajes
-            if( message.length > 0 ){
+            if( Array.isArray( message ) ){
                 for (let index = 0; index < message.length; index++) {
                     const item = message[index];
                     tostada2( { titulo : 'Error' , 'texto' : item , clase : 'error' } );
                 }
             }else{
-                tostada2( { titulo : 'Error' , 'texto' : `${xhr.status}-${error}` , clase : 'error' } );
+                tostada2( { titulo : 'Error' , 'texto' : message , clase : 'error' } );
             }
         break;
         case 409:
@@ -209,6 +281,9 @@ function getAll()
 // ==============================================================================
 // #########    DATE RANGE PICKER #########
 /**
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/3.0.5/daterangepicker.min.css" integrity="sha512-rBi1cGvEdd3NmSAQhPWId5Nd6QxE8To4ADjM2a6n0BrqQdisZ/RPUlm0YycDzvNL1HHAh1nKZqI0kSbif+5upQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/3.0.5/daterangepicker.min.js" integrity="sha512-mh+AjlD3nxImTUGisMpHXW03gE6F4WdQyvuFRkjecwuWLwD2yCijw4tKA3NsEFpA1C3neiKhGXPSIGSfCYPMlQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 <link rel="stylesheet" href="{{ asset('plugins/daterangepicker-master/daterangepicker.css') }}">
 <script src="{{ asset('plugins/daterangepicker-master/daterangepicker.js') }}"></script>
 <div class="form-group">
@@ -346,7 +421,7 @@ var n = num.toFixed(2);
 /* ------------------------------------------------------------- */
 $(document).delegate('.delData', 'click', function(event) {
 	event.preventDefault();
-	var $id = $(this).data('id'), $uuid = $(this).data('uuid'), $nombre = $(this).data('nombre');
+	let id = $(this).data('id'), uuid = $(this).data('uuid'), nombre = $(this).data('nombre');
 });
 /* ------------------------------------------------------------- */
 $.confirm({
@@ -516,6 +591,31 @@ function getLocales( IdClienteProv )
 </table>
 */
 var TablaHomePs;
+let optsLangDatatable = {
+    sProcessing : "Procesando...",
+    sLengthMenu : "Mostrar _MENU_ registros",
+    sZeroRecords: "No se encontraron resultados",
+    sEmptyTable : "Ningún dato disponible en esta tabla",
+    sInfo       : "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+    sInfoEmpty  : "Mostrando registros del 0 al 0 de un total de 0 registros",
+    sInfoFiltered   : "(filtrado de un total de _MAX_ registros)",
+    sInfoPostFix    : "",
+    sSearch         : "Buscar:",
+    sUrl            : "",
+    sInfoThousands  : ",",
+    sLoadingRecords : "Cargando...",
+    oPaginate: {
+        sFirst: "|<",
+        sLast: ">|",
+        sNext: ">",
+        sPrevious: "<",
+    },
+    oAria: {
+        sSortAscending: ": Activar para ordenar la columna de manera ascendente",
+        sSortDescending: ": Activar para ordenar la columna de manera descendente",
+    }
+};
+
 TablaHomePs = $('#TablaHomePs').DataTable({
     pagingType : "full_numbers",
     lengthMenu : [
@@ -537,33 +637,10 @@ TablaHomePs = $('#TablaHomePs').DataTable({
             ]
         }
     ],
-    "searching" : true,
+    "searching" : false,
     "order"     : [[ 2, "desc" ]],
     "scrollX"   : true,
-    language : {
-        sProcessing : "Procesando...",
-        sLengthMenu : "Mostrar _MENU_ registros",
-        sZeroRecords: "No se encontraron resultados",
-        sEmptyTable : "Ningún dato disponible en esta tabla",
-        sInfo       : "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-        sInfoEmpty  : "Mostrando registros del 0 al 0 de un total de 0 registros",
-        sInfoFiltered   : "(filtrado de un total de _MAX_ registros)",
-        sInfoPostFix    : "",
-        sSearch         : "Buscar:",
-        sUrl            : "",
-        sInfoThousands  : ",",
-        sLoadingRecords : "Cargando...",
-        oPaginate: {
-            sFirst: "|<",
-            sLast: ">|",
-            sNext: ">",
-            sPrevious: "<",
-        },
-        oAria: {
-            sSortAscending: ": Activar para ordenar la columna de manera ascendente",
-            sSortDescending: ": Activar para ordenar la columna de manera descendente",
-        }
-    },
+    language : optsLangDatatable,
     dom: "<'row'<'col-sm-3'l><'col-sm-3'f><'col-sm-6'p>>" +
     "<'row'<'col-sm-12'tr>>" +
     "<'row'<'col-sm-5'i><'col-sm-7'p>>",
@@ -612,21 +689,21 @@ TablaHomePs = $('#TablaHomePs').DataTable({
         }
 
         // Fecha Mod 12
-        $('td' ,row ).eq( 12 ).html( moment( data.updated_at ).format('YYYY-MM-DD HH:mm:ss') );
+        $('td' ,row ).eq( 12 ).html( moment( data.updated_at ).format('DD/MM/YYYY HH:mm') );
 
         
     },
     columns : [
-        /* { "data" : null ,
+        { "data" : null ,
             render: (data,type,row) => {
-            return `<div class=" edit_wrapper " data-idarti="${data.IdArticulo}" ><a href='#' data-uuid="${data.uu_id}" data-id="${data.id}" class=" editarItem btn btn-primary btn-sm" ><i class="fa fa-edit" ></i></a></div>`;
+            return `<a href='#' data-uuid="${data.uu_id}" data-id="${data.id}" data-idarti="${data.IdArticulo}" class=" editarItem btn btn-primary btn-sm" ><i class="fa fa-edit" ></i></a>`;
             }
         },
         { "data" : null ,
             render: (data,type,row) => {
-            return `<div class=" del_wrapper " data-idarti="${data.IdArticulo}" ><a href='#' data-uuid="${data.uu_id}" data-id="${data.id}" data-idarti="${data.IdArticulo}" class=" anularItem btn btn-danger btn-sm" ><i class="fa fa-trash" ></i></a></div>`;
+            return `<a href='#' data-uuid="${data.uu_id}" data-id="${data.id}" data-idarti="${data.IdArticulo}" class=" anularItem btn btn-danger btn-sm" ><i class="fa fa-trash" ></i></a>`;
             }
-        }, */
+        },
         { "data" : "Local" } , 
         { "data" : "IdArticulo" } , 
         { "data" : "Articulo" } , 
@@ -638,7 +715,29 @@ TablaHomePs = $('#TablaHomePs').DataTable({
     select: {
         style: 'single'
     },
+    columnDefs: [
+        // Para agregar contador, donde el 2 es el Nro de la columna a sobre escribir
+        {
+            searchable  : false,
+            orderable   : false,
+            targets     : 2
+        }
+    ],
 });
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+TablaHomePs.on('order.dt search.dt', function () {
+    let i = 1;
+    // Para agregar contador, donde el 2 es el Nro de la columna a sobre escribir
+    TablaHomePs
+        .cells(null, 2 , { search: 'applied', order: 'applied' })
+        .every(function (cell) {
+            this.data(i++);
+        });
+})
+.draw();
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
 var buttonsPS = new $.fn.dataTable.Buttons( TablaHomePs , {
     buttons: [
@@ -1202,15 +1301,62 @@ function readJson_table_cab( json , target , _camposTbl )
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
 //
 (function($){
 	$(document).ready(function()
     {
         /* ------------------------------------------------------------- */
+        // TECLAS ESPECIALES
+        $(document).keydown(function(event) {
+            //Tecla CTRL presionada
+            if (!event.ctrlKey){ return true; }
+            let letra = String.fromCharCode(event.which);
+            letra = letra.toUpperCase();
+            switch ( letra ) {
+                case 'Q':
+                    if( confirm('¿Cerrar documento?') ){
+                        $('#wrapper_form').hide();
+                        $('#wrapperTable').fadeIn('slow');
+                        //$('#wrapperTabla').show();
+                        //$('#frmDocumento').hide();
+                        event.preventDefault();
+                    }
+                    break;
+            
+                default:
+                    break;
+            }
+            // $("#result").text(String.fromCharCode(event.which));
+            
+        });
+        /* ------------------------------------------------------------- */
         $('#btnCrear').click(function (e) { 
             e.preventDefault();
             $('#frmDocumento #lblTitulo').html(`Nuevo archivo operarios`);
             $('a[href="#tabDoc"]').tab('show');
+            //$('#wrapperTabla').hide();
+            //$('#frmDocumento').show();
             $('#frmDocumento input[type="text"]').each(function(e){
                 $(this).val('');
             });
@@ -1225,13 +1371,16 @@ function readJson_table_cab( json , target , _camposTbl )
             });
             $('#frmDocumento #Codigo').val(0);
             $('#frmDocumento #id').val(0);
-            renovarToken( '#frmDocumento #uu_id' );
+            let uuID = generateUUID();
+            $( '#frmDocumento #uu_id' ).val( uuID );
             //tblDetalle.columns.adjust().draw();
         });
         /* ------------------------------------------------------------- */
         $(document).delegate('.cerrarFrame','click',function(e){
             e.preventDefault();
             $('a[href="#tabHome"]').tab('show');
+            //$('#wrapperTabla').show();
+            //$('#frmDocumento').hide();
             table.columns.adjust().draw();
         });
         /* ------------------------------------------------------------- */
@@ -1259,6 +1408,20 @@ function readJson_table_cab( json , target , _camposTbl )
             e.preventDefault();
             guardar_Data();
         });
+        /* ------------------------------------------------------------- */
+        /* ------------------------------------------------------------- */
+        /* ------------------------------------------------------------- */
+        /* ------------------------------------------------------------- */
+        /* ------------------------------------------------------------- */
+        /* ------------------------------------------------------------- */
+        /* ------------------------------------------------------------- */
+        /* ------------------------------------------------------------- */
+        /* ------------------------------------------------------------- */
+        /* ------------------------------------------------------------- */
+        /* ------------------------------------------------------------- */
+        /* ------------------------------------------------------------- */
+        /* ------------------------------------------------------------- */
+        /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
