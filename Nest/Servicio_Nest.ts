@@ -1,4 +1,5 @@
 // =========================== TABLA
+/*
 DROP TABLE if exists ssays01.orq_protocolo_medico;
 
 
@@ -16,6 +17,7 @@ CREATE TABLE `orq_protocolo_medico` (
 )
 ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=UTF8MB4_UNICODE_CI;
 
+/*
 /**
  * 
 // ========================== ENTITIES
@@ -175,7 +177,7 @@ import { v4 as uuidv4 } from 'uuid';
       return {
         data , 
         version : '1' , 
-        msg : { title : 'Correcto' , texto : 'Registro guardado' , clase : 'success' , call : 'tostada2' }
+        msg : { titulo : 'Correcto' , texto : 'Registro guardado' , clase : 'success' , call : 'tostada2' }
       }
 
     } catch (error) {
@@ -201,7 +203,7 @@ import { v4 as uuidv4 } from 'uuid';
       return {
         data , 
         version : '1' , 
-        msg : { title : 'Correcto' , texto : 'Registros cargados' , clase : 'success' , call : 'tostada2' }
+        msg : { titulo : 'Correcto' , texto : 'Registros cargados' , clase : 'success' , call : 'tostada2' }
       }
 
     } catch (error) {
@@ -225,7 +227,7 @@ import { v4 as uuidv4 } from 'uuid';
       return {
         data , 
         version : '1' , 
-        msg : { title : 'Correcto' , texto : 'Registro recibido' , clase : 'success' , call : 'tostada2' }
+        msg : { titulo : 'Correcto' , texto : 'Registro recibido' , clase : 'success' , call : 'tostada2' }
       }
       
     } catch (error) {
@@ -250,7 +252,7 @@ import { v4 as uuidv4 } from 'uuid';
       return {
         data : dataP , 
         version : '1' , 
-        msg : { title : 'Correcto' , texto : 'Registro actualizado' , clase : 'success' , call : 'tostada2' }
+        msg : { titulo : 'Correcto' , texto : 'Registro actualizado' , clase : 'success' , call : 'tostada2' }
       }
       
     } catch (error) {
@@ -277,7 +279,7 @@ import { v4 as uuidv4 } from 'uuid';
       return {
         data , 
         version : '1' , 
-        msg : { title : 'Correcto' , texto : 'Registro anulado' , clase : 'success' , call : 'tostada2' }
+        msg : { titulo : 'Correcto' , texto : 'Registro anulado' , clase : 'success' , call : 'tostada2' }
       }
       
     } catch (error) {
