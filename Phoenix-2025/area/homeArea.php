@@ -130,14 +130,14 @@ MIP
 
         </div>
 
-        <button id="addTab" class="btn btn-primary">Go somewhere</button>
+
         <!-- ....................................................... -->
     </div>
 </div>
 
 
 
-<a href="#TopPaginaOrq3" > TopPaginaOrq3</a>
+
         
 
 
