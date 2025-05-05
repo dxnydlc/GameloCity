@@ -186,7 +186,11 @@ let optsLangDatatable = {
             varDump(`Leer respuesta de iframe`);
             varDump( rs.data );
             setNombreTab( rs.data.indice , `${rs.data.data.Codigo}`  );
-            getTodos();
+            let form = rs.data.form;
+
+            if( form == _AuthFormulario ){
+                getTodos();
+            }
         });
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */

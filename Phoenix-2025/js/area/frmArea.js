@@ -155,7 +155,7 @@ function guardarDoc()
                     tostada( 'Correcto' , 'Registro guardado' , 'success' );
                     // ******* NODE JS *******
                     socket.emit('transmitir_data',{
-                        data : data ,  indice : IndiceDoc
+                        data : data ,  indice : IndiceDoc , form : _AuthFormulario
                     });
                     // ******* NODE JS *******
 
