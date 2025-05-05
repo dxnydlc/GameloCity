@@ -3,6 +3,7 @@
 let urlServicio = `${_URL_NESTMy}v1/mip-areas/`;
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
+let _AuthFormulario = `MIP_TIPO_PLAGA`;
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
@@ -157,6 +158,22 @@ function guardarDoc()
                         data : data ,  indice : IndiceDoc
                     });
                     // ******* NODE JS *******
+
+
+                    // ******* NODE JS *******
+                    socket.emit('accion:audit',{
+                        user  : $nomU,
+                        msg   : `Guardar tipo plaga #${data.id} - ${data.Codigo}.` ,
+                        dni   : $dniU,
+                        serie : 0,
+                        corr  : data.id,
+                        form  : _AuthFormulario,
+                        url   : window.location.href,
+                        token : data.uu_id 
+                    });
+                    // ******* NODE JS *******
+
+
                     //
                 break;
                 case 202:
@@ -216,6 +233,23 @@ function cargarDoc()
                     $.each( json.data , function( key , value ){
                         $('#frmDocumento #'+key).val(value);
                     });
+
+
+
+                    // ******* NODE JS *******
+                    socket.emit('accion:audit',{
+                        user  : $nomU,
+                        msg   : `Cargar tipo plaga #${data.id} -> ${data.Codigo}` ,
+                        dni   : $dniU,
+                        serie : 0,
+                        corr  : data.id,
+                        form  : _AuthFormulario,
+                        url   : window.location.href,
+                        token : data.uu_id
+                    });
+                    // ******* NODE JS *******
+
+
                     //
                 break;
                 case 202:
