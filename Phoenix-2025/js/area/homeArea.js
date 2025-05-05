@@ -3,6 +3,7 @@
 let urlServicio = `${_URL_NESTMy}v1/mip-areas/`;
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
+let _AuthFormulario = `MIP_TIPO_PLAGA`;
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
@@ -376,6 +377,22 @@ function getTodos()
                     TablaHomePs.clear();
                     TablaHomePs.rows.add( json.data ).draw();
                     TablaHomePs.columns.adjust().draw();
+
+
+                    // ******* NODE JS *******
+                    socket.emit('accion:audit',{
+                        user  : $nomU,
+                        msg   : `Listar Areas` ,
+                        dni   : $dniU,
+                        serie : 0,
+                        corr  : 0,
+                        form  : _AuthFormulario,
+                        url   : window.location.href,
+                        token : ''
+                    });
+                    // ******* NODE JS *******
+
+
                     //
                 break;
                 case 202:
@@ -434,6 +451,19 @@ function AnularDoc( Id )
                     let data = json.data;
                     tostada( 'Correcto' , 'Registro anulado' , 'success' );
                     getTodos();
+
+                    // ******* NODE JS *******
+                    socket.emit('accion:audit',{
+                        user  : $nomU,
+                        msg   : `Anular Area #${data.id} -> ${data.Codigo}` ,
+                        dni   : $dniU,
+                        serie : 0,
+                        corr  : data.id,
+                        form  : _AuthFormulario,
+                        url   : window.location.href,
+                        token : data.uu_id 
+                    });
+                    // ******* NODE JS *******
                     //
                 break;
                 case 202:
