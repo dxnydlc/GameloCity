@@ -588,7 +588,7 @@ await sleep( 2000 ); // Wait for one second
   }
   // ................................................................
   // ................................................................
-  @Patch(':uuid')
+  @Patch('actualizar/:uuid')
   @HttpCode(200)
   async Actualizar( @Param('uuid') uuid : string, @Body() dto : UpdateMipPlagaDto , @Req() req : Request ) {
     const createdAt = moment().format('YYYY-MM-DD HH:mm:ss');
