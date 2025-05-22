@@ -94,11 +94,11 @@ SSAYS
                         <!-- ./col -->
                     </div>
                     <hr>
-                    <table class=" table table-hover cell-border compact hover nowrap row-border table-striped table-hover " id="wrapperTable" cellspacing="0" width="100%" style="width:100%">
+                    <table id="TablaHomePs" class=" table table-hover cell-border compact hover nowrap row-border table-striped table-hover " cellspacing="0" width="100%" style="width:100%">
                         <thead>
                             <tr>
                                 <th></th>
-                                <th># Req.</th>
+                                <th></th>
                                 <th>Cliente</th>
                                 <th>Sucursal</th>
                                 <th>Mes</th>
