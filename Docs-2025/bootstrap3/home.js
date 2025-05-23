@@ -455,7 +455,7 @@ function guardarDoc()
         var Id = parseInt( $('#frmDocumento #id').val() ),uu_id = $('#frmDocumento #uu_id').val()
         if( Id > 0 ){
             url = `${urlServicio}${uu_id}`;
-            metodo = `PUT`;
+            metodo = `PATCH`;
         }
 		$.ajax({
 			url     : url,
