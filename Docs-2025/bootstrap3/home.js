@@ -144,12 +144,12 @@ let optsLangDatatable = {
             /* columns : [
                 { "data" : null ,
                     render: (data,type,row) => {
-                    return `<a href='#' data-uuid="${data.uu_id}" data-id="${data.id}" data-idarti="${data.IdArticulo}" class=" editarItem btn btn-primary btn-sm" ><i class="fa fa-edit" ></i></a>`;
+                    return `<a href='#' data-uuid="${data.uu_id}" data-id="${data.id}" data-idarti="${data.IdArticulo}" class=" editarDoc btn btn-primary btn-sm" ><i class="fa fa-edit" ></i></a>`;
                     }
                 },
                 { "data" : null ,
                     render: (data,type,row) => {
-                    return `<a href='#' data-uuid="${data.uu_id}" data-id="${data.id}" data-idarti="${data.IdArticulo}" class=" anularItem btn btn-danger btn-sm" ><i class="fa fa-trash" ></i></a>`;
+                    return `<a href='#' data-uuid="${data.uu_id}" data-id="${data.id}" data-idarti="${data.IdArticulo}" class=" anularDoc btn btn-danger btn-sm" ><i class="fa fa-trash" ></i></a>`;
                     }
                 },
                 { "data" : "Local" } , 
@@ -210,7 +210,8 @@ let optsLangDatatable = {
             table.columns.adjust().draw();
         });
         /* ------------------------------------------------------------- */
-        $(document).delegate('.docEdit', 'click', function(event) {
+        /* ------------------------------------------------------------- */
+        $(document).delegate('.editarDoc', 'click', function(event) {
             event.preventDefault();
             var _id = $(this).data('id'), _uuid = $(this).data('uuid'), _nombre = $(this).data('nombre');
             //
@@ -221,6 +222,36 @@ let optsLangDatatable = {
             //
             cargarDoc( _uuid );
         });
+        /* ------------------------------------------------------------- */
+        /* ------------------------------------------------------------- */
+        $(document).delegate('.anularDoc', 'click', function(event) {
+            event.preventDefault();
+            let id = $(this).data('id'), uuID = $(this).data('uuid'), nombre = $(this).data('nombre');
+
+            $.confirm({
+                title: 'Confirmar',
+                type    : 'orange',
+                content: 'Confirme eliminar documento',
+                autoClose: 'Cancelar|10000',
+                buttons: {
+                    Confirmar: {
+                        keys: [ 'enter','Y' ],
+                        text : 'Confirmar (Y)',
+                        btnClass: 'btn-blue',
+                        action : function () {
+                            anularDoc( uuID );
+                        },
+                    },
+                    Cancelar: {
+                        keys: [ 'N' ],
+                        action : function () {
+                            //
+                        }
+                    },
+                }
+            });
+        });
+        /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
         $("#btnGuardarR").on( "click", function(e) {
             e.preventDefault();
@@ -291,6 +322,19 @@ let optsLangDatatable = {
 function initOrq(){
     //
     listarTodo();
+
+    // ******* NODE JS *******
+    socket.emit('accion:audit',{
+        user  : $nomU,
+        msg   : `HOME DDDD` ,
+        dni   : $dniU,
+        serie : 0,
+        corr  : 0,
+        form  : _AuthFormulario,
+        url   : window.location.href,
+        token : ''
+    });
+    // ******* NODE JS *******
     //
 }
 /* ------------------------------------------------------------- */
@@ -354,6 +398,19 @@ function cargarDoc( uuID )
                         $('#frmDocumento #'+key).val(value);
                     });
                     tostada2( json.msg );
+
+                    // ******* NODE JS *******
+                    socket.emit('accion:audit',{
+                        user  : $nomU,
+                        msg   : `CARGAR DDDD #${data.id}` ,
+                        dni   : $dniU,
+                        serie : 0,
+                        corr  : data.id,
+                        form  : _AuthFormulario,
+                        url   : window.location.href,
+                        token : data.uu_id
+                    });
+                    // ******* NODE JS *******
                     //
                 break;
                 case 202:
@@ -395,7 +452,11 @@ function guardarDoc()
         var url = `${urlServicio}`, metodo = `POST`;
         // - //
         var _dataSerializada = $('#frmDocumento').serialize();
-        //
+        var Id = parseInt( $('#frmDocumento #id').val() ),uu_id = $('#frmDocumento #uu_id').val()
+        if( Id > 0 ){
+            url = `${urlServicio}${uu_id}`;
+            metodo = `PUT`;
+        }
 		$.ajax({
 			url     : url,
             data    : _dataSerializada , 
@@ -407,6 +468,7 @@ function guardarDoc()
 		})
 		.done(function(  json ,textStatus, xhr ) {
 			//
+            console.log(xhr.status);
 			switch ( xhr.status )
             {
                 case 200:
@@ -416,6 +478,21 @@ function guardarDoc()
                         $('#frmDocumento #'+key).val(value);
                     });
                     tostada2( json.msg );
+                    listarTodo();
+
+                    // ******* NODE JS *******
+                    socket.emit('accion:audit',{
+                        user  : $nomU,
+                        msg   : `GUARDAR DDD #${data.id}` ,
+                        dni   : $dniU,
+                        serie : 0,
+                        corr  : data.id,
+                        form  : _AuthFormulario,
+                        url   : window.location.href,
+                        token : data.uu_id
+                    });
+                    // ******* NODE JS *******
+
                     //
                 break;
                 case 202:
@@ -475,6 +552,19 @@ function anularDoc( uuID )
                     let data = json.data;
                     tostada2( json.msg );
                     listarTodo();
+
+                    // ******* NODE JS *******
+                    socket.emit('accion:audit',{
+                        user  : $nomU,
+                        msg   : `ANULAR DDD #${data.id}` ,
+                        dni   : $dniU,
+                        serie : 0,
+                        corr  : data.id,
+                        form  : _AuthFormulario,
+                        url   : window.location.href,
+                        token : data.uu_id
+                    });
+                    // ******* NODE JS *******
                     //
                 break;
                 case 202:
