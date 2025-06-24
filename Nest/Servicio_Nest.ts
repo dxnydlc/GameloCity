@@ -539,6 +539,23 @@ await sleep( 2000 ); // Wait for one second
 // CONTROLADOR 2025
 // ===============================================================
 /**
+
+import * as moment from 'moment';
+import 'moment/locale/pt-br';
+import { v4 as uuidv4 } from 'uuid';
+import { JwtGuardGuard } from 'src/guard/jwt-guard/jwt-guard.guard';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Pagination } from 'nestjs-typeorm-paginate';
+import { Request } from 'express';
+import { UtilidadesService } from 'src/utilidades/utilidades.service';
+
+
+// Para activar el auth JwTokenAuth
+@UseGuards( JwtGuardGuard )
+
+@ApiTags('Datos')
+@ApiBearerAuth()
+@UsePipes( new ValidationPipe )
 // ................................................................
   // ................................................................
   // ................................................................
@@ -642,6 +659,15 @@ await sleep( 2000 ); // Wait for one second
 // ===============================================================
 
 /**
+ * 
+ * 
+import { readFileSync, writeFileSync } from 'fs';
+const execShPromise = require("exec-sh").promise;
+
+import * as moment from 'moment';
+import 'moment/locale/pt-br';
+import { v4 as uuidv4 } from 'uuid';
+
 // ...................................................................
   // ...................................................................
   // ...................................................................
