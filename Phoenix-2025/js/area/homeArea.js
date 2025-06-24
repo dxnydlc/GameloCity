@@ -570,8 +570,8 @@ function cerrartab( Indice )
                 text : 'Confirmar (Y)',
                 btnClass: 'btn-blue',
                 action : function () {
-                    $('#home-tab_'+Indice).remove();
-                    $('#home-tab-pane_'+Indice).remove();
+                    //$('#home-tab_'+Indice).remove();
+                    //$('#home-tab-pane_'+Indice).remove();
                     $('#home-tab').tab('show');
                 },
             },
