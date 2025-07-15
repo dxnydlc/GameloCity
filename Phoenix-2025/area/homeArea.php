@@ -60,8 +60,20 @@ MIP
     <div class="card-body">
         <!-- ....................................................... -->
          <div class="row">
-            <div class="col-lg-9 col-md-9"></div>
-            <div class="col col-md-auto">
+            <div class="col-lg-9 col-md-9">
+                <ul class="nav nav-underline " id="tabHome" role="tablist" >
+
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Lista</button>
+                    </li>
+
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link " id="filtro-tab" data-bs-toggle="tab" data-bs-target="#home-filtro-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Filtro</button>
+                    </li>
+
+                </ul>
+            </div>
+            <div class="col-lg-3 col-md-auto">
                 <nav class=" nav justify-content-end doc-tab-nav align-items-center " >
                     <button id="btnHomeFiltro" class=" btn btn-sm btn-phoenix-primary code-btn ms-2 collapsed " >
                         <span class="fas fa-search me-2" data-fa-transform="shrink-3"></span> Buscar
@@ -72,17 +84,7 @@ MIP
                 </nav>
             </div>
          </div>
-        <ul class="nav nav-underline " id="tabHome" role="tablist" >
-
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Lista</button>
-            </li>
-
-            <li class="nav-item" role="presentation">
-                <button class="nav-link " id="filtro-tab" data-bs-toggle="tab" data-bs-target="#home-filtro-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Filtro</button>
-            </li>
-
-        </ul>
+        
         <div class="tab-content" id="tabContenido" >
 
             <hr>
