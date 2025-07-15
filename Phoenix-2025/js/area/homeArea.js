@@ -212,7 +212,6 @@ let optsLangDatatable = {
 
             if( $('.form_'+id).length ){
                 // Colocamos en el tab ya existente
-                //$('#wrapperForm_'+id).attr( "src" , `${_URL_HOME}crud_area/${id}/${id}` );
                 setTimeout(function(){ $('#home-tab_'+id).tab('show'); }, 500 );
                 //
             }else{
@@ -225,7 +224,7 @@ let optsLangDatatable = {
 
                 $('#tabContenido').append(`
                     <div class="tab-pane fade " id="home-tab-pane_${id}" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
-                        <div class="ratio ratio-16x9" >
+                        <div class=" todoAlto ratio ratio-16x9" >
                             <iframe id="wrapperForm_${id}" src="${_URL_HOME}crud_area/${id}/${id}" title="YouTube video" allowfullscreen ></iframe>
                         </div>
                     </div>
