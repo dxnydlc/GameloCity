@@ -416,6 +416,63 @@ _IdAutorizado.on("select2:select", function (e) {
     console.log("select2:select", _Id );
 });
 /* ------------------------------------------------------------- */
+// SELECT 2 SERVICIO OS/OT
+let Servicio = $('#frmDocumento #Servicio').select2({
+    ajax: {
+        url : `${_URL_NESTMy}v1/publico/sistemas_select2/` ,
+        dataType : 'json',
+        data : function (params) {
+            var query = {
+                q : params.term,
+                "user_token" : _token_node
+            }
+            return query;
+        }
+    },
+    processResults: function (data) {
+        return {
+        results: data
+        };
+    },
+    minimumInputLength : 3,width : '100%'
+});
+/* ------------------------------------------------------------- */
+Servicio.on("select2:select", function (e) { 
+    var _Id = e.params.data.id, _Texto = e.params.data.text;
+    console.log("select2:select", _Id );
+    $('#frmDocumento #nombre_sistema').val( _Texto );
+    $('#frmDocumento #nombre_servicio').val( _Texto );
+});
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+// SELECT 2 USUARIOS NEST
+let Supervisor = $('#frmDocumento #Supervisor').select2({
+    ajax: {
+        url : `${_URL_NODE3}api/src/usuarios_select2/` ,
+        dataType : 'json',
+        data : function (params) {
+            var query = {
+                q : params.term,
+                "user_token" : _token_node
+            }
+            return query;
+        }
+    },
+    processResults: function (data) {
+        return {
+        results: data
+        };
+    },
+    minimumInputLength : 3,width : '100%'
+});
+/* ------------------------------------------------------------- */
+Supervisor.on("select2:select", function (e) { 
+    let _Id = e.params.data.id, _Texto = e.params.data.text;
+    console.log("select2:select", _Id );
+    $('#frmDocumento #nombre_supervisor').val( _Texto );
+});
+
+
 var num = 5.56789;
 var n = num.toFixed(2);
 /* ------------------------------------------------------------- */
