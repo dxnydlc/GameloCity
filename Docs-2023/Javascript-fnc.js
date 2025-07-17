@@ -494,6 +494,58 @@ $('#mdlArticulos').on('shown.bs.modal', function (e) {
 	$(".select2-search__field")[0].focus();
 });
 /* ------------------------------------------------------------- */
+// NEST - 2025
+function getLocales( IdClienteProv , Default )
+{
+	//
+	try {
+        //
+		$.ajax({
+			url     : `${_URL_NESTMy}v1/sucursales/get-by-cliente/${IdClienteProv}`,
+			method  : "GET",
+			dataType: "json",
+			headers : {
+				Authorization : `Bearer ${_session3001}`
+			}
+		})
+		.done(function(  json ,textStatus, xhr ) {
+			//
+			switch ( xhr.status )
+            {
+                case 200:
+                    //
+                    let _html = '<option value="" >Seleccione</option>';
+                    $.each( json.data , function( key, value ) {
+                        _html += `<option value="${value.IdSucursal}" >${value.Descripcion}</option>` ; 
+                        });
+                    $('#frmDocumento #IdSucursal').html( _html );
+                    if( Default ){
+                        $('#frmDocumento #IdSucursal').val( Default );
+                    }
+                    $('#frmDocumento #IdSucursal').trigger('change');
+                    //
+                break;
+                case 202:
+                    // denegado...
+                    tostada( json.title , json.texto , json.clase );
+                break;
+                default:
+                break;
+            }
+			/**/
+		})
+		.fail(function(xhr, status, error) {
+            getError01(xhr, status, error);
+		})
+		.always(function() {
+			//
+		});
+	} catch (error) {
+		alert( error );
+	}
+	//
+}
+// ----------------------------------------------------------------
 function getLocales( IdClienteProv )
 {
 	//
