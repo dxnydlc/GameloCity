@@ -448,12 +448,11 @@ Servicio.on("select2:select", function (e) {
 // SELECT 2 USUARIOS NEST
 let Supervisor = $('#frmDocumento #Supervisor').select2({
     ajax: {
-        url : `${_URL_NODE3}api/src/usuarios_select2/` ,
+        url : `${_URL_NESTMy}v1/publico/select2-reg-emple/` ,
         dataType : 'json',
         data : function (params) {
             var query = {
-                q : params.term,
-                "user_token" : _token_node
+                query : params.term,
             }
             return query;
         }
@@ -471,8 +470,55 @@ Supervisor.on("select2:select", function (e) {
     console.log("select2:select", _Id );
     $('#frmDocumento #nombre_supervisor').val( _Texto );
 });
-
-
+/* ------------------------------------------------------------- */
+// ARTICULOS SOFTCOM
+var $eventArticulos = $('#frmDetalle #IdArticulo').select2({
+    ajax: {
+        url: _URL_CONCAR+'/articulos/select2_articulos/',
+        dataType: 'json',
+        data: function (params) {
+            var query = {
+                q : params.term,
+                "user_token" : _token_node
+            }
+            return query;
+        }
+    },
+    processResults: function (data) {
+        return {
+            results: data
+        };
+    },
+    minimumInputLength : 3,width : '100%'
+});
+/* ------------------------------------------------------------- */
+$eventArticulos.on("select2:select", function (e) { 
+    var IdArticulo = e.params.data.id , UnidadMedida = e.params.data.UnidadMedida,Precio = parseFloat( e.params.data.Precio) ,Articulo = e.params.data.text;
+    $('#frmDetalle #Articulo').val(Articulo);
+    $('#frmDetalle #UnidadMedida').val(UnidadMedida);
+    $('#frmDetalle #CostoUnit').val(Precio);
+    setTimeout(function(){ $('#frmDetalle #Cantidad').trigger('focus'); $('#frmDetalle #Cantidad').select(); }, 300 );
+    /* if( Precio == 0 ){
+        alert('ArtÃ­culo sin precio.');
+        $('#mdlArticulos #btnAddProdi').hide();
+    }else{
+        $('#btnAddProdi').show();
+    } */
+    // Ya existe Â¿?
+    $('#btnAddProdi').show();
+    $.each( _ItemsReq , function( key, rs ) {
+        if( IdArticulo == rs.IdArticulo ){
+            $('#frmDetalle #lblArticulo').html(`El artÃ­culo ya existe en la lista`);
+            $('#frmDetalle #btnAddProdi').hide();
+            return true;
+        }else{
+            console.log('NO Existe');
+        }
+    });
+    //
+});
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
 var num = 5.56789;
 var n = num.toFixed(2);
 /* ------------------------------------------------------------- */
