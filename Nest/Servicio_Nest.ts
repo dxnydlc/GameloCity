@@ -1,7 +1,9 @@
 // =========================== TABLA
 /*
+
 DROP TABLE if exists ssays01.orq_protocolo_medico;
 
+DROP TABLE if exists ssays01.orq_protocolo_medico;
 
 CREATE TABLE `orq_protocolo_medico` (
 	`id` 		 INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -131,7 +133,7 @@ imports : [
   ]) , 
   UtilidadesModule , 
 ],
-exports     : [SupCronogramaService]
+exports     : [SupCronogramaService],
 
 
 
@@ -153,10 +155,182 @@ import { v4 as uuidv4 } from 'uuid';
   // ...................................................................
   constructor(
     @InjectRepository( DatosModel )private readonly datosModel:Repository<DatosModel> ,
-    private regEmple: RegistroEmpleadosService , 
     private util:UtilidadesService , 
   ){}
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  async guardar( dto : CreateMipPlagaDto ) {
+    
+    try {
 
+      //Comprobar si el codigo ya existe
+      const mipPlagaInit = await this.datosModel.findOne({
+        where: {
+          Codigo: dto.Codigo
+        }
+      });
+
+      if (mipPlagaInit) throw new HttpException('El código ya existe', HttpStatus.CONFLICT);
+      
+      const newArea = await this.datosModel.create( dto );
+      let dataSave  = await this.datosModel.save( newArea );
+      //let Codigo = await this.util.addZeros( dataSave.id , 4 );
+      //await this.datosModel.update({ id : dataSave.id },{ Codigo : `RM${Codigo}` });
+
+      let data = await this.datosModel.findOne({
+        where : {
+          id : dataSave.id
+        }
+      });
+
+      return {
+        data , 
+        version : '1' , 
+        msg : { titulo : 'Correcto' , texto : 'Registro guardado' , clase : 'success' , call : 'tostada2' }
+      }
+
+    } catch (error) {
+      
+      throw new HttpException( error , HttpStatus.CONFLICT );
+
+    }
+
+  }
+  // ...................................................................
+  // ...................................................................
+  async getTodos() {
+    
+    try {
+      
+      let data = await this.datosModel.find({
+        take : 200 ,
+        order : {
+          id : 'DESC'
+        }
+      });
+  
+      return {
+        data , 
+        version : '1' , 
+        msg : { titulo : 'Correcto' , texto : 'Registros cargados' , clase : 'success' , call : 'tostada2' }
+      }
+
+    } catch (error) {
+
+      throw new HttpException( error , HttpStatus.CONFLICT );
+
+    }
+
+  }
+  // ...................................................................
+  // ...................................................................
+  async getbyId( id : number ) {
+    try {
+
+      let data = await this.datosModel.findOne({
+        where : {
+          id
+        }
+      });
+
+      return {
+        data , 
+        version : '1' , 
+        msg : { titulo : 'Correcto' , texto : 'Registro recibido' , clase : 'success' , call : 'tostada2' }
+      }
+      
+    } catch (error) {
+      
+      throw new HttpException( error , HttpStatus.CONFLICT );
+
+    }
+  }
+  // ...................................................................
+  // ...................................................................
+  async Actualizar( uuID : string , dto : UpdateMipPlagaDto ) {
+    
+    try {
+
+      await this.datosModel.update({ uu_id : uuID } , dto );
+      let dataP = await this.datosModel.findOne({
+        where : {
+          uu_id : uuID
+        }
+      });
+
+      return {
+        data : dataP , 
+        version : '1' , 
+        msg : { titulo : 'Correcto' , texto : 'Registro actualizado' , clase : 'success' , call : 'tostada2' }
+      }
+      
+    } catch (error) {
+
+      throw new HttpException( error , HttpStatus.CONFLICT );
+      
+    }
+
+  }
+  // ...................................................................
+  // ...................................................................
+  async AnularbyId( id : number ) {
+    try {
+
+      const updatedAt = moment().format('YYYY-MM-DD HH:mm:ss');
+
+      await this.datosModel.update({ id } , { Estado : 'Desactivado' , deleted_at : updatedAt , updated_at : updatedAt } );
+      let data = await this.datosModel.findOne({
+        where : {
+          id 
+        }
+      });
+
+      return {
+        data , 
+        version : '1' , 
+        msg : { titulo : 'Correcto' , texto : 'Registro anulado' , clase : 'success' , call : 'tostada2' }
+      }
+      
+    } catch (error) {
+      
+      throw new HttpException( error , HttpStatus.CONFLICT );
+
+    }
+  }
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
   // ...................................................................
   // ...................................................................
   async create( dto : CreateDatoDto ) {
@@ -425,9 +599,137 @@ import { UtilidadesService } from 'src/utilidades/utilidades.service';
     private readonly datosService: DatosService , 
     private readonly util : UtilidadesService , 
   ) {}
-
   // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // private readonly util : UtilidadesService , 
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  @Post('guardar')
+  @HttpCode(200)
+  async guardar(@Body() dto : CreateMipPlagaDto , @Req() req : Request ) {
+    
+    const createdAt = moment(  ).format('YYYY-MM-DD HH:mm:ss');
+    let headerToken = req.headers.authorization;
+    let Usuario = '' , IdUsuario = 0;
 
+    if( headerToken ){
+      let arTOken = headerToken.split(' ');
+      let dataT = await this.util.decodificaToken( arTOken[1] );
+      if( dataT ){
+        Usuario   = dataT['name'];
+        IdUsuario = dataT['dni'];
+      }
+    }
+
+    const bodyProocolo = {
+      ...dto , 
+      created_at : createdAt , 
+      updated_at : createdAt , 
+      Estado: 'Activado',
+      DniUsuarioMod: IdUsuario,
+      UsuarioMod: Usuario,
+    };
+
+    return this.mipPlagaService.guardar( bodyProocolo );
+  }
+  // ................................................................
+  // ................................................................
+  @Get('get-todos')
+  @HttpCode(200)
+  async getTodos() {
+    return this.mipPlagaService.getTodos();
+  }
+  // ................................................................
+  // ................................................................
+  @Get('get-by-id/:id')
+  @HttpCode(200)
+  async getbyId( @Param('id') id : number ) {
+    return this.mipPlagaService.getbyId( id );
+  }
+  // ................................................................
+  // ................................................................
+  @Patch('actualizar/:uuid')
+  @HttpCode(200)
+  async Actualizar( @Param('uuid') uuid : string, @Body() dto : UpdateMipPlagaDto , @Req() req : Request ) {
+    const createdAt = moment().format('YYYY-MM-DD HH:mm:ss');
+    let headerToken = req.headers.authorization;
+    let Usuario = '' , IdUsuario = 0;
+
+    if( headerToken ){
+      let arTOken = headerToken.split(' ');
+      let dataT = await this.util.decodificaToken( arTOken[1] );
+      if( dataT ){
+        Usuario   = dataT['name'];
+        IdUsuario = dataT['dni'];
+      }
+    }
+    const bodyProocolo = {
+      ...dto , 
+      updated_at : createdAt , 
+      DniUsuarioMod: IdUsuario,
+      UsuarioMod: Usuario,
+    };
+    return this.mipPlagaService.Actualizar( uuid , bodyProocolo);
+  }
+  // ................................................................
+  // ................................................................
+  @Delete('anular-by-id/:id')
+  @HttpCode(200)
+  async Anular( @Param('id') id  : number ) {
+    return this.mipPlagaService.AnularbyId( id );
+  }
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
   @Post()
   @HttpCode(200)
   async create(@Body() dto : CreateDatoDto , @Req() req : Request ) {
@@ -453,25 +755,22 @@ import { UtilidadesService } from 'src/utilidades/utilidades.service';
 
     return this.datosService.create( bodyProocolo );
   }
-
   // ................................................................
-
+  // ................................................................
   @Get()
   @HttpCode(200)
   findAll() {
     return this.datosService.findAll();
   }
-
   // ................................................................
-
+  // ................................................................
   @Get(':uuid')
   @HttpCode(200)
   findOne( @Param('uuid') uuid : string) {
     return this.datosService.findOne( uuid );
   }
-
   // ................................................................
-
+  // ................................................................
   @Patch(':uuid')
   @HttpCode(200)
   update(@Param('uuid') uuid : string, @Body() dot: UpdateDatoDto , @Req() req : Request ) {
@@ -494,15 +793,19 @@ import { UtilidadesService } from 'src/utilidades/utilidades.service';
     };
     return this.datosService.update( uuid , bodyProocolo);
   }
-
   // ................................................................
-
+  // ................................................................
   @Delete(':uuid')
   @HttpCode(200)
   remove(@Param('uuid') uuid : string) {
     return this.datosService.remove( uuid );
   }
-
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
   // ................................................................
 
 
@@ -633,104 +936,7 @@ import { UtilidadesService } from 'src/utilidades/utilidades.service';
 @ApiTags('Datos')
 @ApiBearerAuth()
 @UsePipes( new ValidationPipe )
-  // ................................................................
-  // ................................................................
-  // ................................................................
-  // private readonly util : UtilidadesService , 
-  // ................................................................
-  // ................................................................
-  // ................................................................
-  @Post('guardar')
-  @HttpCode(200)
-  async guardar(@Body() dto : CreateMipPlagaDto , @Req() req : Request ) {
-    
-    const createdAt = moment(  ).format('YYYY-MM-DD HH:mm:ss');
-    let headerToken = req.headers.authorization;
-    let Usuario = '' , IdUsuario = 0;
-
-    if( headerToken ){
-      let arTOken = headerToken.split(' ');
-      let dataT = await this.util.decodificaToken( arTOken[1] );
-      if( dataT ){
-        Usuario   = dataT['name'];
-        IdUsuario = dataT['dni'];
-      }
-    }
-
-    const bodyProocolo = {
-      ...dto , 
-      created_at : createdAt , 
-      updated_at : createdAt , 
-      Estado: 'Activado',
-      DniUsuarioMod: IdUsuario,
-      UsuarioMod: Usuario,
-    };
-
-    return this.mipPlagaService.guardar( bodyProocolo );
-  }
-  // ................................................................
-  // ................................................................
-  @Get('get-todos')
-  @HttpCode(200)
-  async getTodos() {
-    return this.mipPlagaService.getTodos();
-  }
-  // ................................................................
-  // ................................................................
-  @Get('get-by-id/:id')
-  @HttpCode(200)
-  async getbyId( @Param('id') id : number ) {
-    return this.mipPlagaService.getbyId( id );
-  }
-  // ................................................................
-  // ................................................................
-  @Patch('actualizar/:uuid')
-  @HttpCode(200)
-  async Actualizar( @Param('uuid') uuid : string, @Body() dto : UpdateMipPlagaDto , @Req() req : Request ) {
-    const createdAt = moment().format('YYYY-MM-DD HH:mm:ss');
-    let headerToken = req.headers.authorization;
-    let Usuario = '' , IdUsuario = 0;
-
-    if( headerToken ){
-      let arTOken = headerToken.split(' ');
-      let dataT = await this.util.decodificaToken( arTOken[1] );
-      if( dataT ){
-        Usuario   = dataT['name'];
-        IdUsuario = dataT['dni'];
-      }
-    }
-    const bodyProocolo = {
-      ...dto , 
-      updated_at : createdAt , 
-      DniUsuarioMod: IdUsuario,
-      UsuarioMod: Usuario,
-    };
-    return this.mipPlagaService.Actualizar( uuid , bodyProocolo);
-  }
-  // ................................................................
-  // ................................................................
-  @Delete('anular-by-id/:id')
-  @HttpCode(200)
-  async Anular( @Param('id') id  : number ) {
-    return this.mipPlagaService.AnularbyId( id );
-  }
-  // ................................................................
-  // ................................................................
-  // ................................................................
-  // ................................................................
-  // ................................................................
-  // ................................................................
-  // ................................................................
-  // ................................................................
-  // ................................................................
-  // ................................................................
-  // ................................................................
-  // ................................................................
-  // ................................................................
-  // ................................................................
-  // ................................................................
-  // ................................................................
-  // ................................................................
+  
 **/
 
 // ===============================================================
@@ -769,156 +975,7 @@ import { v4 as uuidv4 } from 'uuid';
   // ...................................................................
   // ...................................................................
   // ...................................................................
-  async guardar( dto : CreateMipPlagaDto ) {
-    
-    try {
-
-      //Comprobar si el codigo ya existe
-      const mipPlagaInit = await this.mipPlagaModel.findOne({
-        where: {
-          Codigo: dto.Codigo
-        }
-      });
-
-      if (mipPlagaInit) throw new HttpException('El código ya existe', HttpStatus.CONFLICT);
-      
-      const newArea = await this.mipPlagaModel.create( dto );
-      let dataSave  = await this.mipPlagaModel.save( newArea );
-      //let Codigo = await this.util.addZeros( dataSave.id , 4 );
-      //await this.datosModel.update({ id : dataSave.id },{ Codigo : `RM${Codigo}` });
-
-      let data = await this.mipPlagaModel.findOne({
-        where : {
-          id : dataSave.id
-        }
-      });
-
-      return {
-        data , 
-        version : '1' , 
-        msg : { titulo : 'Correcto' , texto : 'Registro guardado' , clase : 'success' , call : 'tostada2' }
-      }
-
-    } catch (error) {
-      
-      throw new HttpException( error , HttpStatus.CONFLICT );
-
-    }
-
-  }
-  // ...................................................................
-  // ...................................................................
-  async getTodos() {
-    
-    try {
-      
-      let data = await this.mipPlagaModel.find({
-        take : 200 ,
-        order : {
-          id : 'DESC'
-        }
-      });
   
-      return {
-        data , 
-        version : '1' , 
-        msg : { titulo : 'Correcto' , texto : 'Registros cargados' , clase : 'success' , call : 'tostada2' }
-      }
-
-    } catch (error) {
-
-      throw new HttpException( error , HttpStatus.CONFLICT );
-
-    }
-
-  }
-  // ...................................................................
-  // ...................................................................
-  async getbyId( id : number ) {
-    try {
-
-      let data = await this.mipPlagaModel.findOne({
-        where : {
-          id
-        }
-      });
-
-      return {
-        data , 
-        version : '1' , 
-        msg : { titulo : 'Correcto' , texto : 'Registro recibido' , clase : 'success' , call : 'tostada2' }
-      }
-      
-    } catch (error) {
-      
-      throw new HttpException( error , HttpStatus.CONFLICT );
-
-    }
-  }
-  // ...................................................................
-  // ...................................................................
-  async Actualizar( uuID : string , dto : UpdateMipPlagaDto ) {
-    
-    try {
-
-      await this.mipPlagaModel.update({ uu_id : uuID } , dto );
-      let dataP = await this.mipPlagaModel.findOne({
-        where : {
-          uu_id : uuID
-        }
-      });
-
-      return {
-        data : dataP , 
-        version : '1' , 
-        msg : { titulo : 'Correcto' , texto : 'Registro actualizado' , clase : 'success' , call : 'tostada2' }
-      }
-      
-    } catch (error) {
-
-      throw new HttpException( error , HttpStatus.CONFLICT );
-      
-    }
-
-  }
-  // ...................................................................
-  // ...................................................................
-  async AnularbyId( id : number ) {
-    try {
-
-      const updatedAt = moment().format('YYYY-MM-DD HH:mm:ss');
-
-      await this.mipPlagaModel.update({ id } , { Estado : 'Desactivado' , deleted_at : updatedAt , updated_at : updatedAt } );
-      let data = await this.mipPlagaModel.findOne({
-        where : {
-          id 
-        }
-      });
-
-      return {
-        data , 
-        version : '1' , 
-        msg : { titulo : 'Correcto' , texto : 'Registro anulado' , clase : 'success' , call : 'tostada2' }
-      }
-      
-    } catch (error) {
-      
-      throw new HttpException( error , HttpStatus.CONFLICT );
-
-    }
-  }
-  // ...................................................................
-  // ...................................................................
-  // ...................................................................
-  // ...................................................................
-  // ...................................................................
-  // ...................................................................
-  // ...................................................................
-  // ...................................................................
-  // ...................................................................
-  // ...................................................................
-  // ...................................................................
-  // ...................................................................
   // ...................................................................
   // ...................................................................
   // ...................................................................
