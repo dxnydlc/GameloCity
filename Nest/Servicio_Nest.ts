@@ -1,7 +1,7 @@
 // =========================== TABLA
 /*
 
-DROP TABLE if exists ssays01.orq_protocolo_medico;
+TRUNCATE TABLE ssays01.orq_protocolo_medico;
 
 DROP TABLE if exists ssays01.orq_protocolo_medico;
 
@@ -165,6 +165,31 @@ import { v4 as uuidv4 } from 'uuid';
   // ...................................................................
   // ...................................................................
   // ...................................................................
+  async demoFuncion() {
+    
+    try {
+      
+      let data = await this.datosModel.find({
+        take : 200 ,
+        order : {
+          id : 'DESC'
+        }
+      });
+  
+      return {
+        data , 
+        version : '1' , 
+        msg : { titulo : 'Correcto' , texto : 'Registros cargados' , clase : 'success' , call : 'tostada2' }
+      }
+
+    } catch (error) {
+
+      varDump( error );
+      throw new HttpException( error , HttpStatus.CONFLICT );
+
+    }
+
+  }
   // ...................................................................
   // ...................................................................
   async guardar( dto : CreateMipPlagaDto ) {
