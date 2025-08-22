@@ -116,12 +116,14 @@ let optsLangDatatable = {
             columns : [
                 { "data" : null ,
                     render: (data,type,row) => {
-                    return `<a href='#' data-uuid="${data.uu_id}" data-id="${data.id}" data-codigo="${data.Codigo}" data-nombre="${data.Nombre}" class=" editRow btn btn-primary btn-sm" ><i class="fa fa-edit" ></i></a>`;
+                        let btn = `<button class=" editRow btn btn-link me-1 mb-1" type="button" data-uuid="${data.uu_id}" data-id="${data.id}" data-codigo="${data.Codigo}" data-nombre="${data.Descripcion}" ><i class=" far fa-edit " ></i></button>`;
+                        return btn;
                     }
                 },
                 { "data" : null ,
                     render: (data,type,row) => {
-                    return `<a href='#' data-uuid="${data.uu_id}" data-id="${data.id}" data-codigo="${data.Codigo}" data-nombre="${data.Nombre}" class=" remRow btn btn-danger btn-sm" ><i class="fa fa-trash" ></i></a>`;
+                        let btn = `<button data-uuid="${data.uu_id}" data-id="${data.id}" data-codigo="${data.Codigo}" data-nombre="${data.Descripcion}" class=" remRow btn btn-link me-1 mb-1" type="button"><i class=" far fa-trash-alt text-danger " ></i></button>`;
+                        return btn;
                     }
                 },
                 { "data" : "id" } , 
