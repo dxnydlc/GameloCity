@@ -154,8 +154,8 @@ import { v4 as uuidv4 } from 'uuid';
   // ...................................................................
   // ...................................................................
   constructor(
-    @InjectRepository( DatosModel )private readonly datosModel:Repository<DatosModel> ,
-    private util:UtilidadesService , 
+    @InjectRepository( MipCaracteristicaModal )private readonly datosModel : Repository<MipCaracteristicaModal> ,
+    private util : UtilidadesService , 
   ){}
   // ...................................................................
   // ...................................................................
@@ -192,7 +192,7 @@ import { v4 as uuidv4 } from 'uuid';
   }
   // ...................................................................
   // ...................................................................
-  async guardar( dto : CreateMipPlagaDto ) {
+  async guardar( dto : CreateMipCaracteristicaDto ) {
     
     try {
 
@@ -224,6 +224,7 @@ import { v4 as uuidv4 } from 'uuid';
 
     } catch (error) {
       
+      varDump( error );
       throw new HttpException( error , HttpStatus.CONFLICT );
 
     }
@@ -250,6 +251,7 @@ import { v4 as uuidv4 } from 'uuid';
 
     } catch (error) {
 
+      varDump( error );
       throw new HttpException( error , HttpStatus.CONFLICT );
 
     }
@@ -274,13 +276,14 @@ import { v4 as uuidv4 } from 'uuid';
       
     } catch (error) {
       
+      varDump( error );
       throw new HttpException( error , HttpStatus.CONFLICT );
 
     }
   }
   // ...................................................................
   // ...................................................................
-  async Actualizar( uuID : string , dto : UpdateMipPlagaDto ) {
+  async Actualizar( uuID : string , dto : UpdateMipCaracteristicaDto ) {
     
     try {
 
@@ -299,6 +302,7 @@ import { v4 as uuidv4 } from 'uuid';
       
     } catch (error) {
 
+      varDump( error );
       throw new HttpException( error , HttpStatus.CONFLICT );
       
     }
@@ -326,6 +330,7 @@ import { v4 as uuidv4 } from 'uuid';
       
     } catch (error) {
       
+      varDump( error );
       throw new HttpException( error , HttpStatus.CONFLICT );
 
     }
@@ -358,16 +363,16 @@ import { v4 as uuidv4 } from 'uuid';
   // ...................................................................
   // ...................................................................
   // ...................................................................
-  async create( dto : CreateDatoDto ) {
+  async create( dto : CreateMipCaracteristicaDto ) {
     
     try {
       
-      const newArea = await this.votoModel.create( dto );
-      let dataSave  = await this.votoModel.save( newArea );
+      const newArea = await this.datosModel.create( dto );
+      let dataSave  = await this.datosModel.save( newArea );
       //let Codigo = await this.util.addZeros( dataSave.id , 4 );
       //await this.datosModel.update({ id : dataSave.id },{ Codigo : `RM${Codigo}` });
 
-      let data = await this.votoModel.findOne({
+      let data = await this.datosModel.findOne({
         where : {
           id : dataSave.id
         }
@@ -381,6 +386,7 @@ import { v4 as uuidv4 } from 'uuid';
 
     } catch (error) {
       
+      varDump( error );
       throw new HttpException( error , HttpStatus.CONFLICT );
 
     }
@@ -392,7 +398,7 @@ import { v4 as uuidv4 } from 'uuid';
     
     try {
       
-      let data = await this.votoModel.find({
+      let data = await this.datosModel.find({
         take : 200 ,
         order : {
           id : 'DESC'
@@ -407,6 +413,7 @@ import { v4 as uuidv4 } from 'uuid';
 
     } catch (error) {
 
+      varDump( error );
       throw new HttpException( error , HttpStatus.CONFLICT );
 
     }
@@ -417,7 +424,7 @@ import { v4 as uuidv4 } from 'uuid';
   async findOne( uuid : string ) {
     try {
 
-      let data = await this.votoModel.findOne({
+      let data = await this.datosModel.findOne({
         where : {
           uu_id : uuid
         }
@@ -431,18 +438,19 @@ import { v4 as uuidv4 } from 'uuid';
       
     } catch (error) {
       
+      varDump( error );
       throw new HttpException( error , HttpStatus.CONFLICT );
 
     }
   }
   // ...................................................................
   // ...................................................................
-  async update( uuID : string , dto : UpdateDatoDto ) {
+  async update( uuID : string , dto : UpdateMipCaracteristicaDto ) {
     
     try {
 
-      await this.votoModel.update({ uu_id : uuID } , dto );
-      let dataP = await this.votoModel.findOne({
+      await this.datosModel.update({ uu_id : uuID } , dto );
+      let dataP = await this.datosModel.findOne({
         where : {
           uu_id : uuID
         }
@@ -456,6 +464,7 @@ import { v4 as uuidv4 } from 'uuid';
       
     } catch (error) {
 
+      varDump( error );
       throw new HttpException( error , HttpStatus.CONFLICT );
       
     }
@@ -468,10 +477,10 @@ import { v4 as uuidv4 } from 'uuid';
 
       const updatedAt = moment().format('YYYY-MM-DD HH:mm:ss');
 
-      await this.votoModel.update({ uu_id : uuid } , { deleted_at : updatedAt , updated_at : updatedAt } );
-      let data = await this.votoModel.findOne({
+      await this.datosModel.update({ uu_id : uuID } , { deleted_at : updatedAt , updated_at : updatedAt } );
+      let data = await this.datosModel.findOne({
         where : {
-          uu_id : uuid
+          uu_id : uuID
         }
       });
 
@@ -483,6 +492,7 @@ import { v4 as uuidv4 } from 'uuid';
       
     } catch (error) {
       
+      varDump( error );
       throw new HttpException( error , HttpStatus.CONFLICT );
 
     }
@@ -491,14 +501,14 @@ import { v4 as uuidv4 } from 'uuid';
   // ...................................................................
   async maxId()
   {
-    let MaxId = await this.areaModel.createQueryBuilder('areas').select("MAX(areas.CodArea)", "max").getRawOne();
+    let MaxId = await this.datosModel.createQueryBuilder('areas').select("MAX(areas.CodArea)", "max").getRawOne();
     return MaxId.max + 1;
   }
   // ...................................................................
   // ...................................................................
   async buscaDescri( nombre :string )
   {
-    let data = await this.areaModel.find({
+    let data = await this.datosModel.find({
       where : {
         Descripcion : nombre.trim()
       }
@@ -619,9 +629,9 @@ import { UtilidadesService } from 'src/utilidades/utilidades.service';
 
 
 // ................................................................
-// ................................................................
+  // ................................................................
   constructor(
-    private readonly datosService: DatosService , 
+    private readonly mipCaracteristicasService: MipCaracteristicasService , 
     private readonly util : UtilidadesService , 
   ) {}
   // ................................................................
@@ -648,7 +658,7 @@ import { UtilidadesService } from 'src/utilidades/utilidades.service';
   // ................................................................
   @Post('guardar')
   @HttpCode(200)
-  async guardar(@Body() dto : CreateMipPlagaDto , @Req() req : Request ) {
+  async guardar(@Body() dto : CreateMipCaracteristicaDto , @Req() req : Request ) {
     
     const createdAt = moment(  ).format('YYYY-MM-DD HH:mm:ss');
     let headerToken = req.headers.authorization;
@@ -672,27 +682,27 @@ import { UtilidadesService } from 'src/utilidades/utilidades.service';
       UsuarioMod: Usuario,
     };
 
-    return this.mipPlagaService.guardar( bodyProocolo );
+    return this.mipCaracteristicasService.guardar( bodyProocolo );
   }
   // ................................................................
   // ................................................................
   @Get('get-todos')
   @HttpCode(200)
   async getTodos() {
-    return this.mipPlagaService.getTodos();
+    return this.mipCaracteristicasService.getTodos();
   }
   // ................................................................
   // ................................................................
   @Get('get-by-id/:id')
   @HttpCode(200)
   async getbyId( @Param('id') id : number ) {
-    return this.mipPlagaService.getbyId( id );
+    return this.mipCaracteristicasService.getbyId( id );
   }
   // ................................................................
   // ................................................................
   @Patch('actualizar/:uuid')
   @HttpCode(200)
-  async Actualizar( @Param('uuid') uuid : string, @Body() dto : UpdateMipPlagaDto , @Req() req : Request ) {
+  async Actualizar( @Param('uuid') uuid : string, @Body() dto : UpdateMipCaracteristicaDto , @Req() req : Request ) {
     const createdAt = moment().format('YYYY-MM-DD HH:mm:ss');
     let headerToken = req.headers.authorization;
     let Usuario = '' , IdUsuario = 0;
@@ -711,14 +721,14 @@ import { UtilidadesService } from 'src/utilidades/utilidades.service';
       DniUsuarioMod: IdUsuario,
       UsuarioMod: Usuario,
     };
-    return this.mipPlagaService.Actualizar( uuid , bodyProocolo);
+    return this.mipCaracteristicasService.Actualizar( uuid , bodyProocolo);
   }
   // ................................................................
   // ................................................................
   @Delete('anular-by-id/:id')
   @HttpCode(200)
   async Anular( @Param('id') id  : number ) {
-    return this.mipPlagaService.AnularbyId( id );
+    return this.mipCaracteristicasService.AnularbyId( id );
   }
   // ................................................................
   // ................................................................
@@ -757,7 +767,7 @@ import { UtilidadesService } from 'src/utilidades/utilidades.service';
   // ................................................................
   @Post()
   @HttpCode(200)
-  async create(@Body() dto : CreateDatoDto , @Req() req : Request ) {
+  async create(@Body() dto : CreateMipCaracteristicaDto , @Req() req : Request ) {
     
     const createdAt = moment(  ).format('YYYY-MM-DD HH:mm:ss');
     let headerToken = req.headers.authorization;
@@ -778,27 +788,27 @@ import { UtilidadesService } from 'src/utilidades/utilidades.service';
       updated_at : createdAt , 
     };
 
-    return this.datosService.create( bodyProocolo );
+    return this.mipCaracteristicasService.create( bodyProocolo );
   }
   // ................................................................
   // ................................................................
   @Get()
   @HttpCode(200)
   findAll() {
-    return this.datosService.findAll();
+    return this.mipCaracteristicasService.findAll();
   }
   // ................................................................
   // ................................................................
   @Get(':uuid')
   @HttpCode(200)
   findOne( @Param('uuid') uuid : string) {
-    return this.datosService.findOne( uuid );
+    return this.mipCaracteristicasService.findOne( uuid );
   }
   // ................................................................
   // ................................................................
   @Patch(':uuid')
   @HttpCode(200)
-  update(@Param('uuid') uuid : string, @Body() dot: UpdateDatoDto , @Req() req : Request ) {
+  async update(@Param('uuid') uuid : string, @Body() dto: UpdateMipCaracteristicaDto , @Req() req : Request ) {
     const createdAt = moment().format('YYYY-MM-DD HH:mm:ss');
     let headerToken = req.headers.authorization;
     let Usuario = '' , IdUsuario = 0;
@@ -816,14 +826,14 @@ import { UtilidadesService } from 'src/utilidades/utilidades.service';
       updated_at : createdAt , 
       IdUsuario , Usuario 
     };
-    return this.datosService.update( uuid , bodyProocolo);
+    return this.mipCaracteristicasService.update( uuid , bodyProocolo);
   }
   // ................................................................
   // ................................................................
   @Delete(':uuid')
   @HttpCode(200)
   remove(@Param('uuid') uuid : string) {
-    return this.datosService.remove( uuid );
+    return this.mipCaracteristicasService.remove( uuid );
   }
   // ................................................................
   // ................................................................
