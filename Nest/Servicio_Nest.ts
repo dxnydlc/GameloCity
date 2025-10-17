@@ -148,7 +148,7 @@ import * as moment from 'moment';
 import 'moment/locale/pt-br';
 import { v4 as uuidv4 } from 'uuid';
 
-
+require('colors');
 
 
   // ...................................................................
@@ -600,7 +600,32 @@ function varDump( e ){
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
-// ..............................................................................
+// ...................................................................
+  function Dump1( e , color )
+  {
+    // rojo, verde, amarillo, negrita_verde, negrita_verde_u
+    switch ( color ) {
+      case 'rojo':
+        console.log(  e.red );
+      break;
+      case 'verde':
+        console.log(  e.green );
+      break;
+      case 'amarillo':
+        console.log(  e.yellow );
+      break;
+      case 'negrita_verde':
+        console.log(  e.green );
+      break;
+      case 'negrita_verde_u':
+        console.log(  e.green.bold );
+      break;
+      default:
+        //
+      break;
+    }
+  }
+  // ..............................................................................
 
 
 
