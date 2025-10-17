@@ -82,14 +82,16 @@ SSAYS
                 <!-- /.box-header -->
                 <div class="box-body" >
                     <div class="row">
-                        <div class=" col-lg-2 col-md-2 " >
-                            <a href="#" class="btn btn-primary btn-block pull-left " id="btnOpen_SRC" ><i class="fa fa-search"></i> Filtro</a>
-                        </div>
-                        <!-- ./col -->
                         <div class=" col-lg-8 col-md-8 " ></div>
+                        <!-- ./col -->
+                         <div class=" col-lg-2 col-md-2 " >
+                            <a href="#" class="btn btn-primary btn-block pull-left " id="btnOpen_SRC" ><i class="fa fa-search"></i> Filtro</a>
+                            <hr>
+                        </div>
                         <!-- ./col -->
                         <div class=" col-lg-2 col-md-2 " >
                             <a id="btnCrear" href="#" class="btn btn-primary btn-block pull-right " data-id="0" ><i class="icofont-plus"></i> Crear</a>
+                            <hr>
                         </div>
                         <!-- ./col -->
                     </div>
@@ -99,21 +101,10 @@ SSAYS
                             <tr>
                                 <th></th>
                                 <th></th>
-                                <th>Cliente</th>
-                                <th>Sucursal</th>
-                                <th>Mes</th>
-                                <th>Fec.Req.</th>
-                                <th>% Acum.</th>
-                                <th>T.Prod</th>
-                                <th>#Guia</th>
-                                <th>#Items</th>
+                                <th>Nro</th>
+                                <th>Descripción</th>
                                 <th>Estado</th>
                                 <th>Actualizado</th>
-                                <th>Creado por</th>
-                                <th>Aprobado por</th>
-                                <th>Anulado por</th>
-                                <th></th>
-                                <th></th>
                             </tr>
                         </thead> 
                         <tbody></tbody>
@@ -133,7 +124,7 @@ SSAYS
 
 
     <div id="wrapper_form" style="display:none;" >
-        <?= $this->include('ficha_inspeccion_25/frmFI25') ?>
+        <?= $this->include( '/servicios25/frmServicios25' ) ?>
     </div>
     
 
@@ -174,10 +165,7 @@ SSAYS
 
 
 
-<script type="text/javascript" src="<?= esc($APP_URL) ?>librerias/ficha_inspeccion_25/homeFI25.js?v=<?= $VERSION ?>" ></script>
+<script type="text/javascript" src="<?= esc($APP_URL) ?>librerias/servicios25/homeServicios25.js?v=<?= $VERSION ?>" ></script>
 
 <?= $this->endSection() ?>
 <!-- ************************************************** -->
-
-
-

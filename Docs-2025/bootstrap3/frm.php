@@ -14,7 +14,95 @@
 	</div>
 	<!-- /.box-header -->
 	<div class="box-body">
-		<!-- BODY -->
+		
+        <!-- BODY -->
+        <form id="frmDocumento" autocomplete="off" >
+            
+            <input type="hidden" id="id" name="id" value="" />
+            <input type="hidden" id="uu_id" name="uu_id" value="" />
+            
+
+            <div class=" row " style="margin-bottom:15px;" >
+                <div class=" col-lg-2 col-md-2 " >
+                    
+                </div>
+                <!-- ./col -->
+                <div class=" col-lg-4 col-md-4 " ></div>
+                <!-- ./col -->
+                <div class=" col-lg-3 col-md-3 " ></div>
+                <!-- ./col -->
+                <div class=" col-lg-3 col-md-3 " ></div>
+                <!-- ./col -->
+            </div>
+            <!-- ./row -->
+
+            <div class=" row " style="margin-bottom:15px;" >
+                <div class=" col-lg-6 col-md-6 " >
+                    <div class=" form-group ">
+                        <label for="IdClienteProv">Cliente</label>
+                        <select name="IdClienteProv" id="IdClienteProv" class="form-control" ></select>
+                        <a href="#" id="QuitarSelect">Quitar Seleccion</a>
+                    </div>
+                    <!-- ./form-group -->
+                </div>
+                <!-- ./col -->
+                <div class=" col-lg-6 col-md-6 " >
+                    <div class=" form-group ">
+                        <label for="IdSucursal">Sucursal</label>
+                        <select name="IdSucursal" id="IdSucursal" class="form-control" ></select>
+                    </div>
+                    <!-- ./form-group -->
+                </div>
+                <!-- ./col -->
+            </div>
+            <!-- ./row -->
+
+            <div class=" row " style="margin-bottom:15px;" >
+                <div class=" col-lg-6 col-md-6 " >
+                    <div class=" form-group ">
+                        <label for="Supervisor" >Personal</label>
+                        <select name="Supervisor" id="Supervisor" class="form-control" ></select>
+                    </div>
+                    <!-- ./form-group -->
+                </div>
+                <!-- ./col -->
+                <div class=" col-lg-6 col-md-6 " >
+                    <div class=" form-group ">
+                        <label for="IdArticulo" >Articulo</label>
+                        <select name="IdArticulo" id="IdArticulo" class="form-control" ></select>
+                    </div>
+                    <!-- ./form-group -->
+                </div>
+                <!-- ./col -->
+            </div>
+            <!-- ./row -->
+
+            <div class=" row " style="margin-bottom:15px;" >
+                <div class=" col-lg-3 col-md-3 " ></div>
+                <!-- ./col -->
+                <div class=" col-lg-3 col-md-3 " ></div>
+                <!-- ./col -->
+                <div class=" col-lg-3 col-md-3 " ></div>
+                <!-- ./col -->
+                <div class=" col-lg-3 col-md-3 " ></div>
+                <!-- ./col -->
+            </div>
+            <!-- ./row -->
+
+            <div class=" row " style="margin-bottom:15px;" >
+                <div class=" col-lg-3 col-md-3 " ></div>
+                <!-- ./col -->
+                <div class=" col-lg-3 col-md-3 " ></div>
+                <!-- ./col -->
+                <div class=" col-lg-3 col-md-3 " ></div>
+                <!-- ./col -->
+                <div class=" col-lg-3 col-md-3 " ></div>
+                <!-- ./col -->
+            </div>
+            <!-- ./row -->
+
+        </form>
+
 	</div>
 	<!-- /.box-body -->
 	<div class="box-footer">
@@ -32,22 +120,22 @@
 			</div>
 			<!-- ./col -->
 			<div class=" col-lg-2 col-md-2 ">
-				<a href="#" class="btn btn-warning btn-block" id="btnVerAuth" >Auditoría</a>
+                <button class="btn btn-warning btn-block" id="btnVerAuth" ><div class="fa fa-clock-o"></div> Auditoría</button>
 				<hr>
 			</div>
 			<!-- ./col -->
 			<div class=" col-lg-2 col-md-2 " >
-				<a href="#" class="btn btn-danger btn-block" id="btnAnularR" ><i class="fa fa-save"></i> Anular</a>
+                <button  class="btn btn-danger btn-block" id="btnAnularR" ><i class="fa fa-save"></i> Anula</button>
 				<hr>
 			</div>
 			<!-- ./col -->
 			<div class=" col-lg-2 col-md-2 " >
-				<a href="#" class="btn btn-success btn-block" id="btnAprobarR" ><i class="fa fa-save"></i> Aprobar</a>
+                <button  class="btn btn-success btn-block" id="btnAprobarR" ><i class="fa fa-save"></i> Aprobar</button>
 				<hr>
 			</div>
 			<!-- ./col -->
 			<div class=" col-lg-2 col-md-2 " >
-				<a href="#" class="btn btn-primary btn-block" id="btnGuardarR" ><i class="fa fa-save"></i> Guardar</a>
+                <button  class="btn btn-primary btn-block" id="btnGuardarR" ><i class="fa fa-save"></i> Guardar</button>
 				<hr>
 			</div>
 			<!-- ./col -->
@@ -58,6 +146,3 @@
 	<!-- /.box-footer -->
 </div>
 <!-- ./box -->
-
-
-
