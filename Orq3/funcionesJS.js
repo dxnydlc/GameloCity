@@ -104,6 +104,9 @@ function guardarDoc()
                     let data = json.data;
                     $('#frmDocumento #id').val( data.id );
                     $('#frmDocumento #uu_id').val( data.uu_id );
+                    $.each( json.data , function( key , value ){
+                        $('#frmDocumento #'+key).val(value);
+                    });
                     //
                 break;
                 case 202:
@@ -407,6 +410,135 @@ _IdAutorizado.on("select2:select", function (e) {
     console.log("select2:select", _Id );
 	$('#frmDocumento #ClaseServicio').val( _Texto );
 });
+// SELECT 2 USUARIOS NEST
+let Supervisor = $('#frmDocumento #Supervisor').select2({
+    ajax: {
+        url : `${_URL_NESTMy}v1/publico/select2-reg-emple/` ,
+        dataType : 'json',
+        data : function (params) {
+            var query = {
+                query : params.term,
+            }
+            return query;
+        }
+    },
+    processResults: function (data) {
+        return {
+        results: data
+        };
+    },
+    minimumInputLength : 3,width : '100%'
+});
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+Supervisor.on("select2:select", function (e) { 
+    let _Id = e.params.data.id, _Texto = e.params.data.text;
+    console.log("select2:select", _Id );
+    $('#frmDocumento #nombre_supervisor').val( _Texto );
+});
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+// ARTICULOS SOFTCOM
+var $eventArticulos = $('#frmDocumento #IdArticulo').select2({
+    ajax: {
+        url: _URL_CONCAR+'/articulos/select2_articulos/',
+        dataType: 'json',
+        data: function (params) {
+            var query = {
+                q : params.term,
+                "user_token" : _token_node
+            }
+            return query;
+        }
+    },
+    processResults: function (data) {
+        return {
+            results: data
+        };
+    },
+    minimumInputLength : 3,width : '100%'
+});
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+$eventArticulos.on("select2:select", function (e) { 
+    var IdArticulo = e.params.data.id , UnidadMedida = e.params.data.UnidadMedida,Precio = parseFloat( e.params.data.Precio) ,Articulo = e.params.data.text;
+    $('#frmDetalle #Articulo').val(Articulo);
+    $('#frmDetalle #UnidadMedida').val(UnidadMedida);
+    $('#frmDetalle #CostoUnit').val(Precio);
+    setTimeout(function(){ $('#frmDetalle #Cantidad').trigger('focus'); $('#frmDetalle #Cantidad').select(); }, 300 );
+    /* if( Precio == 0 ){
+        alert('ArtÃ­culo sin precio.');
+        $('#mdlArticulos #btnAddProdi').hide();
+    }else{
+        $('#btnAddProdi').show();
+    } */
+    // Ya existe Â¿?
+    //$('#btnAddProdi').show();
+    /* $.each( _ItemsReq , function( key, rs ) {
+        if( IdArticulo == rs.IdArticulo ){
+            $('#frmDetalle #lblArticulo').html(`El artÃ­culo ya existe en la lista`);
+            $('#frmDetalle #btnAddProdi').hide();
+            return true;
+        }else{
+            console.log('NO Existe');
+        }
+    }); */
+    //
+});
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+// SELECT 2 CLIENTE NEST
+let IdClienteProv = $('#frmDocumento #IdClienteProv').select2({
+    ajax: {
+        url : `${_URL_NESTMy}v1/publico/clientes-select2/` ,
+        dataType : 'json',
+        data : function (params) {
+            var query = {
+                q : params.term,
+            }
+            return query;
+        }
+    },
+    processResults: function (data) {
+        return {
+        results: data
+        };
+    },
+    minimumInputLength : 3,width : '100%'
+});
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+IdClienteProv.on("select2:select", function (e) { 
+    let _Id = e.params.data.id, _Texto = e.params.data.text;
+    console.log("select2:select", _Id );
+    $('#frmDocumento #Cliente').val( _Texto );
+    getLocales( _Id , '' );
+});
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+let IdSucursal = $('#frmDocumento #IdSucursal').select2({
+    width : '100%'
+});
+/* ------------------------------------------------------------- */
+IdSucursal.on("select2:select", function (e) { 
+    let _Id = e.params.data.id, _Texto = e.params.data.text;
+    console.log("select2:select", _Id );
+    $('#frmDocumento #Sucursal').val( _Texto );
+});
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+$("#QuitarSelect").on( "click", function(e) {
+    e.preventDefault();
+    $('#frmDocumento #IdClienteProv').html(``);
+    $('#frmDocumento #IdClienteProv').trigger('change');
+
+    $('#frmDocumento #IdSucursal').html(``);
+    $('#frmDocumento #IdSucursal').trigger('change');
+});
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
 var num = 5.56789;
 var n = num.toFixed(2);
@@ -486,6 +618,57 @@ $('#mdlArticulos').on('shown.bs.modal', function (e) {
 	$(".select2-search__field")[0].focus();
 });
 /* ------------------------------------------------------------- */
+function getLocales( IdClienteProv , Default )
+{
+	//
+	try {
+        //
+		$.ajax({
+			url     : `${_URL_NESTMy}v1/sucursales/get-by-cliente/${IdClienteProv}`,
+			method  : "GET",
+			dataType: "json",
+			headers : {
+				Authorization : `Bearer ${_session3001}`
+			}
+		})
+		.done(function(  json ,textStatus, xhr ) {
+			//
+			switch ( xhr.status )
+            {
+                case 200:
+                    //
+                    let _html = '<option value="" >Seleccione</option>';
+                    $.each( json.data , function( key, value ) {
+                        _html += `<option value="${value.IdSucursal}" >${value.Descripcion}</option>` ; 
+                        });
+                    $('#frmDocumento #IdSucursal').html( _html );
+                    if( Default ){
+                        $('#frmDocumento #IdSucursal').val( Default );
+                    }
+                    $('#frmDocumento #IdSucursal').trigger('change');
+                    //
+                break;
+                case 202:
+                    // denegado...
+                    tostada( json.title , json.texto , json.clase );
+                break;
+                default:
+                break;
+            }
+			/**/
+		})
+		.fail(function(xhr, status, error) {
+            getError02(xhr, status, error);
+		})
+		.always(function() {
+			//
+		});
+	} catch (error) {
+		alert( error );
+	}
+	//
+}
+/* ------------------------------------------------------------- */
 function getLocales( IdClienteProv )
 {
 	//
@@ -545,7 +728,7 @@ function getLocales( IdClienteProv )
 		$('#Contenedor').waitMe('hide');
 	}
 	//
-} 
+}
 // ==============================================================================
 /*
 
