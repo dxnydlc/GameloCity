@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1038677402188",
+    "project_id": "flutter-notifiacion",
+    "storage_bucket": "flutter-notifiacion.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1038677402188:android:b48a8deb9bbcda0a824ae9",
+        "android_client_info": {
+          "package_name": "com.yupicode.push_notification"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDaVp_lN3Hbo52gYlh0M4ftTIQTlyDR42Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
