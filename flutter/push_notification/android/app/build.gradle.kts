@@ -9,7 +9,9 @@ plugins {
 android {
     namespace = "com.yupicode.push_notification"
     compileSdk = flutter.compileSdkVersion
+    //compileSdk = 35
     ndkVersion = flutter.ndkVersion
+    //ndkVersion = "29.0.14033849"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -25,10 +27,12 @@ android {
         applicationId = "com.yupicode.push_notification"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
-        versionCode = flutter.versionCode
-        versionName = flutter.versionName
+        minSdk          = flutter.minSdkVersion
+        //targetSdk       = flutter.targetSdkVersion
+        targetSdk       = 35
+        versionCode     = 1
+        versionName     = "01"
+        multiDexEnabled = true
     }
 
     buildTypes {
@@ -56,4 +60,6 @@ dependencies {
 
   // Add the dependencies for any other desired Firebase products
   // https://firebase.google.com/docs/android/setup#available-libraries
+
+  implementation("com.android.support:multidex:1.0.3")
 }

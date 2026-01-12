@@ -5,12 +5,15 @@ class MnesajeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final args = ModalRoute.of( context )?.settings.arguments ?? 'no data';
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Inicio'),
       ),
       body: Center(
-        child: Text('Home screen'),
+        child: Text('$args' , style : TextStyle( fontSize: 30 ) ),
       ),
     );
   }
