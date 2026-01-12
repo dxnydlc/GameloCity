@@ -345,6 +345,77 @@ $('input[name="datefilter"]').on('cancel.daterangepicker', function(ev, picker) 
 // #########    ./DATE RANGE PICKER #########
 
 // ==============================================================================
+// CARGAR ARCHIVOS AL SISTEMA SIMPLE
+// form
+/*
+<form method="post" action="" enctype="multipart/form-data" id="uploadFormObs6" >
+
+    <input type="file" id="fileInputObs6" name="fileInputObs6" />
+
+</form>
+<div id="responseMsg"></div>
+/**/
+// js
+/* ------------------------------------------------------------- */
+$("#uploadButton").click(function(){
+    // Get the file object from the input element
+    var fileData = $('#fileInputObs6').prop('files')[0];
+
+    let uuID = $('#obs6_item_'+idObs6Det).data('uuid');
+    
+    // Create a FormData object and append the file
+    var formData = new FormData();
+    formData.append('formData', fileData); // 'file' is the key used on the server-side
+    // Flag, Cod01, Id, Token, Glosa, idFolder, Folder
+    formData.append( 'Flag' , 'OSA-CONSTANCIA-SUP-OBS6' );
+    formData.append( 'Cod01' , '0' );
+
+    formData.append( 'Id' , idObs6Det );
+
+    formData.append( 'Token' , uuID );
+    formData.append( 'Glosa' , '' );
+    formData.append( 'idFolder' , '6' );
+    formData.append( 'Folder' , '' );
+
+    varDump( formData );
+
+    // Perform the AJAX request
+
+    $('#mdlObs6Foto').waitMe({
+        effect  : 'facebook',
+        text    : 'Espere...',
+        bg      : 'rgba(255,255,255,0.7)',
+        color   : '#146436',fontSize:'20px',textPos : 'vertical',
+        onClose : function() {}
+    });
+
+    $.ajax({
+        url         : `${urlArchivosObs6}upload`, // <-- Point to your server-side script
+        type        : 'POST',
+        data        : formData,
+        cache       : false,
+        contentType : false, // <-- Important: tell jQuery not to set the content type
+        processData : false, // <-- Important: tell jQuery not to process the data
+        dataType    : "json",
+        headers     : {
+            Authorization : `Bearer ${_session3001}`
+        },
+        success     : function(response){
+            $('#responseMsg').html(response); // Display server response
+            $('#fileInputObs6').val('');
+            let IdCab = $('#frmDocumento #id').val();
+            cargarObs6( IdCab );
+            $('#mdlObs6Foto').waitMe('hide');
+        },
+        error       : function(xhr, status, error) {
+            $('#responseMsg').html('Error: ' + error);
+            $('#fileInputObs6').val('');
+            $('#mdlObs6Foto').waitMe('hide');
+        }
+    });
+});
+/* ------------------------------------------------------------- */
+
 /* ------------------------------------------------------------- */
 // Cargar datos formulario
 $.each( json.data , function( key , value ){

@@ -337,6 +337,54 @@ require('colors');
   }
   // ...................................................................
   // ...................................................................
+  async enviarCorreo() {
+    
+    try {
+      
+      const SparkPost = require('sparkpost');
+      let SPARKPOST_SECRET = process.env.SPARKPOST_SECRET;
+      const client = new SparkPost( SPARKPOST_SECRET );
+
+      let resultado = {};
+
+      client.transmissions.send({
+        options: {
+          sandbox: true
+        },
+        content: {
+          from: 'testing@sparkpostbox.com',
+          subject: 'Hello, World!',
+          html:'<html><body><p>Testing SparkPost - the world\'s most awesomest email service!</p></body></html>'
+        },
+        recipients: [
+          {address: '<YOUR EMAIL ADDRESS>'}
+        ]
+      })
+      .then(data => {
+        console.log('Woohoo! You just sent your first mailing!');
+        console.log(data);
+        resultado = data;
+      })
+      .catch(err => {
+        console.log('Whoops! Something went wrong');
+        console.log(err);
+        resultado = err;
+      });
+  
+      return {
+        data : resultado , 
+        version : '1' , 
+        msg : { titulo : 'Correcto' , texto : 'Registros cargados' , clase : 'success' , call : 'tostada2' }
+      }
+
+    } catch (error) {
+
+      varDump( error );
+      throw new HttpException( error , HttpStatus.CONFLICT );
+
+    }
+
+  }
   // ...................................................................
   // ...................................................................
   // ...................................................................
