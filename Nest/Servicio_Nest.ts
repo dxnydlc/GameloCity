@@ -1,3 +1,357 @@
+
+// ==================================
+// CODIGO PARA UNA TABLA CON ARCHIVOS
+// =================================
+
+/**
+-- =====================================================
+-- ARCHIVOS.
+-- =====================================================
+
+
+-- nest generate resource orq_constancia_supervision_osa_obs6_archivos --no-spec
+
+DROP TABLE if exists ssays01.orq_archivos_planeamiento_programacion;
+
+TRUNCATE TABLE ssays01.orq_archivos_planeamiento_programacion;
+
+CREATE TABLE `orq_archivos_planeamiento_programacion` (
+  `id`              int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `uu_id`           varchar(150) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `id_modulo`       int(11) DEFAULT NULL,
+  `guardado_en`     varchar(150) COLLATE utf8mb4_unicode_ci DEFAULT 'PUBLIC',
+  `ruta_fisica`     text COLLATE utf8mb4_unicode_ci,
+  `RutaOriginal`    text COLLATE utf8mb4_unicode_ci,
+  `RutaThumbnail`   text COLLATE utf8mb4_unicode_ci,
+  `id_usuario`      varchar(150) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `usuario`         varchar(150) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `modulo`          varchar(150) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `formulario`      varchar(150) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `nombre_archivo`  varchar(150) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `size`            varchar(150) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `nombre_fisico`   varchar(150) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `extension`       varchar(150) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `NroPaginas`      int(11) DEFAULT '0',
+  `url`             text COLLATE utf8mb4_unicode_ci,
+  `url_compress`    text COLLATE utf8mb4_unicode_ci,
+  `url_original`    text COLLATE utf8mb4_unicode_ci,
+  `url_thumb`       text COLLATE utf8mb4_unicode_ci,
+  `url_400`         text COLLATE utf8mb4_unicode_ci,
+  `url_40`          text COLLATE utf8mb4_unicode_ci,
+  `tipo_documento`  varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `Cod001`          varchar(150) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `Cod002`          varchar(150) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `Cod003`          varchar(150) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `serie`           varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `correlativo`     int(11) DEFAULT NULL,
+  `id_mail`         int(11) DEFAULT NULL,
+  `id_respuesta`    int(11) DEFAULT NULL,
+  `token`           text COLLATE utf8mb4_unicode_ci,
+  `glosa`           text COLLATE utf8mb4_unicode_ci,
+  `id_carpeta`      int(11) DEFAULT NULL,
+  `carpeta`         varchar(150) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `publico`         varchar(150) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `id_post`         int(11) DEFAULT NULL,
+  `tipo_archivo_salud` varchar(150) COLLATE utf8mb4_unicode_ci DEFAULT 'EMO',
+  `IdClienteProv`   bigint(20) DEFAULT NULL,
+  `IdSucursal`      bigint(20) DEFAULT NULL,
+  `id_empresa`      int(11) NOT NULL DEFAULT '1',
+  `empresa`         varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'SSAYS SAC',
+  `deleted_at`      timestamp NULL DEFAULT NULL,
+  `created_at`      timestamp NULL DEFAULT NULL,
+  `updated_at`      timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/**/
+
+// MODELO
+/*
+@PrimaryGeneratedColumn() 
+    id : number
+
+    @Column()
+    @Generated("uuid")
+    uu_id : string
+
+    @Column()
+    id_modulo : number
+
+    @Column()
+    guardado_en : string
+
+    @Column({ type : 'text' })
+    ruta_fisica : string
+
+    @Column({ type : 'text' })
+    RutaOriginal : string
+
+    @Column({ type : 'text' })
+    RutaThumbnail : string
+
+    @Column()
+    id_usuario : string
+
+    @Column()
+    usuario : string
+
+    @Column()
+    modulo : string
+
+    @Column()
+    formulario : string
+
+    @Column()
+    nombre_archivo : string
+
+    @Column()
+    size : string
+
+    @Column()
+    nombre_fisico : string
+
+    @Column()
+    extension : string
+
+    @Column()
+    NroPaginas : number
+
+    @Column({ type : 'text' })
+    url : string
+
+    @Column({ type : 'text' })
+    url_original : string
+
+    @Column({ type : 'text' })
+    url_thumb : string
+
+    @Column({ type : 'text' })
+    url_compress : string
+
+    @Column({ type : 'text' })
+    url_400 : string
+
+    @Column({ type : 'text' })
+    url_40 : string
+
+    @Column()
+    tipo_documento : string
+
+    @Column()
+    Cod001 : string
+
+    @Column()
+    Cod002 : string
+
+    @Column()
+    Cod003 : string
+
+    @Column()
+    serie : string
+
+    @Column()
+    correlativo : number
+
+    @Column()
+    id_mail : number
+
+    @Column()
+    id_respuesta : number
+
+    @Column({ type : 'text' })
+    token : string
+
+    @Column({ type : 'text' })
+    glosa : string
+
+    @Column()
+    id_carpeta : number
+
+    @Column()
+    carpeta : string
+
+    @Column()
+    publico : string
+
+    @Column()
+    id_post : number
+
+    @Column({type:'bigint'})
+    IdClienteProv : number
+
+    @Column()
+    IdSucursal : number
+
+    @Column()
+    id_empresa : number
+
+    @Column()
+    empresa : string
+
+    @Column({ type : 'datetime'})
+    deleted_at : Date
+
+    @Column({ type : 'datetime'})
+    created_at : Date
+
+    @Column({ type : 'datetime'})
+    updated_at : Date
+*/
+
+// CONTRALADOR
+// ===========================
+/*
+// ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  //
+  //   * 
+  //   * @param formData 
+  //   * @param Flag, Cod01, Id, Token, Glosa, idFolder, Folder
+  //   * @param req 
+  //   * @returns 
+  //
+    @Post('upload')
+    @HttpCode(200)
+    @UseInterceptors(FileInterceptor('formData', { storage }))
+    async handleUpload( @UploadedFile() file: Express.Multer.File, @Body() body: any, @Req() req: Request) {
+      //
+      varDump( `##############################################` );
+      varDump( `CARGAR  ARCHIVO MIL` );
+      varDump( `##############################################` );
+      const createdAt = moment().format('YYYY-MM-DD HH:mm:ss');
+      
+      let headerToken = req.headers.authorization;
+      let Usuario = '' , IdUsuario = 0;
+  
+      if( headerToken ){
+        let arTOken = headerToken.split(' ');
+        let dataT = await this.util.decodificaToken( arTOken[1] );
+        if( dataT ){
+          Usuario   = dataT['name'];
+          IdUsuario = dataT['dni'];
+        }
+      }
+  
+      //console.log( headerToken );
+      let _URL_PROYECTO = process.env.URL_PROYECTO;
+      console.log('path: ' + _URL_PROYECTO + file.path);
+      let filename = file.filename;
+      console.log('filename: ' + file.filename);
+      let extension = file.mimetype;
+      extension = extension.toLowerCase()
+      console.log(`MimeType: ${extension}`);
+  
+  
+      // Origin: https://stackoverflow.com/questions/10865347/node-js-get-file-extension
+      let extFile = filename
+        .split('.')
+        .filter(Boolean) // removes empty extensions (e.g. `filename...txt`)
+        .slice(1)
+        .join('.');
+      console.log(`Extensión: ${extFile}`);
+  
+      let url_thumb = `uploads/${file.filename}`;
+      let url_compress = `uploads/${file.filename}`;
+  
+      switch (extFile.toLocaleLowerCase()) {
+        case 'jpg':
+        case 'png':
+        case 'jpeg':
+          url_thumb = `uploads/thumbnails-${file.filename}`;
+          url_compress = `uploads/thumbnails-${file.filename}`;
+          await sharp(_URL_PROYECTO + file.path).resize(200, 200).toFile(_URL_PROYECTO + 'public/uploads/' + 'thumbnails-' + file.filename, (err, resizeImage) => {
+            if (err) {
+              console.log(err);
+            } else {
+              console.log(resizeImage);
+            }
+          });
+          break;
+      }
+  
+      let _data = {
+        ruta_fisica     : file.path,
+        RutaOriginal    : file.path,
+        RutaThumbnail   : file.path,
+        url             : `uploads/${file.filename}`,
+        url_original    : `uploads/${file.filename}`,
+        url_thumb       : url_thumb,
+        url_compress    : url_compress,
+        extension       : extFile,
+        size            : file.size,
+        nombre_archivo  : file.originalname,
+        nombre_fisico : file.filename,
+        formulario    : body.Flag,
+        Cod001        : body.Cod01,
+        correlativo   : body.Id,
+        token         : body.Token,
+        glosa         : body.Glosa,
+        id_carpeta    : body.idFolder , 
+        carpeta       : body.Folder ,
+        created_at    : createdAt , 
+        updated_at    : createdAt , 
+        id_usuario    : IdUsuario  , 
+        usuario       : Usuario , 
+      };
+      return this.memorandumArchivosService.cargar(_data);
+    }
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+/**/
+
+// SERVICE
+// ===========================
+/*
+// ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  async cargar(data: any) {
+  
+    try {
+
+      let result: [];
+
+      const newArea = await this.datosModel.create(data);
+      let dataInsertada = await this.datosModel.save(newArea);
+
+      varDump( `##############################################` );
+      varDump( `ESCRIBIR  ARCHIVO MEMORANDUM` );
+      varDump( dataInsertada );
+      varDump( `##############################################` );
+
+      // devolver todos archivos con ese token y formulario¿?
+
+      return {
+        data : result , 
+        version : '1' , 
+        msg : { titulo : 'Correcto' , texto : 'Registros cargados' , clase : 'success' , call : 'tostada2' }
+      }
+
+    } catch (error) {
+
+      varDump( error );
+      throw new HttpException( error , HttpStatus.CONFLICT );
+
+    }
+  }
+  // ...................................................................
+  // ...................................................................
+*/
+
+
+
+
+
 // =========================== TABLA
 /*
 
