@@ -197,6 +197,18 @@ CREATE TABLE `orq_archivos_planeamiento_programacion` (
     updated_at : Date
 */
 
+
+/*
+// ======================================== MODULE
+imports : [
+  TypeOrmModule.forFeature([
+    SupCronogramaModel 
+  ]) , 
+  UtilidadesModule , 
+],
+exports     : [SupCronogramaService],
+*/
+
 // CONTRALADOR
 // ===========================
 /*
