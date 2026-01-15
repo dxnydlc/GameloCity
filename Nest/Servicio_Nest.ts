@@ -615,7 +615,12 @@ require('colors');
 
     try {
       let _URL_PROYECTO = process.env.URL_PROYECTO;
-      let comando = `xvfb-run wkhtmltopdf --enable-local-file-access ${_URL_PROYECTO}public/html/${file}.html ${_URL_PROYECTO}public/html/${file}.pdf`;
+      // Tal vez en tu equipo se necesite usar otro comando, lo defines en el .env, key "COMANDO_PDF"
+      let COMANDO_PDF = process.env.COMANDO_PDF;
+      if(!COMANDO_PDF){
+      COMANDO_PDF = `xvfb-run wkhtmltopdf --enable-local-file-access`;
+      }
+      let comando = `${COMANDO_PDF} ${_URL_PROYECTO}public/html/${file}.html ${_URL_PROYECTO}public/html/${file}.pdf`;
       out = await execShPromise(comando, true);
     } catch (e) {
       console.log('Error: ', e);
