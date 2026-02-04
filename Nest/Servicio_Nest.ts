@@ -72,10 +72,10 @@ export class DatosModel {
     Estado : string
 
     @Column()
-    IdUsuario : number
+    DniUsuarioMod : string
 
     @Column()
-    Usuario : string
+    UsuarioMod : string
 
     @Column()
     deleted_at : string
@@ -90,14 +90,14 @@ export class DatosModel {
 
 
 
-    @OneToOne( () => ClienteModel , (Cliente) => Cliente.dCliente10 )
-    @JoinColumn({ name : 'IdClienteProv' , referencedColumnName : 'IdClienteProv' })
-    dCliente10 : ClienteModel
+    //@OneToOne( () => ClienteModel , (Cliente) => Cliente.dCliente10 )
+    //@JoinColumn({ name : 'IdClienteProv' , referencedColumnName : 'IdClienteProv' })
+    //dCliente10 : ClienteModel
 
 
-    @OneToOne(() => SucursalModel , (photo) => photo.dLocal10 )
-    @JoinColumn({ name : 'IdSucursal' , referencedColumnName : 'IdSucursal' })
-    dLocal10 : SucursalModel
+    //@OneToOne(() => SucursalModel , (photo) => photo.dLocal10 )
+    //@JoinColumn({ name : 'IdSucursal' , referencedColumnName : 'IdSucursal' })
+    //dLocal10 : SucursalModel
 
 }
 
