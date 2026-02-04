@@ -15,8 +15,12 @@ CREATE TABLE `orq_protocolo_medico` (
 	`id` 		 INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
 	`uu_id` 	 VARCHAR(150) DEFAULT NULL,
 
-	`Codigo` 	   VARCHAR(150) DEFAULT NULL,
-    `Descripcion`  VARCHAR(150) DEFAULT NUll,
+	`Codigo` 	      VARCHAR(150) DEFAULT NULL,
+  `Descripcion`   VARCHAR(150) DEFAULT NUll,
+  `Estado`        VARCHAR(150) DEFAULT 'Activado',
+  
+  `DniUsuarioMod`   VARCHAR(150) DEFAULT NUll,
+  `UsuarioMod`      VARCHAR(150) DEFAULT NUll,
 	
 	`deleted_at` 	TIMESTAMP NULL DEFAULT NULL,
 	`created_at` 	TIMESTAMP NULL DEFAULT NULL,
