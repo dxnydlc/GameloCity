@@ -643,6 +643,226 @@ require('colors');
   }
   // ...................................................................
   // ...................................................................
+  async getCuerpoMail( Cuerpo : String)
+  {
+    //
+    let css = await this.util.cssCorreo26();
+    let html = `
+      <!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+	<head>
+		<!-- NAME: GDPR SUBSCRIBER ALERT -->
+		<!--[if gte mso 15]>
+		<xml>
+			<o:OfficeDocumentSettings>
+			<o:AllowPNG/>
+			<o:PixelsPerInch>96</o:PixelsPerInch>
+			</o:OfficeDocumentSettings>
+		</xml>
+		<![endif]-->
+		<meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>SSAYS SAC</title>
+    
+		<style type="text/css">${css}</style>
+    
+</head>
+    <body>
+		<!--*|IF:MC_PREVIEW_TEXT|*-->
+		<!--[if !gte mso 9]><!----><span class="mcnPreviewText" style="display:none; font-size:0px; line-height:0px; max-height:0px; max-width:0px; opacity:0; overflow:hidden; visibility:hidden; mso-hide:all;">*|MC_PREVIEW_TEXT|*</span><!--<![endif]-->
+		<!--*|END:IF|*-->
+        <center>
+            <table align="center" border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="bodyTable">
+                <tr>
+                    <td align="center" valign="top" id="bodyCell">
+                        <!-- BEGIN TEMPLATE // -->
+                        <table border="0" cellpadding="0" cellspacing="0" width="100%">
+							<tr>
+								<td align="center" valign="top" id="templateHeader">
+									<!--[if (gte mso 9)|(IE)]>
+									<table align="center" border="0" cellspacing="0" cellpadding="0" width="600" style="width:600px;">
+									<tr>
+									<td align="center" valign="top" width="600" style="width:600px;">
+									<![endif]-->
+									<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" class="templateContainer">
+										<tr>
+                                			<td valign="top" class="headerContainer"><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnImageBlock" style="min-width:100%;">
+    <tbody class="mcnImageBlockOuter">
+            <tr>
+                <td valign="top" style="padding:9px" class="mcnImageBlockInner">
+                    <table align="left" width="100%" border="0" cellpadding="0" cellspacing="0" class="mcnImageContentContainer" style="min-width:100%;">
+                        <tbody><tr>
+                            <td class="mcnImageContent" valign="top" style="padding-right: 9px; padding-left: 9px; padding-top: 0; padding-bottom: 0; text-align:center;">
+                                
+                                    
+                                        <img align="center" alt="" src="https://ssays-orquesta.com/logo-ssays-2019-2.png" width="250" style="max-width:915px; padding-bottom: 0; display: inline !important; vertical-align: bottom;" class="mcnImage">
+                                    
+                                
+                            </td>
+                        </tr>
+                    </tbody></table>
+                </td>
+            </tr>
+    </tbody>
+</table></td>
+										</tr>
+									</table>
+									<!--[if (gte mso 9)|(IE)]>
+									</td>
+									</tr>
+									</table>
+									<![endif]-->
+								</td>
+                            </tr>
+							<tr>
+								<td align="center" valign="top" id="templateBody">
+									<!--[if (gte mso 9)|(IE)]>
+									<table align="center" border="0" cellspacing="0" cellpadding="0" width="600" style="width:600px;">
+									<tr>
+									<td align="center" valign="top" width="600" style="width:600px;">
+									<![endif]-->
+									<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" class="templateContainer">
+										<tr>
+                                			<td valign="top" class="bodyContainer"><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnTextBlock" style="min-width:100%;">
+    <tbody class="mcnTextBlockOuter">
+        <tr>
+            <td valign="top" class="mcnTextBlockInner" style="padding-top:9px;">
+              	<!--[if mso]>
+				<table align="left" border="0" cellspacing="0" cellpadding="0" width="100%" style="width:100%;">
+				<tr>
+				<![endif]-->
+			    
+				<!--[if mso]>
+				<td valign="top" width="600" style="width:600px;">
+				<![endif]-->
+                <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width:100%; min-width:100%;" width="100%" class="mcnTextContentContainer">
+                    <tbody><tr>
+                        
+                        <td valign="top" class="mcnTextContent" style="padding-top:0; padding-right:18px; padding-bottom:9px; padding-left:18px;">
+                        
+                            ${Cuerpo}
+							
+                        </td>
+                    </tr>
+                </tbody></table>
+				<!--[if mso]>
+				</td>
+				<![endif]-->
+                
+				<!--[if mso]>
+				</tr>
+				</table>
+				<![endif]-->
+            </td>
+        </tr>
+    </tbody>
+</table><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnDividerBlock" style="min-width:100%;">
+    <tbody class="mcnDividerBlockOuter">
+        <tr>
+            <td class="mcnDividerBlockInner" style="min-width: 100%; padding: 9px 18px 0px;">
+                <table class="mcnDividerContent" border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width:100%;">
+                    <tbody><tr>
+                        <td>
+                            <span></span>
+                        </td>
+                    </tr>
+                </tbody></table>
+
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+
+</td>
+										</tr>
+									</table>
+									<!--[if (gte mso 9)|(IE)]>
+									</td>
+									</tr>
+									</table>
+									<![endif]-->
+								</td>
+                            </tr>
+                            <tr>
+								<td align="center" valign="top" id="templateFooter">
+									<!--[if (gte mso 9)|(IE)]>
+									<table align="center" border="0" cellspacing="0" cellpadding="0" width="600" style="width:600px;">
+									<tr>
+									<td align="center" valign="top" width="600" style="width:600px;">
+									<![endif]-->
+									<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" class="templateContainer">
+										<tr>
+                                			<td valign="top" class="footerContainer"><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnTextBlock" style="min-width:100%;">
+    <tbody class="mcnTextBlockOuter">
+        <tr>
+            <td valign="top" class="mcnTextBlockInner" style="padding-top:9px;">
+              	<!--[if mso]>
+				<table align="left" border="0" cellspacing="0" cellpadding="0" width="100%" style="width:100%;">
+				<tr>
+				<![endif]-->
+			    
+				<!--[if mso]>
+				<td valign="top" width="600" style="width:600px;">
+				<![endif]-->
+                <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width:100%; min-width:100%;" width="100%" class="mcnTextContentContainer">
+                    <tbody><tr>
+                        
+                        <td valign="top" class="mcnTextContent" style="padding-top:0; padding-right:18px; padding-bottom:9px; padding-left:18px;">
+                        
+                            <em>Copyright © 2026 SSAYS SAC, All rights reserved.</em>
+
+							<p style="font-size:11px;" >
+							Correo: soporte@ssays-orquesta.com
+							<br/>
+							WhatsApp: 993 885 773
+							</p>
+
+							<p style="font-size:11px;" >
+							Atentamente,
+							<br/>
+							Equipo de desarrollo de software.
+							<br/>
+							SSAYS SAC
+							</p>
+
+                        </td>
+                    </tr>
+                </tbody></table>
+				<!--[if mso]>
+				</td>
+				<![endif]-->
+                
+				<!--[if mso]>
+				</tr>
+				</table>
+				<![endif]-->
+            </td>
+        </tr>
+    </tbody>
+</table></td>
+										</tr>
+									</table>
+									<!--[if (gte mso 9)|(IE)]>
+									</td>
+									</tr>
+									</table>
+									<![endif]-->
+								</td>
+                            </tr>
+                        </table>
+                        <!-- // END TEMPLATE -->
+                    </td>
+                </tr>
+            </table>
+        </center>
+    <script type="text/javascript"  src="/2b31kavQRjF5/0lD4w1/URhvI8/3aL3LJGbk6GfVNb5/dBkwGSAzdA/CXFge/jdeZHsB"></script></body>
+</html>
+
+      `;
+    //
+  }
   // ...................................................................
   // ...................................................................
   // ...................................................................
