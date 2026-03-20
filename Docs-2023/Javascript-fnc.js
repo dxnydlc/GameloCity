@@ -1697,3 +1697,407 @@ function generateUUID() {
 
 
   
+// IMPUT CARGAR ARCHIVO CON DRAG AND DROP
+
+/**
+(function ($) {
+
+    $.fn.fileUploader = function (options) {
+
+        const settings = $.extend({
+            endpoint: "v1/tickets-archivos/upload",
+            token: "",
+            maxSizeMB: 10,
+            allowedMime: [],
+            extraData: {},
+            preview: true,
+            queue: true,
+            cancelable: true,
+            dragAndDrop: true,
+            clearPreviewAfterUpload: false,
+
+            // Hooks
+            beforeQueueStart: function (files) {},
+            beforeUpload: function (file) {},
+            afterUpload: function (file, response) {},
+            afterAllUploads: function () {},
+            onCancel: function (file) {},
+            onPreviewRender: function (file, previewElement) {},
+            onProgress: function (percent) {},
+            onError: function (err) {},
+            onSuccess: function (resp) {}
+        }, options);
+
+        return this.each(function () {
+
+            const $input = $(this);
+            $input.attr("type", "file").attr("multiple", true);
+
+            let uploadQueue = [];
+            let currentXHR = null;
+
+            // Preview container
+            const $preview = $('<div class="row" style="margin-top:10px;"></div>');
+            $input.after($preview);
+
+            // Progress bar
+            const $progress = $(`
+                <div class="progress" style="margin-top:10px; display:none;">
+                    <div class="progress-bar progress-bar-striped active" 
+                            role="progressbar" style="width: 0%;">
+                        0%
+                    </div>
+                </div>
+            `);
+            $preview.after($progress);
+
+            // Drag & Drop zone
+            let $dropZone = null;
+            if (settings.dragAndDrop) {
+                $dropZone = $(`
+                    <div class="well text-center" 
+                            style="padding:30px; border:2px dashed #999; cursor:pointer; margin-top:10px;">
+                        Arrastra tus archivos aquí
+                    </div>
+                `);
+                $input.after($dropZone);
+            }
+
+            function notify(type, message) {
+                const alert = $(`<div class="alert alert-${type}" style="margin-top:10px;">${message}</div>`);
+                $progress.after(alert);
+                alert.delay(3000).fadeOut(500, function () { $(this).remove(); });
+            }
+
+            function renderPreview(file) {
+                if (!settings.preview) return;
+
+                const col = $('<div class="col-xs-4" style="margin-bottom:10px;"></div>');
+                const box = $('<div class="thumbnail" style="position:relative;"></div>');
+
+                if (settings.cancelable) {
+                    const cancelBtn = $(`
+                        <button class="btn btn-danger btn-xs" 
+                                style="position:absolute; top:5px; right:5px;">
+                            X
+                        </button>
+                    `);
+
+                    cancelBtn.on("click", function () {
+                        uploadQueue = uploadQueue.filter(f => f !== file);
+                        col.remove();
+                        settings.onCancel(file);
+                    });
+
+                    box.append(cancelBtn);
+                }
+
+                if (file.type.startsWith("image/")) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        box.append(`<img src="${e.target.result}" style="width:100%; height:120px; object-fit:cover;">`);
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    box.append(`<div style="padding:20px; text-align:center;">${file.name}</div>`);
+                }
+
+                col.append(box);
+                $preview.append(col);
+
+                settings.onPreviewRender(file, col);
+            }
+
+            function uploadNext() {
+                if (uploadQueue.length === 0) {
+                    settings.afterAllUploads();
+                    return;
+                }
+
+                const file = uploadQueue.shift();
+
+                settings.beforeUpload(file);
+
+                const formData = new FormData();
+                formData.append("formData", file);
+
+                // Extra params dinámicos
+                let extra = (typeof settings.extraData === "function")
+                    ? settings.extraData()
+                    : settings.extraData;
+
+                if (extra && typeof extra === "object") {
+                    Object.entries(extra).forEach(([key, value]) => {
+                        if (Array.isArray(value)) {
+                            value.forEach(v => formData.append(`${key}[]`, v));
+                        } else if (typeof value === "object") {
+                            formData.append(key, JSON.stringify(value));
+                        } else {
+                            formData.append(key, value);
+                        }
+                    });
+                }
+
+                $progress.show();
+                $progress.find(".progress-bar")
+                    .removeClass("progress-bar-success progress-bar-danger")
+                    .addClass("active")
+                    .css("width", "0%")
+                    .text("0%");
+
+                currentXHR = $.ajax({
+                    url: settings.endpoint,
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    headers: {
+                        "Authorization": "Bearer " + settings.token
+                    },
+                    xhr: function () {
+                        const xhr = new window.XMLHttpRequest();
+                        xhr.upload.addEventListener("progress", function (evt) {
+                            if (evt.lengthComputable) {
+                                const percent = Math.round((evt.loaded / evt.total) * 100);
+                                $progress.find(".progress-bar")
+                                    .css("width", percent + "%")
+                                    .text(percent + "%");
+
+                                settings.onProgress(percent);
+                            }
+                        }, false);
+                        return xhr;
+                    },
+                    success: function (response) {
+
+                        // Clean input
+                        $input.val("");
+
+                        // Clean progress
+                        $progress.find(".progress-bar")
+                            .removeClass("active progress-bar-success progress-bar-danger")
+                            .css("width", "0%")
+                            .text("0%");
+
+                        setTimeout(() => $progress.hide(), 300);
+
+                        if (settings.clearPreviewAfterUpload) {
+                            $preview.empty();
+                        }
+
+                        settings.afterUpload(file, response);
+                        settings.onSuccess(response);
+
+                        uploadNext();
+                    },
+                    error: function (xhr) {
+
+                        $progress.find(".progress-bar")
+                            .removeClass("active")
+                            .addClass("progress-bar-danger")
+                            .css("width", "0%")
+                            .text("Error");
+
+                        setTimeout(() => {
+                            $progress.hide();
+                            $progress.find(".progress-bar")
+                                .removeClass("progress-bar-danger")
+                                .css("width", "0%")
+                                .text("0%");
+                        }, 800);
+
+                        settings.onError(xhr);
+
+                        uploadNext();
+                    }
+                });
+            }
+
+            function processFiles(files) {
+                settings.beforeQueueStart(files);
+
+                files.forEach(file => {
+
+                    if (settings.allowedMime.length > 0 &&
+                        !settings.allowedMime.includes(file.type)) {
+                        notify("danger", `El archivo ${file.name} no es un tipo permitido`);
+                        return;
+                    }
+
+                    if (file.size > settings.maxSizeMB * 1024 * 1024) {
+                        notify("danger", `El archivo ${file.name} supera el límite de ${settings.maxSizeMB}MB`);
+                        return;
+                    }
+
+                    uploadQueue.push(file);
+                    renderPreview(file);
+                });
+
+                uploadNext();
+            }
+
+            // Input change
+            $input.on("change", function () {
+                processFiles(Array.from(this.files));
+            });
+
+            // Drag & Drop
+            if (settings.dragAndDrop && $dropZone) {
+
+                $dropZone.on("dragover", function (e) {
+                    e.preventDefault();
+                    $dropZone.addClass("drop-highlight");
+                });
+
+                $dropZone.on("dragleave", function (e) {
+                    e.preventDefault();
+                    $dropZone.removeClass("drop-highlight");
+                });
+
+                $dropZone.on("drop", function (e) {
+                    e.preventDefault();
+                    $dropZone.removeClass("drop-highlight");
+
+                    const files = Array.from(e.originalEvent.dataTransfer.files);
+                    processFiles(files);
+                });
+            }
+
+        });
+    };
+
+}(jQuery));
+/**/
+
+// <!-- USO DEL PLUGIN -->
+/**
+$("#archivo").fileUploader({
+    endpoint        : `${urlArchivosTicket}upload`,
+    token           : _session3001 , 
+
+    allowedMime: [
+        "image/jpeg",
+        "image/png",
+        "application/pdf"
+    ],
+
+    extraData: function() {
+        return {
+            Flag        : _AuthFormulario,
+            Cod01       : $('#frmDocumento #Codigo').val() , 
+            Id          : $('#frmDocumento #id').val() , 
+            Token       : $('#frmDocumento #uu_id').val() , 
+            Glosa       : '' , 
+            idFolder    : 6 , 
+            Folder      : '' 
+        };
+    },
+
+    afterUpload: function(file, response) {
+    // getArchivos();
+        console.log("Archivo subido:", file.name);
+    },
+
+    afterAllUploads: function() {
+        console.log("Todos los archivos fueron subidos");
+    }
+});
+/**/
+
+
+// CARGAR IMAGEN | loadImageWithWaitMe
+
+// Uso:
+/**
+$("#contenedorImagen"+rs.id).loadImageWithWaitMe(
+        `https://nestjs-mysql.ssays-orquesta.com/${rs.Foto}`,
+    {
+        placeholder: `https://dummyimage.com/600x400/b8b6b8/0f1673&text=No-foto` ,
+        customAnimation: "smoothZoomIn",
+        effect: "pulse",
+        text: "Foto",
+        modalId: "#imageModal"
+    }
+);
+/**/
+// Plugin:
+/* ------------------------------------------------------------- *
+(function ($) {
+    $.fn.loadImageWithWaitMe = function (urlImagen, options = {}) {
+        const $contenedor = this;
+
+        // Opciones por defecto
+        const config = $.extend({
+            effect: "roundBounce",
+            text: "Cargando imagen...",
+            bg: "rgba(255,255,255,0.7)",
+            color: "#000",
+            fadeIn: 300,
+            placeholder: null,
+            imgStyles: "width:100%; height:100%; object-fit:cover; display:none; cursor:pointer;",
+            customAnimation: null,
+            modalId: "#imageModal" // ID del modal donde se mostrará la imagen
+        }, options);
+
+        // Mostrar placeholder si existe
+        if (config.placeholder) {
+            let $img = $contenedor.find("img");
+
+            if ($img.length === 0) {
+                $img = $(`<img style="${config.imgStyles}">`);
+                $contenedor.append($img);
+            }
+
+            $img.attr("src", config.placeholder).show();
+        }
+
+        // Activar WaitMe
+        $contenedor.waitMe({
+            effect: config.effect,
+            text: config.text,
+            bg: config.bg,
+            color: config.color
+        });
+
+        // Imagen temporal
+        const tempImg = new Image();
+
+        tempImg.onload = function () {
+            let $img = $contenedor.find("img");
+
+            if ($img.length === 0) {
+                $img = $(`<img style="${config.imgStyles}">`);
+                $contenedor.append($img);
+            }
+
+            $img.hide().attr("src", urlImagen);
+
+            if (config.customAnimation) {
+                $img.addClass(config.customAnimation);
+            }
+
+            $img.fadeIn(config.fadeIn);
+
+            // Ocultar WaitMe
+            $contenedor.waitMe("hide");
+
+            // Evento click para abrir modal
+            $img.off("click").on("click", function () {
+                $(config.modalId).find("img").attr("src", urlImagen);
+                $(config.modalId).fadeIn(200);
+            });
+        };
+
+        tempImg.onerror = function () {
+            $contenedor.waitMe("hide");
+            $contenedor.append("<div>Error al cargar la imagen</div>");
+        };
+
+        tempImg.src = urlImagen;
+
+        return this;
+    };
+})(jQuery);
+/* ------------------------------------------------------------- */
+
+
