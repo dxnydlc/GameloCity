@@ -1008,6 +1008,21 @@ function handleFail(xhr, status, error) {
 }
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
+function mostrarErroresValidacion(xhr) {
+    const errores = xhr.responseJSON?.errors;
+
+    if (!errores) {
+        tostada('Error de validación', 'Datos inválidos', 'warning');
+        return;
+    }
+
+    // Muestra cada error en tostada o en UI
+    Object.values(errores).forEach(msg => {
+        tostada('Validación', msg, 'warning');
+    });
+}
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
 function mostrarLoader(selector) {
     if( selector ){
         //
