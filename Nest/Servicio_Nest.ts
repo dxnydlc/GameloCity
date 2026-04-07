@@ -917,8 +917,11 @@ function sleep(ms) {
 // ======================================== CONTROLLER
 
 
-import * as moment from 'moment';
-import 'moment/locale/pt-br';
+//import * as moment from 'moment';
+//import 'moment/locale/pt-br';
+
+const moment = require('moment');
+
 import { v4 as uuidv4 } from 'uuid';
 import { JwtGuardGuard } from 'src/guard/jwt-guard/jwt-guard.guard';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
