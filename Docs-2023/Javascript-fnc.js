@@ -2101,3 +2101,76 @@ $("#contenedorImagen"+rs.id).loadImageWithWaitMe(
 /* ------------------------------------------------------------- */
 
 
+// NOTIFICADOR MEJORADO CON COLA
+/*
+<div id="notification-container"
+     class="position-fixed top-0 start-50 translate-middle-x mt-3"
+     style="z-index: 9999; width: 100%; max-width: 400px;">
+</div>
+
+class NotificationManager {
+    constructor() {
+        this.queue = [];
+        this.isShowing = false;
+        this.container = document.getElementById("notification-container");
+        this.defaultDuration = 5000;
+    }
+
+    show(message, type = "info", duration = this.defaultDuration) {
+        this.queue.push({ message, type, duration });
+        this.processQueue();
+    }
+
+    processQueue() {
+        if (this.isShowing || this.queue.length === 0) return;
+
+        this.isShowing = true;
+        const { message, type, duration } = this.queue.shift();
+
+        const alert = document.createElement("div");
+        alert.className = `alert alert-${this.mapType(type)} shadow fade`;
+        alert.style.cursor = "pointer";
+        alert.innerHTML = message;
+
+        // Cerrar al hacer clic
+        alert.addEventListener("click", () => this.close(alert));
+
+        this.container.appendChild(alert);
+
+        // Fade-in
+        setTimeout(() => alert.classList.add("show"), 10);
+
+        // Auto-cierre
+        setTimeout(() => this.close(alert), duration);
+    }
+
+    close(alert) {
+        alert.classList.remove("show");
+
+        // Fade-out
+        setTimeout(() => {
+            alert.remove();
+            this.isShowing = false;
+            this.processQueue();
+        }, 300);
+    }
+
+    mapType(type) {
+        const map = {
+            success: "success",
+            error: "danger",
+            info: "info"
+        };
+        return map[type] || "info";
+    }
+}
+
+const notifier = new NotificationManager();
+
+// Uso
+notifier.show("Operación exitosa", "success");
+notifier.show("Ocurrió un error inesperado", "error", 3000);
+notifier.show("Información importante", "info", 7000);
+
+
+*/
