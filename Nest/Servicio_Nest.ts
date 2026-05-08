@@ -154,8 +154,11 @@ exports     : [SupCronogramaService],
 import { readFileSync, writeFileSync } from 'fs';
 const execShPromise = require("exec-sh").promise;
 
-import * as moment from 'moment';
-import 'moment/locale/pt-br';
+//import * as moment from 'moment';
+//import 'moment/locale/pt-br';
+
+const moment = require('moment');
+
 import { v4 as uuidv4 } from 'uuid';
 
 require('colors');
@@ -1500,81 +1503,100 @@ import * as sharp from 'sharp';
       varDump( `CARGAR  ARCHIVO MIL` );
       varDump( `##############################################` );
       const createdAt = moment().format('YYYY-MM-DD HH:mm:ss');
-      
-      let headerToken = req.headers.authorization;
-      let Usuario = '' , IdUsuario = 0;
-  
-      if( headerToken ){
-        let arTOken = headerToken.split(' ');
-        let dataT = await this.util.decodificaToken( arTOken[1] );
-        if( dataT ){
-          Usuario   = dataT['name'];
-          IdUsuario = dataT['dni'];
-        }
+    
+    let headerToken = req.headers.authorization;
+    let Usuario = '' , IdUsuario = 0;
+
+    if( headerToken ){
+      let arTOken = headerToken.split(' ');
+      let dataT = await this.util.decodificaToken( arTOken[1] );
+      if( dataT ){
+        Usuario   = dataT['name'];
+        IdUsuario = dataT['dni'];
       }
-  
-      //console.log( headerToken );
-      let _URL_PROYECTO = process.env.URL_PROYECTO;
-      console.log('path: ' + _URL_PROYECTO + file.path);
-      let filename = file.filename;
-      console.log('filename: ' + file.filename);
-      let extension = file.mimetype;
-      extension = extension.toLowerCase()
-      console.log(`MimeType: ${extension}`);
-  
-  
-      // Origin: https://stackoverflow.com/questions/10865347/node-js-get-file-extension
-      let extFile = filename
-        .split('.')
-        .filter(Boolean) // removes empty extensions (e.g. `filename...txt`)
-        .slice(1)
-        .join('.');
-      console.log(`Extensión: ${extFile}`);
-  
-      let url_thumb = `uploads/${file.filename}`;
-      let url_compress = `uploads/${file.filename}`;
-  
-      switch (extFile.toLocaleLowerCase()) {
-        case 'jpg':
-        case 'png':
-        case 'jpeg':
-          url_thumb = `uploads/thumbnails-${file.filename}`;
-          url_compress = `uploads/thumbnails-${file.filename}`;
-          await sharp(_URL_PROYECTO + file.path).resize(200, 200).toFile(_URL_PROYECTO + 'public/uploads/' + 'thumbnails-' + file.filename, (err, resizeImage) => {
-            if (err) {
-              console.log(err);
-            } else {
-              console.log(resizeImage);
-            }
-          });
-          break;
-      }
-  
-      let _data = {
-        ruta_fisica     : file.path,
-        RutaOriginal    : file.path,
-        RutaThumbnail   : file.path,
-        url             : `uploads/${file.filename}`,
-        url_original    : `uploads/${file.filename}`,
-        url_thumb       : url_thumb,
-        url_compress    : url_compress,
-        extension       : extFile,
-        size            : file.size,
-        nombre_archivo  : file.originalname,
-        nombre_fisico : file.filename,
-        formulario    : body.Flag,
-        Cod001        : body.Cod01,
-        correlativo   : body.Id,
-        token         : body.Token,
-        glosa         : body.Glosa,
-        id_carpeta    : body.idFolder , 
-        carpeta       : body.Folder ,
-        created_at    : createdAt , 
-        updated_at    : createdAt , 
-        id_usuario    : IdUsuario  , 
-        usuario       : Usuario , 
-      };
-      return this.memorandumArchivosService.cargar(_data);
+    }
+
+    //console.log( headerToken );
+    let _URL_PROYECTO     = process.env.URL_PROYECTO;
+    console.log('path: ' + _URL_PROYECTO + file.path);
+    let filename          = file.filename;
+    console.log('filename: ' + file.filename);
+    let extension         = file.mimetype;
+    extension             = extension.toLowerCase();
+    console.log(`MimeType: ${extension}`);
+
+
+    // Origin: https://stackoverflow.com/questions/10865347/node-js-get-file-extension
+    let extFile = filename
+      .split('.')
+      .filter(Boolean) // removes empty extensions (e.g. `filename...txt`)
+      .slice(1)
+      .join('.');
+    console.log(`Extensión: ${extFile}`);
+
+    let url_thumb         = `uploads/${file.filename}`;
+    let url_compress      = `uploads/${file.filename}`;
+    let foto_quemada      = `uploads/quemada-${file.filename}`;
+
+    switch (extFile.toLocaleLowerCase()) {
+      case 'jpg':
+      case 'png':
+      case 'jpeg':
+        url_thumb = `uploads/thumbnails-${file.filename}`;
+        url_compress = `uploads/thumbnails-${file.filename}`;
+        await sharp(_URL_PROYECTO + file.path).resize(200, 200).toFile(_URL_PROYECTO + 'public/uploads/' + 'thumbnails-' + file.filename, (err, resizeImage) => {
+          if (err) {
+            console.log(err);
+          } else {
+            console.log(resizeImage);
+          }
+        });
+        // Quemar foto
+        const textoMarca          = `SSAYS SAC - MIL`;
+        const svgText             = `
+        <svg width="400" height="60">
+          <rect x="0" y="0" width="100%" height="100%" fill="black" fill-opacity="0.5"/>
+          <text x="10" y="50" font-size="24" fill="white" font-family="Arial">${textoMarca}</text>
+          <text x="10" y="28" font-size="18" fill="white" font-family="Arial">${moment().format('DD/MM/YYYY HH:mm:ss')} DNI : ${IdUsuario}</text>
+        </svg>`;
+
+        await sharp(file.path) // file.path es la ruta temporal de multer
+          .resize(1280, null, { withoutEnlargement: true }) // Opcional: limitar tamaño
+          .composite([{
+            input: Buffer.from(svgText),
+            gravity: 'southeast' // esquina inferior derecha
+          }])
+          .jpeg({ quality: 85 }) // Comprime un poco
+          .toFile( _URL_PROYECTO + 'public/uploads/' + 'quemada-' + file.filename, );
+        break;
+        // =========================================
+    }
+
+    let _data = {
+      ruta_fisica         : foto_quemada,
+      RutaOriginal        : file.path,
+      RutaThumbnail       : file.path,
+      url                 : foto_quemada,
+      url_original        : `uploads/${file.filename}`,
+      url_thumb           : url_thumb,
+      url_compress        : url_compress,
+      extension           : extFile,
+      size                : file.size,
+      nombre_archivo      : file.originalname,
+      nombre_fisico       : file.filename,
+      formulario          : body.Flag,
+      Cod001              : body.Cod01,
+      correlativo         : body.Id,
+      token               : body.Token,
+      glosa               : body.Glosa,
+      id_carpeta          : body.idFolder,
+      carpeta             : body.Folder,
+      created_at          : createdAt,
+      updated_at          : createdAt,
+      id_usuario          : IdUsuario,
+      usuario             : Usuario,
+    };
+    return this.milArchivosService.cargar(_data);
     }
   // ................................................................
   // ................................................................
