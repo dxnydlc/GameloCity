@@ -13,6 +13,7 @@ var _AuthFormulario = 'ASISTENCIA-EVENTOS';
 let idCab = 0, uuidCab = ``, xIdClienteProv = 0, xIdSucursal = 0;
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
+let xIdArea = 0 , xIdPuesto = 0 ;
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
@@ -469,6 +470,28 @@ let optsLangDatatable = {
         });
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
+        let IdArea = $('#frmDocumento #IdArea').select2({
+            width : '100%'
+        });
+        /* ------------------------------------------------------------- */
+        /* ------------------------------------------------------------- */
+        IdArea.on("select2:select", function (e) { 
+            let _Id = e.params.data.id, _Texto = e.params.data.text;
+            xIdArea = _Id;
+            $('#frmDocumento #Area').val( _Texto );
+            ejecutarDoc( 'get-puestos' );
+        });
+        /* ------------------------------------------------------------- */
+        /* ------------------------------------------------------------- */
+        let IdPuesto = $('#frmDocumento #IdPuesto').select2({
+            width : '100%'
+        });
+        /* ------------------------------------------------------------- */
+        /* ------------------------------------------------------------- */
+        IdPuesto.on("select2:select", function (e) { 
+            let _Id = e.params.data.id, _Texto = e.params.data.text;
+            $('#frmDocumento #Puesto').val( _Texto );
+        });
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
@@ -800,6 +823,7 @@ function prepararRequest( tipoReq ) {
     let esEdicion     = id > 0;
 
     // listar-cab | guardar-cab | cargar-cab | anular-cab
+    let _html = ``;
     switch ( tipoReq ) {
         // -------------------------------------------------------------
         case 'guardar-cab':
@@ -875,6 +899,7 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
     const status = xhr.status;
 
     // listar-cab | guardar-cab | cargar-cab | anular-cab
+    let _html = ``;
     if (status === 200) {
         const data = json.data;
         switch ( tipoReq ) {
@@ -954,15 +979,57 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
             break;
             // -------------------------------------------------------------
             case 'get-locales':
+                _html = `<option value="" >Seleccione</option>`;
                 $.each( json.data , function( key, value ) {
                     _html += `<option value="${value.IdSucursal}" >${value.Descripcion}</option>` ; 
                 });
                 $('#frmDocumento #IdSucursal').html( _html );
-                if( Default ){
-                    $('#frmDocumento #IdSucursal').val( Default );
+                if( xIdSucursal ){
+                    $('#frmDocumento #IdSucursal').val( xIdSucursal );
                 }
                 $('#frmDocumento #IdSucursal').trigger('change');
             break;
+            // -------------------------------------------------------------
+            // -------------------------------------------------------------
+            case 'get-areas':
+                _html = `<option value="0" >Seleccione</option>`;
+                $.each( json.data , function( key, value ) {
+                    _html += `<option value="${value.CodArea}" >${value.Descripcion}</option>` ; 
+                });
+                $('#frmDocumento #IdArea').html( _html );
+                if( xIdArea ){
+                    $('#frmDocumento #IdArea').val( xIdArea );
+                }
+                $('#frmDocumento #IdArea').trigger('change');
+            break;
+            // -------------------------------------------------------------
+            // -------------------------------------------------------------
+            case 'get-puestos':
+                _html = `<option value="0" >Seleccione</option>`;
+                $.each( json.data , function( key, value ) {
+                    _html += `<option value="${value.id}" >${value.Descripcion}</option>` ; 
+                });
+                $('#frmDocumento #IdPuesto').html( _html );
+                if( xIdPuesto ){
+                    $('#frmDocumento #IdPuesto').val( xIdPuesto );
+                }
+                $('#frmDocumento #IdPuesto').trigger('change');
+            break;
+            // -------------------------------------------------------------
+            // -------------------------------------------------------------
+            // -------------------------------------------------------------
+            // -------------------------------------------------------------
+            // -------------------------------------------------------------
+            // -------------------------------------------------------------
+            // -------------------------------------------------------------
+            // -------------------------------------------------------------
+            // -------------------------------------------------------------
+            // -------------------------------------------------------------
+            // -------------------------------------------------------------
+            // -------------------------------------------------------------
+            // -------------------------------------------------------------
+            // -------------------------------------------------------------
+            // -------------------------------------------------------------
             // -------------------------------------------------------------
             // -------------------------------------------------------------
             // -------------------------------------------------------------
