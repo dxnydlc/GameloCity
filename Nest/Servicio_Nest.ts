@@ -300,6 +300,15 @@ require('colors');
     
     try {
 
+      // Primero ver si esta activo o no {-.-}
+      let data1 = await this.datosModel.findOne({
+        where: {
+          uu_id: uuID,
+        },
+      });
+
+      if( data1.Estado != 'Activo' )throw new HttpException( 'Documento no disponible', HttpStatus.CONFLICT);
+
       await this.datosModel.update({ uu_id : uuID } , dto );
       let dataP = await this.datosModel.findOne({
         where : {
@@ -328,7 +337,7 @@ require('colors');
 
       const updatedAt = moment().format('YYYY-MM-DD HH:mm:ss');
 
-      await this.datosModel.update({ id } , { Estado : 'Desactivado' , deleted_at : updatedAt , updated_at : updatedAt } );
+      await this.datosModel.update({ id } , { Estado : 'Anulado' , deleted_at : updatedAt , updated_at : updatedAt } );
       let data = await this.datosModel.findOne({
         where : {
           id 
@@ -424,140 +433,6 @@ require('colors');
   // ...................................................................
   // ...................................................................
   // ...................................................................
-  async create( dto : CreateMipCaracteristicaDto ) {
-    
-    try {
-      
-      const newArea = await this.datosModel.create( dto );
-      let dataSave  = await this.datosModel.save( newArea );
-      //let Codigo = await this.util.addZeros( dataSave.id , 4 );
-      //await this.datosModel.update({ id : dataSave.id },{ Codigo : `RM${Codigo}` });
-
-      let data = await this.datosModel.findOne({
-        where : {
-          id : dataSave.id
-        }
-      });
-
-      return {
-        data , 
-        version : '1' , 
-        msg : { titulo : 'Correcto' , texto : 'Registro guardado' , clase : 'success' , call : 'tostada2' }
-      }
-
-    } catch (error) {
-      
-      varDump( error );
-      throw new HttpException( error , HttpStatus.CONFLICT );
-
-    }
-
-  }
-  // ...................................................................
-  // ...................................................................
-  async findAll() {
-    
-    try {
-      
-      let data = await this.datosModel.find({
-        take : 200 ,
-        order : {
-          id : 'DESC'
-        }
-      });
-  
-      return {
-        data , 
-        version : '1' , 
-        msg : { titulo : 'Correcto' , texto : 'Registros cargados' , clase : 'success' , call : 'tostada2' }
-      }
-
-    } catch (error) {
-
-      varDump( error );
-      throw new HttpException( error , HttpStatus.CONFLICT );
-
-    }
-
-  }
-  // ...................................................................
-  // ...................................................................
-  async findOne( uuid : string ) {
-    try {
-
-      let data = await this.datosModel.findOne({
-        where : {
-          uu_id : uuid
-        }
-      });
-
-      return {
-        data , 
-        version : '1' , 
-        msg : { titulo : 'Correcto' , texto : 'Registro recibido' , clase : 'success' , call : 'tostada2' }
-      }
-      
-    } catch (error) {
-      
-      varDump( error );
-      throw new HttpException( error , HttpStatus.CONFLICT );
-
-    }
-  }
-  // ...................................................................
-  // ...................................................................
-  async update( uuID : string , dto : UpdateMipCaracteristicaDto ) {
-    
-    try {
-
-      await this.datosModel.update({ uu_id : uuID } , dto );
-      let dataP = await this.datosModel.findOne({
-        where : {
-          uu_id : uuID
-        }
-      });
-
-      return {
-        data : dataP , 
-        version : '1' , 
-        msg : { titulo : 'Correcto' , texto : 'Registro actualizado' , clase : 'success' , call : 'tostada2' }
-      }
-      
-    } catch (error) {
-
-      varDump( error );
-      throw new HttpException( error , HttpStatus.CONFLICT );
-      
-    }
-
-  }
-  // ...................................................................
-  // ...................................................................
-  async remove( uuID : string ) {
-    try {
-
-      const updatedAt = moment().format('YYYY-MM-DD HH:mm:ss');
-
-      await this.datosModel.update({ uu_id : uuID } , { deleted_at : updatedAt , updated_at : updatedAt } );
-      let data = await this.datosModel.findOne({
-        where : {
-          uu_id : uuID
-        }
-      });
-
-      return {
-        data , 
-        version : '1' , 
-        msg : { titulo : 'Correcto' , texto : 'Registro anulado' , clase : 'success' , call : 'tostada2' }
-      }
-      
-    } catch (error) {
-      
-      varDump( error );
-      throw new HttpException( error , HttpStatus.CONFLICT );
-
-    }
-  }
   // ...................................................................
   // ...................................................................
   async maxId()
@@ -991,7 +866,7 @@ import { UtilidadesService } from 'src/utilidades/utilidades.service';
       ...dto , 
       created_at : createdAt , 
       updated_at : createdAt , 
-      Estado: 'Activado',
+      Estado: 'Activo',
       DniUsuarioMod: IdUsuario,
       UsuarioMod: Usuario,
     };
@@ -1079,76 +954,6 @@ import { UtilidadesService } from 'src/utilidades/utilidades.service';
   // ................................................................
   // ................................................................
   // ................................................................
-  @Post()
-  @HttpCode(200)
-  async create(@Body() dto : CreateMipCaracteristicaDto , @Req() req : Request ) {
-    
-    const createdAt = moment(  ).format('YYYY-MM-DD HH:mm:ss');
-    let headerToken = req.headers.authorization;
-    let Usuario = '' , IdUsuario = 0;
-
-    if( headerToken ){
-      let arTOken = headerToken.split(' ');
-      let dataT = await this.util.decodificaToken( arTOken[1] );
-      if( dataT ){
-        Usuario   = dataT['name'];
-        IdUsuario = dataT['dni'];
-      }
-    }
-
-    const bodyProocolo = {
-      ...dto , 
-      created_at : createdAt , 
-      updated_at : createdAt , 
-    };
-
-    return this.mipCaracteristicasService.create( bodyProocolo );
-  }
-  // ................................................................
-  // ................................................................
-  @Get()
-  @HttpCode(200)
-  findAll() {
-    return this.mipCaracteristicasService.findAll();
-  }
-  // ................................................................
-  // ................................................................
-  @Get(':uuid')
-  @HttpCode(200)
-  findOne( @Param('uuid') uuid : string) {
-    return this.mipCaracteristicasService.findOne( uuid );
-  }
-  // ................................................................
-  // ................................................................
-  @Patch(':uuid')
-  @HttpCode(200)
-  async update(@Param('uuid') uuid : string, @Body() dto: UpdateMipCaracteristicaDto , @Req() req : Request ) {
-    const createdAt = moment().format('YYYY-MM-DD HH:mm:ss');
-    let headerToken = req.headers.authorization;
-    let Usuario = '' , IdUsuario = 0;
-
-    if( headerToken ){
-      let arTOken = headerToken.split(' ');
-      let dataT = await this.util.decodificaToken( arTOken[1] );
-      if( dataT ){
-        Usuario   = dataT['name'];
-        IdUsuario = dataT['dni'];
-      }
-    }
-    const bodyProocolo = {
-      ...dto , 
-      updated_at : createdAt , 
-      IdUsuario , Usuario 
-    };
-    return this.mipCaracteristicasService.update( uuid , bodyProocolo);
-  }
-  // ................................................................
-  // ................................................................
-  @Delete(':uuid')
-  @HttpCode(200)
-  remove(@Param('uuid') uuid : string) {
-    return this.mipCaracteristicasService.remove( uuid );
-  }
   // ................................................................
   // ................................................................
   // ................................................................
