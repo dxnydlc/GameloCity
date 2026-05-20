@@ -2164,4 +2164,108 @@ class NotificationManager {
 
 const notifier = new NotificationManager();
 
+// ### Para bootstrap5 ###
+
+<div id="notif-overlay" 
+     style="display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+            background:rgba(0,0,0,0.35); z-index:9998; opacity:0; transition:opacity .3s;">
+</div>
+
+<div id="notif-modal-container"
+     style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%);
+            z-index:9999; max-width:420px; width:90%; opacity:0; transition:opacity .3s;">
+</div>
+
+
+class NotificationManager {
+    constructor(defaultDuration = 2000) { // ← duración por defecto dinámica
+        this.queue = [];
+        this.isShowing = false;
+
+        this.overlay = document.getElementById("notif-overlay");
+        this.modal = document.getElementById("notif-modal-container");
+
+        this.defaultDuration = defaultDuration;
+
+        // Cerrar al hacer clic en overlay
+        this.overlay.addEventListener("click", () => this.close());
+    }
+
+    show(message, type = "info", duration = null) {
+        this.queue.push({
+            message,
+            type,
+            duration: duration ?? this.defaultDuration // ← si no envías duración, usa la global
+        });
+        this.processQueue();
+    }
+
+    processQueue() {
+        if (this.isShowing || this.queue.length === 0) return;
+
+        this.isShowing = true;
+        const { message, type, duration } = this.queue.shift();
+
+        this.modal.innerHTML = `
+            <div class="alert alert-${this.mapType(type)} fade show shadow-lg"
+                 style="cursor:pointer; margin:0; font-size:16px; border-radius:10px;">
+                ${message}
+            </div>
+        `;
+
+        // Cerrar al hacer clic en la notificación
+        this.modal.firstElementChild.addEventListener("click", () => this.close());
+
+        // Mostrar overlay + modal con animación
+        this.overlay.style.display = "block";
+        this.modal.style.display = "block";
+
+        setTimeout(() => {
+            this.overlay.style.opacity = "1";
+            this.modal.style.opacity = "1";
+        }, 10);
+
+        // Auto-cierre dinámico
+        this.timer = setTimeout(() => this.close(), duration);
+    }
+
+    close() {
+        clearTimeout(this.timer);
+
+        this.overlay.style.opacity = "0";
+        this.modal.style.opacity = "0";
+
+        setTimeout(() => {
+            this.overlay.style.display = "none";
+            this.modal.style.display = "none";
+
+            this.isShowing = false;
+            this.processQueue();
+        }, 300);
+    }
+
+    mapType(type) {
+        const map = {
+            success: "success",
+            error: "danger",
+            info: "info"
+        };
+        return map[type] || "info";
+    }
+}
+
+const notifier = new NotificationManager(2000); // ← 2 segundos por defecto
+
+notifier.show("Guardado correctamente", "success");
+notifier.show("Error inesperado", "error", 3000);
+notifier.show("Procesando solicitud…", "info", 7000);
+
+
+// Uso
+notifier.show("Guardado correctamente", "success");
+notifier.show("Error inesperado", "error", 3000);
+notifier.show("Procesando solicitud…", "info", 7000);
+
+
+
 */
