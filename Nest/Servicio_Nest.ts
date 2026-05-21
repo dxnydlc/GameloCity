@@ -1343,10 +1343,15 @@ import * as sharp from 'sharp';
     let url_compress      = `uploads/${file.filename}`;
     let foto_quemada      = `uploads/quemada-${file.filename}`;
 
+    let foto_quemada      = file.path;
+    let xUrl              = `uploads/${file.filename}`;
+
     switch (extFile.toLocaleLowerCase()) {
       case 'jpg':
       case 'png':
       case 'jpeg':
+        foto_quemada      = `uploads/quemada-${file.filename}`;
+        xUrl              = `uploads/quemada-${file.filename}`;
         url_thumb = `uploads/thumbnails-${file.filename}`;
         url_compress = `uploads/thumbnails-${file.filename}`;
         await sharp(_URL_PROYECTO + file.path).resize(200, 200).toFile(_URL_PROYECTO + 'public/uploads/' + 'thumbnails-' + file.filename, (err, resizeImage) => {
@@ -1381,7 +1386,7 @@ import * as sharp from 'sharp';
       ruta_fisica         : foto_quemada,
       RutaOriginal        : file.path,
       RutaThumbnail       : file.path,
-      url                 : foto_quemada,
+      url                 : xUrl,
       url_original        : `uploads/${file.filename}`,
       url_thumb           : url_thumb,
       url_compress        : url_compress,
