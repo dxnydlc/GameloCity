@@ -6,7 +6,7 @@
 
 <!-- ************************************************** -->
 <?= $this->section('titulo') ?>
-Dashboard
+Areas
 <?= $this->endSection() ?>
 <!-- ************************************************** -->
 
@@ -27,18 +27,22 @@ SSAYS
 <!-- ************************************************** -->
 <?= $this->section('los_css') ?>
 
-<link rel="stylesheet" href="https://cdn.datatables.net/2.2.2/css/dataTables.dataTables.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/autofill/2.7.0/css/autoFill.dataTables.min.css">
-<!-- botones -->
-<link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.2.2/css/buttons.dataTables.min.css">
-<!-- ColReorder -->
-<link rel="stylesheet" href="https://cdn.datatables.net/colreorder/2.0.4/css/colReorder.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
 
-<!-- keytabable -->
-<link rel="stylesheet" href="https://cdn.datatables.net/keytable/2.12.1/css/keyTable.dataTables.min.css">
-<!-- Responsive -->
-<link rel="stylesheet" href="https://cdn.datatables.net/responsive/3.0.4/css/responsive.dataTables.min.css">
 
+  <style>
+    /* Animación glow */
+    .chip-glow {
+      animation: glowPulse 2s infinite ease-in-out;
+    }
+
+    @keyframes glowPulse {
+      0%   { box-shadow: 0 0 0px rgba(0,0,0,0.0); }
+      50%  { box-shadow: 0 0 12px rgba(255,255,255,0.7); }
+      100% { box-shadow: 0 0 0px rgba(0,0,0,0.0); }
+    }
+  </style>
 
 
 <?= $this->endSection() ?>
@@ -57,74 +61,37 @@ SSAYS
     
     <div class="card-body">
 
-        <h4>Areas</h4>
+        <h4>Servicios</h4>
 
-        <!-- ....................................................... -->
-        <div class="row">
-            <div class=" col-lg-6 col-md-6 " ></div>
-            <!-- ./col -->
-            <div class=" col-lg-2 col-md-2 " >
-                <button id="btnGoImportar" class=" btn btn-default " data-bs-toggle="modal" data-bs-target="#mdlImportar" ><i class="fa a-cloud-upload"></i> Importar</button>
-            </div>
-            <!-- ./col -->
-             <div class=" col-lg-2 col-md-2 " >
-                <button id="btnOpenFiltro" class=" btn btn-default " ><i class="fa fa-search"></i> Filtro</button>
-            </div>
-            <!-- ./col -->
-            <div class=" col-lg-2 col-md-2 " >
-                <a id="btnCrear" href="#" class="btn btn-primary btn-block pull-right " data-id="0" >
-                    <i class="icofont-plus"></i> Crear</a>
-            </div>
-            <!-- ./col -->
-        </div>
-        <hr>
-        
-        <div class="tab-content" id="tabContenido" >
+        <!-- TABS -->
+  <ul class=" nav nav-tabs nav-underline " id="editorTabs" role="tablist">
 
-            <hr>
+    <!-- TAB FIJO (NO TIENE BOTÓN CERRAR) -->
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active"
+              id="tab-listado"
+              data-bs-toggle="tab"
+              data-bs-target="#tab-content-listado"
+              type="button">
+        Listado
+      </button>
+    </li>
 
-            <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
-                <table id="TablaHomePs" class=" table table-striped table-no-bordered table-hover " style="width:100%" >
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th></th>
-                            <th>#</th>
-                            <th>Codigo</th>
-                            <th>Descripción</th>
-                            <th>Estado</th>
-                            <th>Creado</th>
-                            <th>Modificado</th>
-                            <th>Usuario</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
+  </ul>
 
-            <div class="tab-pane fade " id="home-filtro-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
-                
-            <div class=" row " >
-                <div class=" col-lg-3 col-md-3 " >
-                    <div class="form-group">
-                        <label for="Cliente" >Descripción</label> 
-                        <input type="text" name="inicio" id="inicio" class="form-control" value="" maxlength="150" />
-                    </div>
-                    <!-- ./form-group -->
-                </div>
-                <!-- ./col -->
-                <div class=" col-lg-3 col-md-3 " ></div>
-                <!-- ./col -->
-                <div class=" col-lg-3 col-md-3 " ></div>
-                <!-- ./col -->
-                <div class=" col-lg-3 col-md-3 " ></div>
-                <!-- ./col -->
-            </div>
-            <!-- ./row -->
+  <!-- CONTENIDO DE TABS -->
+  <div class="tab-content" id="editorTabsContent">
 
-            </div>
+    <!-- CONTENIDO DEL TAB FIJO -->
+    <div class="tab-pane fade show active" id="tab-content-listado" role="tabpanel">
 
-        </div>
+      <button class="btn btn-success my-3" onclick="nuevoRegistro()">Nuevo</button>
+
+      <div id="tablaContainer"></div>
+
+    </div>
+
+  </div>
 
         <!-- ....................................................... -->
     </div>
@@ -136,7 +103,7 @@ SSAYS
 
 
 <div id="wrapper_form" style="display:none;" >
-    <?= $this->include( '/area/nuevo/frmArea2026' ) ?>
+    <?= $this->include( '/catalogo/sistemas/frmSistemas' ) ?>
 </div>
 
 
@@ -157,12 +124,6 @@ SSAYS
 
 
 
-<?= $this->include( '/area/nuevo/mdlArea2026' ) ?>
-
-
-
-
-
 
 <!-- ============================================================== -->
 
@@ -178,26 +139,21 @@ SSAYS
 
 
 
-<script type="text/javascript" src="https://cdn.datatables.net/2.2.2/js/dataTables.min.js" ></script>
-<script type="text/javascript" src="https://cdn.datatables.net/autofill/2.7.0/js/dataTables.autoFill.min.js" ></script>
-<!-- botones -->
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/3.2.2/js/dataTables.buttons.min.js" ></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/3.2.2/js/buttons.colVis.min.js" ></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/3.2.2/js/buttons.print.min.js" ></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/3.2.2/js/buttons.html5.min.js" ></script>
-<!-- ColReorder -->
-<script type="text/javascript" src="https://cdn.datatables.net/colreorder/2.0.4/js/dataTables.colReorder.min.js" ></script>
-<!-- keytable -->
-<script type="text/javascript" src="https://cdn.datatables.net/keytable/2.12.1/js/dataTables.keyTable.min.js" ></script>
-<!-- Responsive -->
-<script type="text/javascript" src="https://cdn.datatables.net/responsive/3.0.4/js/dataTables.responsive.min.js" ></script>
+
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+
+  <!-- Moment.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
 
 
 
-
-
-
-<script type="text/javascript" src="<?= esc($APP_URL) ?>librerias/area/homeArea2026.js?v=<?= $VERSION ?>" ></script>
+<script type="text/javascript" src="<?= esc($APP_URL) ?>librerias/catalogo/sistemas/homeSistemas.js?v=<?= $VERSION ?>" ></script>
 
 <?= $this->endSection() ?>
 <!-- ************************************************** -->
