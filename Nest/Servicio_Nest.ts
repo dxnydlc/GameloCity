@@ -1457,6 +1457,117 @@ import * as sharp from 'sharp';
     }
   }
   // ...................................................................
+  Servicio NestJS: convertir JSON → Excel y guardarlo
+  import { Injectable, BadRequestException } from '@nestjs/common';
+import * as ExcelJS from 'exceljs';
+import * as fs from 'fs';
+import * as path from 'path';
+
+@Injectable()
+export class ExcelService {
+
+  async jsonToExcelAndSave(): Promise<string> {
+
+    // -----------------------------------
+    // 1. JSON dentro de la función
+    // -----------------------------------
+    const data = [
+      { codigo: 'Codigo', nombre: 'Nombre' },
+      { codigo: 'A01-63', nombre: 'Menaje' },
+      { codigo: 'X032-74', nombre: 'Seguridad' },
+      { codigo: 'T-031-25', nombre: 'Quesos' },
+      { codigo: 'A-025-14', nombre: 'Menaje 2' }
+    ];
+
+    // -----------------------------------
+    // 2. Validación de data
+    // -----------------------------------
+    if (!Array.isArray(data) || data.length === 0) {
+      throw new BadRequestException('No hay datos para generar el Excel');
+    }
+
+    // -----------------------------------
+    // 3. Crear workbook y hoja
+    // -----------------------------------
+    const workbook = new ExcelJS.Workbook();
+    const sheet = workbook.addWorksheet('Reporte');
+
+    const headers = Object.keys(data[0]);
+
+    // -----------------------------------
+    // 4. Definir columnas con estilos
+    // -----------------------------------
+    sheet.columns = headers.map(h => ({
+      header: h.toUpperCase(),
+      key: h,
+      width: 25
+    }));
+
+    // -----------------------------------
+    // 5. Estilos para encabezados
+    // -----------------------------------
+    sheet.getRow(1).eachCell(cell => {
+      cell.fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: 'FFCCE5FF' } // azul suave
+      };
+      cell.font = { bold: true, color: { argb: 'FF000000' } };
+      cell.alignment = { vertical: 'middle', horizontal: 'center' };
+      cell.border = {
+        top: { style: 'thin' },
+        left: { style: 'thin' },
+        bottom: { style: 'thin' },
+        right: { style: 'thin' }
+      };
+    });
+
+    // -----------------------------------
+    // 6. Agregar filas con estilos
+    // -----------------------------------
+    data.forEach((row, index) => {
+      const excelRow = sheet.addRow(row);
+
+      excelRow.eachCell(cell => {
+        cell.border = {
+          top: { style: 'thin' },
+          left: { style: 'thin' },
+          bottom: { style: 'thin' },
+          right: { style: 'thin' }
+        };
+        cell.alignment = { vertical: 'middle', horizontal: 'left' };
+      });
+
+      // Alternar color de fondo (zebra)
+      if (index % 2 === 0) {
+        excelRow.eachCell(cell => {
+          cell.fill = {
+            type: 'pattern',
+            pattern: 'solid',
+            fgColor: { argb: 'FFF7F7F7' }
+          };
+        });
+      }
+    });
+
+    // -----------------------------------
+    // 7. Crear carpeta si no existe
+    // -----------------------------------
+    const folderPath = path.join(process.cwd(), 'uploads', 'excel');
+    if (!fs.existsSync(folderPath)) {
+      fs.mkdirSync(folderPath, { recursive: true });
+    }
+
+    // -----------------------------------
+    // 8. Guardar archivo
+    // -----------------------------------
+    const filePath = path.join(folderPath, `reporte_${Date.now()}.xlsx`);
+    await workbook.xlsx.writeFile(filePath);
+
+    return filePath;
+  }
+}
+
   // ...................................................................
 */
 

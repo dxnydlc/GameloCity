@@ -1159,22 +1159,321 @@ var $id = $(this).data('id'),$uuid = $(this).data('uuid');
 setTimeout(function(){ alert("Hello"); }, 3000);
 // ==============================================================================
 // ==============================================================================
+// For de fechas usando moment
+const moment = require('moment');
+
+// Asegurar español
+moment.locale('es');
+
+const fechaInicio = moment("2024-01-01", "YYYY-MM-DD");
+const fechaFin = moment("2024-01-10", "YYYY-MM-DD");
+
+const diffDias = fechaFin.diff(fechaInicio, 'days');
+
+for (let i = 0; i <= diffDias; i++) {
+    const fechaActual = moment(fechaInicio).add(i, 'days');
+    console.log(i, fechaActual.format("DD/MM/YYYY"));
+}
 // ==============================================================================
 // ==============================================================================
+// Calcular horas extras en Peru (8 horas)
+function calcularHorasExtrasDesde8(horasStr) {
+  // Parsear "HH:mm"
+  const [h, m] = horasStr.split(":").map(Number);
+
+  // Convertir a minutos
+  const totalMin = h * 60 + m;
+
+  // Jornada laboral estándar en Perú: 8 horas
+  const jornadaMin = 8 * 60;
+
+  // Si no supera las 8 horas, no hay extras
+  if (totalMin <= jornadaMin) {
+    return {
+      porcentaje25: { horas: 0, minutos: 0, text: "00:00" },
+      porcentaje35: { horas: 0, minutos: 0, text: "00:00" },
+      porcentaje25Decimal: 0,
+      porcentaje35Decimal: 0,
+      totalDecimal: 0,
+      totalText: "00:00"
+    };
+  }
+
+  // Minutos extra reales
+  const extraMin = totalMin - jornadaMin;
+
+  // Límites legales
+  const limite25 = 2 * 60; // 2 horas = 120 min
+
+  // Cálculo
+  const min25 = Math.min(extraMin, limite25);
+  const min35 = Math.max(extraMin - limite25, 0);
+
+  // Conversión HH:mm
+  const horas25 = Math.floor(min25 / 60);
+  const minutos25 = min25 % 60;
+
+  const horas35 = Math.floor(min35 / 60);
+  const minutos35 = min35 % 60;
+
+  // Formato texto HH:MM
+  const text25 = `${String(horas25).padStart(2, "0")}:${String(minutos25).padStart(2, "0")}`;
+  const text35 = `${String(horas35).padStart(2, "0")}:${String(minutos35).padStart(2, "0")}`;
+
+  // Conversión decimal
+  const porcentaje25Decimal = +(min25 / 60).toFixed(2);
+  const porcentaje35Decimal = +(min35 / 60).toFixed(2);
+
+  // Total en horas decimales
+  const totalDecimal = +(porcentaje25Decimal + porcentaje35Decimal).toFixed(2);
+
+  // Total HH:MM
+  const totalHoras = Math.floor((min25 + min35) / 60);
+  const totalMinutos = (min25 + min35) % 60;
+  const totalText = `${String(totalHoras).padStart(2, "0")}:${String(totalMinutos).padStart(2, "0")}`;
+
+  return {
+    porcentaje25: { horas: horas25, minutos: minutos25, text: text25 },
+    porcentaje35: { horas: horas35, minutos: minutos35, text: text35 },
+    porcentaje25Decimal,
+    porcentaje35Decimal,
+    totalDecimal,
+    totalText
+  };
+}
+/**
+ * calcularHorasExtrasDesde8("10:30");
+{
+  porcentaje25: { horas: 2, minutos: 0, text: "02:00" },
+  porcentaje35: { horas: 0, minutos: 30, text: "00:30" },
+  porcentaje25Decimal: 2.00,
+  porcentaje35Decimal: 0.50,
+  totalDecimal: 2.50,
+  totalText: "02:30"
+}
+
+ */
 // ==============================================================================
 // ==============================================================================
+// Multiplicar horas
+function multiplicarHoras(numero, horas) {
+  const totalMin = numero * horas * 60;
+
+  const h = Math.floor(totalMin / 60);
+  const m = totalMin % 60;
+
+  return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
+}
+/**
+ * multiplicarHoras(2, 8);
+// "16:00"
+
+ */
 // ==============================================================================
 // ==============================================================================
+// Sumar horas y minutos
+function sumarHorasYMinutos(h1, h2) {
+  const m1 = moment(h1, "HH:mm");
+  const m2 = moment(h2, "HH:mm");
+
+  const totalMin =
+    m1.hours() * 60 + m1.minutes() +
+    m2.hours() * 60 + m2.minutes();
+
+  const horas = Math.floor(totalMin / 60);
+  const minutos = totalMin % 60;
+
+  return `${String(horas).padStart(2, "0")}:${String(minutos).padStart(2, "0")}`;
+}
+/**
+ * sumarHorasYMinutos("02:30", "01:45");
+// "04:15"
+
+ */
 // ==============================================================================
 // ==============================================================================
+// Saber la fecha de la semana pasada
+const moment = require('moment');
+
+// Hoy: miércoles 03 de junio 2026
+const hoy = moment('2026-06-03');
+
+// Lunes de la semana pasada
+const lunesPasado = hoy.clone().subtract(1, 'week').startOf('isoWeek');
+
+// Domingo de la semana pasada
+const domingoPasado = hoy.clone().subtract(1, 'week').endOf('isoWeek');
+
+console.log("Lunes pasado:", lunesPasado.format('YYYY-MM-DD'));
+console.log("Domingo pasado:", domingoPasado.format('YYYY-MM-DD'));
+
 // ==============================================================================
 // ==============================================================================
+// Validar coordenadas
+const validarCoordFlexible = (v) => {
+  if (v === null || v === undefined) return false;
+
+  const n = Number(v);
+
+  return (
+    String(v).trim() !== "" &&   // no vacío
+    !isNaN(n) &&                 // convertible a número
+    n !== 0                      // distinto de 0
+  );
+};
+/**
+ * if (validarCoordFlexible(lat) && validarCoordFlexible(lng)) {
+  console.log("Coordenadas válidas");
+} else {
+  console.log("Coordenadas inválidas");
+}
+
+ */
 // ==============================================================================
 // ==============================================================================
+//Distancia GPS
+function puntoMasCercano(lista, latRef, lngRef) {
+  const R = 6371000; // metros
+  const toRad = (v) => v * Math.PI / 180;
+
+  const distanciaMetros = (lat1, lng1, lat2, lng2) => {
+    lat1 = Number(lat1);
+    lng1 = Number(lng1);
+    lat2 = Number(lat2);
+    lng2 = Number(lng2);
+
+    const dLat = toRad(lat2 - lat1);
+    const dLng = toRad(lng2 - lng1);
+
+    const a =
+      Math.sin(dLat / 2) ** 2 +
+      Math.cos(toRad(lat1)) *
+      Math.cos(toRad(lat2)) *
+      Math.sin(dLng / 2) ** 2;
+
+    return 2 * R * Math.asin(Math.sqrt(a));
+  };
+
+  let mejor = null;
+  let menorDist = Infinity;
+
+  for (const p of lista) {
+    if (!p.lat || !p.lng) continue;
+
+    const d = distanciaMetros(latRef, lngRef, p.lat, p.lng);
+
+    if (d < menorDist) {
+      menorDist = d;
+      mejor = p;
+    }
+  }
+
+  return {
+    id: mejor.id,
+    name: mejor.name,
+    lat: mejor.lat,
+    lng: mejor.lng,
+    distancia_metros: Number(menorDist.toFixed(2)),
+    distancia_km: Number((menorDist / 1000).toFixed(4))
+  };
+}
+/**
+ * {
+  "id": 14132,
+  "name": "BETA",
+  "lat": -12.077236460043558,
+  "lng": -77.06533204975852,
+  "distancia_metros": 310.42,
+  "distancia_km": 0.3104
+}
+const lista = [
+  { lat: -12.0536433, lng: -76.96170769999999 },
+  { lat: -6.779852099999999, lng: -79.8309024 },
+  { lat: -12.0494636, lng: -77.08805079999999 },
+  { lat: -12.298728852315586, lng: -76.84875385267753 },
+  { lat: -6.7603902, lng: -79.84097489999999 },
+  { lat: -12.2836862, lng: -76.8569613 },
+  { lat: -12.077236460043558, lng: -77.06533204975852 },
+  { lat: -6.7975156, lng: -79.8479413 },
+  { lat: -12.041296459779355, lng: -77.05316245776368 },
+  { lat: -8.116512499999999, lng: -79.0241607 },
+  { lat: -12.1551319, lng: -76.97226359999999 },
+  { lat: -16.3988325, lng: -71.55375599999999 },
+  { lat: -12.2836862, lng: -76.8569613 },
+  { lat: -12.1545709, lng: -76.9725711 },
+  { lat: -12.012817281733556, lng: -76.902288453759 },
+  { lat: -12.0424136, lng: -77.060065 },
+  { lat: -12.077208088391155, lng: -77.06537253537901 }
+];
+
+const referencia = { lat: -12.0760648, lng: -77.0679584 };
+
+console.log(puntoMasCercano(lista, referencia.lat, referencia.lng));
+ */
 // ==============================================================================
 // ==============================================================================
+// Color de texto en contraste al color de fondo
+function getContrastingTextColor(hexColor) {
+    // Quitar el "#" si existe
+    hexColor = hexColor.replace('#', '');
+
+    // Convertir a valores RGB
+    const r = parseInt(hexColor.substring(0, 2), 16);
+    const g = parseInt(hexColor.substring(2, 4), 16);
+    const b = parseInt(hexColor.substring(4, 6), 16);
+
+    // Calcular luminancia (fórmula estándar)
+    const luminancia = (0.299 * r + 0.587 * g + 0.114 * b);
+
+    // Si es oscuro → texto blanco, si es claro → texto negro
+    return luminancia > 150 ? '#000000' : '#FFFFFF';
+}
+
 // ==============================================================================
 // ==============================================================================
+// Función generarTablaDesdeJSON(json)
+function generarTablaDesdeJSON(data) {
+  if (!Array.isArray(data) || data.length === 0) return "";
+
+  // 1. Obtener encabezados desde las keys del primer objeto
+  const headers = Object.keys(data[0]);
+
+  // 2. Crear tabla
+  let html = "<table border='1' cellspacing='0' cellpadding='6'>";
+
+  // 3. Encabezados
+  html += "<thead><tr>";
+  headers.forEach(h => {
+    html += `<th>${h}</th>`;
+  });
+  html += "</tr></thead>";
+
+  // 4. Filas
+  html += "<tbody>";
+  data.forEach(row => {
+    html += "<tr>";
+    headers.forEach(h => {
+      html += `<td>${row[h] ?? ""}</td>`;
+    });
+    html += "</tr>";
+  });
+  html += "</tbody>";
+
+  html += "</table>";
+  return html;
+}
+/**
+ * const json = [
+  { codigo: 'Codigo', nombre: 'Nombre' },
+  { codigo: 'A01-63', nombre: 'Menaje' },
+  { codigo: 'X032-74', nombre: 'Seguridad' },
+  { codigo: 'T-031-25', nombre: 'Quesos' },
+  { codigo: 'A-025-14', nombre: 'Menaje 2' }
+];
+
+document.body.innerHTML = generarTablaDesdeJSON(json);
+
+ */
 // ==============================================================================
 // ==============================================================================
 // ==============================================================================
