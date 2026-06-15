@@ -1476,6 +1476,77 @@ document.body.innerHTML = generarTablaDesdeJSON(json);
  */
 // ==============================================================================
 // ==============================================================================
+// TABLA DESDE JSON - AVANZADO
+function renderDataTable(jsonData, containerId, tableId = "tablaJson") {
+    if (!Array.isArray(jsonData) || jsonData.length === 0) {
+        console.warn("JSON vacío o inválido");
+        return;
+    }
+
+    // Detectar columnas dinámicamente
+    const columns = Object.keys(jsonData[0]);
+
+    // Construir THEAD
+    let thead = "<thead><tr>";
+    columns.forEach(col => {
+        thead += `<th>${col}</th>`;
+    });
+    thead += "</tr></thead>";
+
+    // Construir TBODY
+    let tbody = "<tbody>";
+    jsonData.forEach(row => {
+        tbody += "<tr>";
+        columns.forEach(col => {
+            tbody += `<td>${row[col] !== null ? row[col] : ""}</td>`;
+        });
+        tbody += "</tr>";
+    });
+    tbody += "</tbody>";
+
+    // Insertar tabla en el contenedor dinámico
+    const html = `
+        <table id="${tableId}" class="table table-striped table-bordered table-hover" style="width:100%">
+            ${thead}
+            ${tbody}
+        </table>
+    `;
+    document.getElementById(containerId).innerHTML = html;
+
+    // Reinicializar DataTable si ya existe
+    if ($.fn.DataTable.isDataTable(`#${tableId}`)) {
+        $(`#${tableId}`).DataTable().destroy();
+    }
+
+    // Inicializar DataTables PRO
+    return $(`#${tableId}`).DataTable({
+        responsive: true,
+        dom: "Bfrtip",
+        buttons: [
+            { extend: "excelHtml5", text: "Excel" },
+            { extend: "pdfHtml5", text: "PDF" },
+            { extend: "csvHtml5", text: "CSV" },
+            { extend: "print", text: "Imprimir" }
+        ],
+        language: {
+            url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json"
+        },
+        initComplete: function () {
+            this.api().columns().every(function () {
+                const column = this;
+                const input = document.createElement("input");
+                input.className = "form-control form-control-sm";
+                input.placeholder = "Filtrar…";
+
+                $(input).appendTo($(column.footer()).empty())
+                    .on("keyup change", function () {
+                        column.search(this.value).draw();
+                    });
+            });
+        }
+    });
+}
+// let dataqhtml = renderDataTable(miJson, "tab-12345-body", "tablaSucursales");
 // ==============================================================================
 // ==============================================================================
 // ==============================================================================
