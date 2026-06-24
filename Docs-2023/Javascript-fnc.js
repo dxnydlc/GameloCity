@@ -1478,9 +1478,28 @@ document.body.innerHTML = generarTablaDesdeJSON(json);
 // ==============================================================================
 // TABLA DESDE JSON - AVANZADO
 function renderDataTable(jsonData, containerId, tableId = "tablaJson") {
-    if (!Array.isArray(jsonData) || jsonData.length === 0) {
-        console.warn("JSON vacío o inválido");
+    const container = document.getElementById(containerId);
+    if (!container) {
+        console.warn("No existe el contenedor:", containerId);
         return;
+    }
+
+    // Si el JSON está vacío → limpiar tabla y destruir DataTable
+    if (!Array.isArray(jsonData) || jsonData.length === 0) {
+
+        // Destruir DataTable si existe
+        if ($.fn.DataTable.isDataTable(`#${tableId}`)) {
+            $(`#${tableId}`).DataTable().destroy();
+        }
+
+        // Limpiar contenedor
+        container.innerHTML = `
+            <div class="alert alert-warning m-2">
+                No hay datos para mostrar.
+            </div>
+        `;
+
+        return; // Salir
     }
 
     // Detectar columnas dinámicamente
@@ -1505,13 +1524,12 @@ function renderDataTable(jsonData, containerId, tableId = "tablaJson") {
     tbody += "</tbody>";
 
     // Insertar tabla en el contenedor dinámico
-    const html = `
+    container.innerHTML = `
         <table id="${tableId}" class="table table-striped table-bordered table-hover" style="width:100%">
             ${thead}
             ${tbody}
         </table>
     `;
-    document.getElementById(containerId).innerHTML = html;
 
     // Reinicializar DataTable si ya existe
     if ($.fn.DataTable.isDataTable(`#${tableId}`)) {
@@ -1530,19 +1548,6 @@ function renderDataTable(jsonData, containerId, tableId = "tablaJson") {
         ],
         language: {
             url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json"
-        },
-        initComplete: function () {
-            this.api().columns().every(function () {
-                const column = this;
-                const input = document.createElement("input");
-                input.className = "form-control form-control-sm";
-                input.placeholder = "Filtrar…";
-
-                $(input).appendTo($(column.footer()).empty())
-                    .on("keyup change", function () {
-                        column.search(this.value).draw();
-                    });
-            });
         }
     });
 }
@@ -1551,8 +1556,193 @@ function renderDataTable(jsonData, containerId, tableId = "tablaJson") {
 // ==============================================================================
 // ==============================================================================
 // ==============================================================================
+// COMBO PARA SELECCIONAR SEMANAS
+    function generarComboSemanasEnFormulario(formId, year) {
+        const form = document.getElementById(formId);
+        if (!form) return console.warn("Formulario no encontrado:", formId);
+
+        const select = form.querySelector(".comboSemanas");
+        if (!select) return console.warn("No existe .comboSemanas dentro del formulario:", formId);
+
+        select.innerHTML = ""; // limpiar
+
+        // 👉 Opción inicial vacía (guía para el usuario)
+        const optDefault = document.createElement("option");
+        optDefault.value = "";
+        optDefault.textContent = "Seleccione una semana...";
+        optDefault.disabled = false;
+        optDefault.selected = true;
+        select.appendChild(optDefault);
+
+        const semanaActual = moment().isoWeek();
+        const añoActual = moment().year();
+        const semanasEnAño = moment(`${year}-12-31`).isoWeeksInYear();
+
+        const limite = (year === añoActual) ? semanaActual : semanasEnAño;
+
+        for (let w = 1; w <= limite; w++) {
+            const lunes = moment().year(year).isoWeek(w).startOf("isoWeek");
+            const domingo = lunes.clone().endOf("isoWeek");
+
+            const opt = document.createElement("option");
+            opt.value = w;
+            opt.textContent = `Semana ${w} (${lunes.format("DD/MM")} - ${domingo.format("DD/MM")})`;
+
+            // 🔒 Semana actual visible pero desactivada
+            if (year === añoActual && w === semanaActual) {
+            opt.disabled = true;
+            opt.textContent += " (actual)";
+            }
+
+            select.appendChild(opt);
+        }
+
+        // ❌ Ya NO seleccionamos automáticamente ninguna semana
+        // select.value = ultimaSemanaDisponible;  ← eliminado
+        // Uso
+        // generarComboSemanasEnFormulario( xNombreForm , moment().year() )
+    }
 // ==============================================================================
 // ==============================================================================
+// Json a tabla, avanzado con buscador
+function generarTablaDesdeJSON() {
+    const cont = document.getElementById("contenedor-tabla");
+    cont.innerHTML = "";
+
+    const table = document.createElement("table");
+    table.classList.add("tabla-selectable");
+    table.id = "tblDetalle";
+
+    // ============================
+    // 1) CREAR THEAD
+    // ============================
+    const thead = document.createElement("thead");
+    const header = document.createElement("tr");
+
+    // Columna Acción
+    const thAccion = document.createElement("th");
+    thAccion.textContent = "A";
+    header.appendChild(thAccion);
+
+    // DNI
+    const thDNI = document.createElement("th");
+    thDNI.textContent = "DNI";
+    header.appendChild(thDNI);
+
+    // Nombre
+    const thNombre = document.createElement("th");
+    thNombre.textContent = "Nombre";
+    header.appendChild(thNombre);
+
+    // Columnas dinámicas (Día1, Día2, Día3...)
+    const fila0 = dataJSON[0];
+    for (let i = 2; i < fila0.length; i++) {
+        const th = document.createElement("th");
+        th.textContent = fila0[i].Dia;
+        header.appendChild(th);
+    }
+
+    thead.appendChild(header);
+    table.appendChild(thead);
+
+    // ============================
+    // 2) CREAR TBODY
+    // ============================
+    const tbody = document.createElement("tbody");
+
+    dataJSON.forEach((fila, r) => {
+        const tr = document.createElement("tr");
+
+        // --- Botón en primera columna ---
+        const td1 = document.createElement("td");
+        const btn = document.createElement("button");
+        btn.innerHTML = '<i class="fa fa-trash"></i>';
+        btn.id = "btn-" + ("row" + r);
+        btn.classList.add('btnItemFila');
+        btn.dataset.clase = "td-" + ("row" + r) + "-dni";
+        btn.dataset.pre = "td-" + ("row" + r);
+        td1.appendChild(btn);
+        tr.appendChild(td1);
+
+        // --- Celdas dinámicas ---
+        fila.forEach((col, c) => {
+            const td = document.createElement("td");
+
+            if (col.DNI) {
+                td.textContent = col.DNI;
+                td.classList.add("locked");
+                td.classList.add("td-" + ("row" + r) + "-dni");
+
+            } else if (col.Nombre) {
+                td.textContent = col.Nombre;
+                td.classList.add("locked");
+                td.classList.add("td-" + ("row" + r) + "-nombre");
+
+            } else {
+                const keyDia = Object.keys(col).find(k => k.startsWith("dia"));
+                td.textContent = keyDia ? col[keyDia] : "";
+
+                if (td.textContent.trim() !== "-") {
+                    td.style.backgroundColor = "#f3fbe4";
+                }
+            }
+
+            td.classList.add("td-" + ("row" + r));
+            td.dataset.row = r;
+            td.dataset.col = c;
+            td.dataset.id = col.id || "";
+            td.dataset.uu_id = col.uu_id || "";
+
+            // ID real de la celda
+            if (col.id) {
+                td.id = "celda-" + col.id;
+            }
+
+            tr.appendChild(td);
+        });
+
+        tbody.appendChild(tr);
+    });
+
+    table.appendChild(tbody);
+    cont.appendChild(table);
+}
+// buscador en tabla
+function activarBuscadorTabla(inputId, tableSelector) {
+  const input = document.getElementById(inputId);
+  const table = document.querySelector(tableSelector);
+
+  if (!input || !table) return;
+
+  // Obtiene todos los TR directamente del TABLE
+  const rows = Array.from(table.querySelectorAll("tr"));
+
+  // Si la tabla tiene encabezado, lo excluimos del filtrado
+  const header = rows.shift(); // primer <tr>
+
+  input.addEventListener("input", () => {
+    const filtro = input.value.toLowerCase();
+
+    rows.forEach(row => {
+      const texto = row.textContent.toLowerCase();
+      row.style.display = texto.includes(filtro) ? "" : "none";
+    });
+  });
+}
+/**
+ * <input id="buscador" class="form-control" placeholder="Buscar...">
+ * <div id="contenedorTabla"></div>
+<script>
+  const data = [
+    { codigo: "A01-63", nombre: "Menaje" },
+    { codigo: "X032-74", nombre: "Seguridad" }
+  ];
+
+  document.getElementById("contenedorTabla").innerHTML = generarTablaDesdeJSON(data);
+
+  activarBuscadorTabla("buscador", ".tabla-selectable");
+</script>
+ */
 // ==============================================================================
 // ==============================================================================
 // ==============================================================================
