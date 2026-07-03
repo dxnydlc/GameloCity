@@ -7,25 +7,30 @@
 // =========================== TABLA
 /*
 
+SELECT *  FROM orq_asistencia_procesar_data
+ORDER BY id DESC LIMIT 100;
+
 TRUNCATE TABLE ssays01.orq_protocolo_medico;
 
 DROP TABLE if exists ssays01.orq_protocolo_medico;
 
 CREATE TABLE `orq_protocolo_medico` (
-	`id` 		 INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`id`			INT(10) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	`uu_id` 	 VARCHAR(150) DEFAULT NULL,
 
 	`Codigo` 	      VARCHAR(150) DEFAULT NULL,
-  `Descripcion`   VARCHAR(150) DEFAULT NUll,
-  `Estado`        VARCHAR(150) DEFAULT 'Activado',
-  
-  `DniUsuarioMod`   VARCHAR(150) DEFAULT NUll,
-  `UsuarioMod`      VARCHAR(150) DEFAULT NUll,
-	
+	`Descripcion`   VARCHAR(150) DEFAULT NUll,
+	`Estado`        VARCHAR(150) DEFAULT 'Activado',
+
+	`DniUsuarioMod`   VARCHAR(150) DEFAULT NUll,
+	`UsuarioMod`      VARCHAR(150) DEFAULT NUll,
+
 	`deleted_at` 	TIMESTAMP NULL DEFAULT NULL,
 	`created_at` 	TIMESTAMP NULL DEFAULT NULL,
 	`updated_at` 	TIMESTAMP NULL DEFAULT NULL,
-	PRIMARY KEY (`id`)
+	
+    INDEX idx_IdCli ( IdClienteProv ),
+    INDEX idx_IdSuc ( IdSucursal ) 
 )
 ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=UTF8MB4_UNICODE_CI;
 
