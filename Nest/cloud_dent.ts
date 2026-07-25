@@ -191,7 +191,11 @@ require('colors');
     } catch (error) {
 
       varDump( error );
-      throw new HttpException( error , HttpStatus.CONFLICT );
+      throw new HttpException(
+        'Error en el servicio', 
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        { cause: error } // Optional: passes the original error for debugging logs
+      );
 
     }
 
@@ -231,7 +235,11 @@ require('colors');
     } catch (error) {
       
       varDump( error );
-      throw new HttpException( error , HttpStatus.CONFLICT );
+      throw new HttpException(
+        'Error en el servicio', 
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        { cause: error } // Optional: passes the original error for debugging logs
+      );
 
     }
 
@@ -258,7 +266,11 @@ require('colors');
     } catch (error) {
 
       varDump( error );
-      throw new HttpException( error , HttpStatus.CONFLICT );
+      throw new HttpException(
+        'Error en el servicio', 
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        { cause: error } // Optional: passes the original error for debugging logs
+      );
 
     }
 
@@ -283,7 +295,11 @@ require('colors');
     } catch (error) {
       
       varDump( error );
-      throw new HttpException( error , HttpStatus.CONFLICT );
+      throw new HttpException(
+        'Error en el servicio', 
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        { cause: error } // Optional: passes the original error for debugging logs
+      );
 
     }
   }
@@ -318,7 +334,11 @@ require('colors');
     } catch (error) {
 
       varDump( error );
-      throw new HttpException( error , HttpStatus.CONFLICT );
+      throw new HttpException(
+        'Error en el servicio', 
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        { cause: error } // Optional: passes the original error for debugging logs
+      );
       
     }
 
@@ -346,7 +366,11 @@ require('colors');
     } catch (error) {
       
       varDump( error );
-      throw new HttpException( error , HttpStatus.CONFLICT );
+      throw new HttpException(
+        'Error en el servicio', 
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        { cause: error } // Optional: passes the original error for debugging logs
+      );
 
     }
   }
@@ -1058,7 +1082,11 @@ import * as sharp from 'sharp';
     } catch (error) {
 
       varDump( error );
-      throw new HttpException( error , HttpStatus.CONFLICT );
+      throw new HttpException(
+        'Error en el servicio', 
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        { cause: error } // Optional: passes the original error for debugging logs
+      );
 
     }
   }
