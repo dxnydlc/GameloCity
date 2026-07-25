@@ -516,7 +516,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { JwtGuardGuard } from 'src/guard/jwt-guard/jwt-guard.guard';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Pagination } from 'nestjs-typeorm-paginate';
-import { Request } from 'express';
+import * as express from 'express';
 import { UtilidadesService } from 'src/utilidades/utilidades.service';
 
 
@@ -559,20 +559,19 @@ import { UtilidadesService } from 'src/utilidades/utilidades.service';
   // ................................................................
   @Post('guardar')
   @HttpCode(200)
-  async guardar(@Body() dto : CreateMipCaracteristicaDto , @Req() req : Request ) {
+  async guardar(@Body() dto : CreateMipCaracteristicaDto , @Req() req : express.Request ) {
     
-    const createdAt = moment(  ).format('YYYY-MM-DD HH:mm:ss');
-    let headerToken = req.headers.authorization;
-    let Usuario = '' , IdUsuario = 0;
+    const createdAt   = moment().format('YYYY-MM-DD HH:mm:ss');
+    let Usuario       = '' , IdUsuario = '0';
 
-    if( headerToken ){
-      let arTOken = headerToken.split(' ');
-      let dataT = await this.util.decodificaToken( arTOken[1] );
-      if( dataT ){
-        Usuario   = dataT['name'];
-        IdUsuario = dataT['dni'];
-      }
+    let a             = req.user;
+    console.log('_____+++', a);
+    if( a ){
+      IdUsuario       = a['DNI'];
+      Usuario         = a['Nombre'];
     }
+    console.log( 'Usuario'   , Usuario );
+    console.log( 'IdUsuario' , IdUsuario );
 
     const bodyProocolo = {
       ...dto , 
@@ -603,19 +602,20 @@ import { UtilidadesService } from 'src/utilidades/utilidades.service';
   // ................................................................
   @Patch('actualizar/:uuid')
   @HttpCode(200)
-  async Actualizar( @Param('uuid') uuid : string, @Body() dto : UpdateMipCaracteristicaDto , @Req() req : Request ) {
-    const createdAt = moment().format('YYYY-MM-DD HH:mm:ss');
-    let headerToken = req.headers.authorization;
-    let Usuario = '' , IdUsuario = 0;
+  async Actualizar( @Param('uuid') uuid : string, @Body() dto : UpdateMipCaracteristicaDto , @Req() req : express.Request ) {
+    
+    const createdAt   = moment().format('YYYY-MM-DD HH:mm:ss');
+    let Usuario       = '' , IdUsuario = '0';
 
-    if( headerToken ){
-      let arTOken = headerToken.split(' ');
-      let dataT = await this.util.decodificaToken( arTOken[1] );
-      if( dataT ){
-        Usuario   = dataT['name'];
-        IdUsuario = dataT['dni'];
-      }
+    let a             = req.user;
+    console.log('_____+++', a);
+    if( a ){
+      IdUsuario       = a['DNI'];
+      Usuario         = a['Nombre'];
     }
+    console.log( 'Usuario'   , Usuario );
+    console.log( 'IdUsuario' , IdUsuario );
+
     const bodyProocolo = {
       ...dto , 
       updated_at : createdAt , 
