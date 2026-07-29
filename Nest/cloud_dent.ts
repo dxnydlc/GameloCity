@@ -173,6 +173,8 @@ require('colors');
   // ...................................................................
   async demoFuncion() {
     
+    let errMensaje = ``;
+
     try {
       
       let data = await this.datosModel.find({
@@ -191,8 +193,11 @@ require('colors');
     } catch (error) {
 
       varDump( error );
+      if(!errMensaje)
+      errMensaje = `Error en el servicio`;
+
       throw new HttpException(
-        'Error en el servicio', 
+        errMensaje, 
         HttpStatus.INTERNAL_SERVER_ERROR,
         { cause: error } // Optional: passes the original error for debugging logs
       );
@@ -204,6 +209,8 @@ require('colors');
   // ...................................................................
   async guardar( dto : CreateMipCaracteristicaDto ) {
     
+    let errMensaje = ``;
+
     try {
 
       //Comprobar si el codigo ya existe
@@ -235,8 +242,11 @@ require('colors');
     } catch (error) {
       
       varDump( error );
+      if(!errMensaje)
+      errMensaje = `Error en el servicio`;
+
       throw new HttpException(
-        'Error en el servicio', 
+        errMensaje, 
         HttpStatus.INTERNAL_SERVER_ERROR,
         { cause: error } // Optional: passes the original error for debugging logs
       );
@@ -248,6 +258,8 @@ require('colors');
   // ...................................................................
   async getTodos() {
     
+  let errMensaje = ``;
+
     try {
       
       let data = await this.datosModel.find({
@@ -266,8 +278,11 @@ require('colors');
     } catch (error) {
 
       varDump( error );
+      if(!errMensaje)
+      errMensaje = `Error en el servicio`;
+
       throw new HttpException(
-        'Error en el servicio', 
+        errMensaje, 
         HttpStatus.INTERNAL_SERVER_ERROR,
         { cause: error } // Optional: passes the original error for debugging logs
       );
@@ -278,6 +293,9 @@ require('colors');
   // ...................................................................
   // ...................................................................
   async getbyId( id : number ) {
+
+    let errMensaje = ``;
+
     try {
 
       let data = await this.datosModel.findOne({
@@ -295,8 +313,11 @@ require('colors');
     } catch (error) {
       
       varDump( error );
+      if(!errMensaje)
+      errMensaje = `Error en el servicio`;
+
       throw new HttpException(
-        'Error en el servicio', 
+        errMensaje, 
         HttpStatus.INTERNAL_SERVER_ERROR,
         { cause: error } // Optional: passes the original error for debugging logs
       );
@@ -307,6 +328,8 @@ require('colors');
   // ...................................................................
   async Actualizar( uuID : string , dto : UpdateMipCaracteristicaDto ) {
     
+    let errMensaje = ``;
+
     try {
 
       // Primero ver si esta activo o no {-.-}
@@ -334,8 +357,11 @@ require('colors');
     } catch (error) {
 
       varDump( error );
+      if(!errMensaje)
+      errMensaje = `Error en el servicio`;
+
       throw new HttpException(
-        'Error en el servicio', 
+        errMensaje, 
         HttpStatus.INTERNAL_SERVER_ERROR,
         { cause: error } // Optional: passes the original error for debugging logs
       );
@@ -346,6 +372,9 @@ require('colors');
   // ...................................................................
   // ...................................................................
   async AnularbyId( id : number ) {
+
+    let errMensaje = ``;
+
     try {
 
       const updatedAt = moment().format('YYYY-MM-DD HH:mm:ss');
@@ -366,8 +395,11 @@ require('colors');
     } catch (error) {
       
       varDump( error );
+      if(!errMensaje)
+      errMensaje = `Error en el servicio`;
+
       throw new HttpException(
-        'Error en el servicio', 
+        errMensaje, 
         HttpStatus.INTERNAL_SERVER_ERROR,
         { cause: error } // Optional: passes the original error for debugging logs
       );
