@@ -173,6 +173,7 @@ require('colors');
   // ...................................................................
   async demoFuncion() {
     
+
     try {
       
       let data = await this.datosModel.find({
@@ -182,6 +183,8 @@ require('colors');
         }
       });
   
+      // throw new BadRequestException('Usuario no existe');
+
       return {
         data , 
         version : '1' , 
@@ -190,12 +193,19 @@ require('colors');
 
     } catch (error) {
 
-      varDump( error );
-      throw new HttpException(
-        'Error en el servicio', 
-        HttpStatus.INTERNAL_SERVER_ERROR,
-        { cause: error } // Optional: passes the original error for debugging logs
-      );
+      // Para depuración local
+      varDump(error); 
+
+      // SI EL ERROR YA ES DE NESTJS (ej. BadRequestException), LO RELANZAMOS DIRECTO
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
+      throw new InternalServerErrorException({
+        message: 'Error en el servicio de autenticación',
+        cause: error // Mantiene el rastro del error original en logs internos
+      });
 
     }
 
@@ -204,6 +214,8 @@ require('colors');
   // ...................................................................
   async guardar( dto : CreateMipCaracteristicaDto ) {
     
+
+
     try {
 
       //Comprobar si el codigo ya existe
@@ -213,7 +225,7 @@ require('colors');
         }
       });
 
-      if (mipPlagaInit) throw new HttpException('El código ya existe', HttpStatus.CONFLICT);
+      if (mipPlagaInit) throw new BadRequestException('El código ya existe' );
       
       const newArea = await this.datosModel.create( dto );
       let dataSave  = await this.datosModel.save( newArea );
@@ -234,12 +246,19 @@ require('colors');
 
     } catch (error) {
       
-      varDump( error );
-      throw new HttpException(
-        'Error en el servicio', 
-        HttpStatus.INTERNAL_SERVER_ERROR,
-        { cause: error } // Optional: passes the original error for debugging logs
-      );
+      // Para depuración local
+      varDump(error); 
+
+      // SI EL ERROR YA ES DE NESTJS (ej. BadRequestException), LO RELANZAMOS DIRECTO
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
+      throw new InternalServerErrorException({
+        message: 'Error en el servicio de autenticación',
+        cause: error // Mantiene el rastro del error original en logs internos
+      });
 
     }
 
@@ -248,6 +267,8 @@ require('colors');
   // ...................................................................
   async getTodos() {
     
+
+
     try {
       
       let data = await this.datosModel.find({
@@ -265,12 +286,19 @@ require('colors');
 
     } catch (error) {
 
-      varDump( error );
-      throw new HttpException(
-        'Error en el servicio', 
-        HttpStatus.INTERNAL_SERVER_ERROR,
-        { cause: error } // Optional: passes the original error for debugging logs
-      );
+      // Para depuración local
+      varDump(error); 
+
+      // SI EL ERROR YA ES DE NESTJS (ej. BadRequestException), LO RELANZAMOS DIRECTO
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
+      throw new InternalServerErrorException({
+        message: 'Error en el servicio de autenticación',
+        cause: error // Mantiene el rastro del error original en logs internos
+      });
 
     }
 
@@ -278,6 +306,9 @@ require('colors');
   // ...................................................................
   // ...................................................................
   async getbyId( id : number ) {
+
+
+
     try {
 
       let data = await this.datosModel.findOne({
@@ -294,12 +325,19 @@ require('colors');
       
     } catch (error) {
       
-      varDump( error );
-      throw new HttpException(
-        'Error en el servicio', 
-        HttpStatus.INTERNAL_SERVER_ERROR,
-        { cause: error } // Optional: passes the original error for debugging logs
-      );
+      // Para depuración local
+      varDump(error); 
+
+      // SI EL ERROR YA ES DE NESTJS (ej. BadRequestException), LO RELANZAMOS DIRECTO
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
+      throw new InternalServerErrorException({
+        message: 'Error en el servicio de autenticación',
+        cause: error // Mantiene el rastro del error original en logs internos
+      });
 
     }
   }
@@ -307,6 +345,8 @@ require('colors');
   // ...................................................................
   async Actualizar( uuID : string , dto : UpdateMipCaracteristicaDto ) {
     
+
+
     try {
 
       // Primero ver si esta activo o no {-.-}
@@ -333,12 +373,19 @@ require('colors');
       
     } catch (error) {
 
-      varDump( error );
-      throw new HttpException(
-        'Error en el servicio', 
-        HttpStatus.INTERNAL_SERVER_ERROR,
-        { cause: error } // Optional: passes the original error for debugging logs
-      );
+      // Para depuración local
+      varDump(error); 
+
+      // SI EL ERROR YA ES DE NESTJS (ej. BadRequestException), LO RELANZAMOS DIRECTO
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
+      throw new InternalServerErrorException({
+        message: 'Error en el servicio de autenticación',
+        cause: error // Mantiene el rastro del error original en logs internos
+      });
       
     }
 
@@ -346,6 +393,9 @@ require('colors');
   // ...................................................................
   // ...................................................................
   async AnularbyId( id : number ) {
+
+
+
     try {
 
       const updatedAt = moment().format('YYYY-MM-DD HH:mm:ss');
@@ -365,12 +415,19 @@ require('colors');
       
     } catch (error) {
       
-      varDump( error );
-      throw new HttpException(
-        'Error en el servicio', 
-        HttpStatus.INTERNAL_SERVER_ERROR,
-        { cause: error } // Optional: passes the original error for debugging logs
-      );
+      // Para depuración local
+      varDump(error); 
+
+      // SI EL ERROR YA ES DE NESTJS (ej. BadRequestException), LO RELANZAMOS DIRECTO
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
+      throw new InternalServerErrorException({
+        message: 'Error en el servicio de autenticación',
+        cause: error // Mantiene el rastro del error original en logs internos
+      });
 
     }
   }
