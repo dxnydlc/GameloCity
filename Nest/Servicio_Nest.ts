@@ -202,8 +202,19 @@ require('colors');
 
     } catch (error) {
 
-      varDump( error );
-      throw new HttpException( error , HttpStatus.CONFLICT );
+      // Para depuración local
+      varDump(error); 
+
+      // SI EL ERROR YA ES DE NESTJS (ej. BadRequestException), LO RELANZAMOS DIRECTO
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
+      throw new InternalServerErrorException({
+        message: 'Error en el servicio de xxxx',
+        cause: error // Mantiene el rastro del error original en logs internos
+      });
 
     }
 
@@ -242,8 +253,19 @@ require('colors');
 
     } catch (error) {
       
-      varDump( error );
-      throw new HttpException( error , HttpStatus.CONFLICT );
+      // Para depuración local
+      varDump(error); 
+
+      // SI EL ERROR YA ES DE NESTJS (ej. BadRequestException), LO RELANZAMOS DIRECTO
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
+      throw new InternalServerErrorException({
+        message: 'Error en el servicio de autenticación',
+        cause: error // Mantiene el rastro del error original en logs internos
+      });
 
     }
 
@@ -269,8 +291,19 @@ require('colors');
 
     } catch (error) {
 
-      varDump( error );
-      throw new HttpException( error , HttpStatus.CONFLICT );
+      // Para depuración local
+      varDump(error); 
+
+      // SI EL ERROR YA ES DE NESTJS (ej. BadRequestException), LO RELANZAMOS DIRECTO
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
+      throw new InternalServerErrorException({
+        message: 'Error en el servicio de autenticación',
+        cause: error // Mantiene el rastro del error original en logs internos
+      });
 
     }
 
@@ -294,8 +327,19 @@ require('colors');
       
     } catch (error) {
       
-      varDump( error );
-      throw new HttpException( error , HttpStatus.CONFLICT );
+      // Para depuración local
+      varDump(error); 
+
+      // SI EL ERROR YA ES DE NESTJS (ej. BadRequestException), LO RELANZAMOS DIRECTO
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
+      throw new InternalServerErrorException({
+        message: 'Error en el servicio de autenticación',
+        cause: error // Mantiene el rastro del error original en logs internos
+      });
 
     }
   }
@@ -329,8 +373,19 @@ require('colors');
       
     } catch (error) {
 
-      varDump( error );
-      throw new HttpException( error , HttpStatus.CONFLICT );
+      // Para depuración local
+      varDump(error); 
+
+      // SI EL ERROR YA ES DE NESTJS (ej. BadRequestException), LO RELANZAMOS DIRECTO
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
+      throw new InternalServerErrorException({
+        message: 'Error en el servicio de autenticación',
+        cause: error // Mantiene el rastro del error original en logs internos
+      });
       
     }
 
@@ -357,8 +412,19 @@ require('colors');
       
     } catch (error) {
       
-      varDump( error );
-      throw new HttpException( error , HttpStatus.CONFLICT );
+      // Para depuración local
+      varDump(error); 
+
+      // SI EL ERROR YA ES DE NESTJS (ej. BadRequestException), LO RELANZAMOS DIRECTO
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
+      throw new InternalServerErrorException({
+        message: 'Error en el servicio de autenticación',
+        cause: error // Mantiene el rastro del error original en logs internos
+      });
 
     }
   }
@@ -406,8 +472,19 @@ require('colors');
 
     } catch (error) {
 
-      varDump( error );
-      throw new HttpException( error , HttpStatus.CONFLICT );
+      // Para depuración local
+      varDump(error); 
+
+      // SI EL ERROR YA ES DE NESTJS (ej. BadRequestException), LO RELANZAMOS DIRECTO
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
+      throw new InternalServerErrorException({
+        message: 'Error en el servicio de autenticación',
+        cause: error // Mantiene el rastro del error original en logs internos
+      });
 
     }
 
@@ -511,8 +588,6 @@ require('colors');
       out = await execShPromise(comando, true);
     } catch (e) {
       console.log('Error: ', e);
-      console.log('Stderr: ', e.stderr);
-      console.log('Stdout: ', e.stdout);
 
       return e;
     }
@@ -809,8 +884,10 @@ import { v4 as uuidv4 } from 'uuid';
 import { JwtGuardGuard } from 'src/guard/jwt-guard/jwt-guard.guard';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Pagination } from 'nestjs-typeorm-paginate';
-import { Request } from 'express';
+// import { Request } from 'express';
 import { UtilidadesService } from 'src/utilidades/utilidades.service';
+
+import * as express from 'express';
 
 
 // Para activar el auth JwTokenAuth
@@ -852,20 +929,19 @@ import { UtilidadesService } from 'src/utilidades/utilidades.service';
   // ................................................................
   @Post('guardar')
   @HttpCode(200)
-  async guardar(@Body() dto : CreateMipCaracteristicaDto , @Req() req : Request ) {
+  async guardar(@Body() dto : CreateMipCaracteristicaDto , @Req() express.Request ) {
     
-    const createdAt = moment(  ).format('YYYY-MM-DD HH:mm:ss');
-    let headerToken = req.headers.authorization;
-    let Usuario = '' , IdUsuario = 0;
+    const createdAt   = moment().format('YYYY-MM-DD HH:mm:ss');
+    let Usuario       = '' , IdUsuario = '0';
 
-    if( headerToken ){
-      let arTOken = headerToken.split(' ');
-      let dataT = await this.util.decodificaToken( arTOken[1] );
-      if( dataT ){
-        Usuario   = dataT['name'];
-        IdUsuario = dataT['dni'];
-      }
+    let a             = req.user;
+    console.log('_____+++', a);
+    if( a ){
+      IdUsuario       = a['DNI'];
+      Usuario         = a['Nombre'];
     }
+    console.log( 'Usuario'   , Usuario );
+    console.log( 'IdUsuario' , IdUsuario );
 
     const bodyProocolo = {
       ...dto , 
@@ -896,19 +972,19 @@ import { UtilidadesService } from 'src/utilidades/utilidades.service';
   // ................................................................
   @Patch('actualizar/:uuid')
   @HttpCode(200)
-  async Actualizar( @Param('uuid') uuid : string, @Body() dto : UpdateMipCaracteristicaDto , @Req() req : Request ) {
-    const createdAt = moment().format('YYYY-MM-DD HH:mm:ss');
-    let headerToken = req.headers.authorization;
-    let Usuario = '' , IdUsuario = 0;
+  async Actualizar( @Param('uuid') uuid : string, @Body() dto : UpdateMipCaracteristicaDto , @Req() req : express.Request ) {
+    const createdAt   = moment().format('YYYY-MM-DD HH:mm:ss');
+    let Usuario       = '' , IdUsuario = '0';
 
-    if( headerToken ){
-      let arTOken = headerToken.split(' ');
-      let dataT = await this.util.decodificaToken( arTOken[1] );
-      if( dataT ){
-        Usuario   = dataT['name'];
-        IdUsuario = dataT['dni'];
-      }
+    let a             = req.user;
+    console.log('_____+++', a);
+    if( a ){
+      IdUsuario       = a['DNI'];
+      Usuario         = a['Nombre'];
     }
+    console.log( 'Usuario'   , Usuario );
+    console.log( 'IdUsuario' , IdUsuario );
+
     const bodyProocolo = {
       ...dto , 
       updated_at : createdAt , 
