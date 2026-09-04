@@ -9,53 +9,31 @@
 
         <div class="page-content">
 
+            <div class="container mt-4">
+                <ul class="nav nav-pills mb-3" id="dynamicTabs">
+                    <li class="nav-item">
+                        <button class="nav-link active" id="tab-lista" data-bs-toggle="pill" data-bs-target="#content-lista">
+                            Lista
+                        </button>
+                    </li>
+                </ul>
+                <!-- =================================================================================================== -->
+                <div class="tab-content" id="dynamicTabContent">
+                    <div class="tab-pane fade show active" id="content-lista">
+                        <button class="btn btn-success mb-3" id="btnNuevo">Nuevo</button>
 
-            <!-- TABS -->
-            <ul class="nav nav-tabs" role="tablist" id="editorTabs" >
-
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link active"
-                            id="tab-listado"
-                            data-bs-toggle="tab"
-                            data-bs-target="#tab-content-listado"
-                            type="button">
-                        Listado
-                    </button>
-                </li>
-
-            </ul>
-            <!--<ul class=" nav nav-tabs nav-underline " id="editorTabssss" role="tablist">
-                <li class="nav-item" role="presentationss">
-                </li>
-            </ul>-->
-
-            <!-- CONTENIDO DE TABS -->
-            <div class="tab-content" id="editorTabsContent" >
-                <!-- CONTENIDO DEL TAB FIJO -->
-                <div class="tab-pane fade show active" id="tab-content-listado" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
-                    
-                    <button class="btn btn-success my-3" onclick="nuevoRegistro()">Nuevo</button>
-
-                    <div id="tablaContainer"></div>
-
+                        <table id="tblUsuarios" class="table table-striped table-bordered"></table>
+                    </div>
                 </div>
+                <!-- =================================================================================================== -->
             </div>
 
 
-            <!--<div class="tab-content" id="editorTabsContent">
 
-                
-                <div class="tab-pane fade show active" id="tab-content-listado" role="tabpanel">
-
-                    <button class="btn btn-success my-3" onclick="nuevoRegistro()">Nuevo</button>
-
-                    <div id="tablaContainer"></div>
-
-                </div>
-
-            </div>-->
             <!-- ....................................................... -->
 
         </div>
 
     </div>
+
+</div>

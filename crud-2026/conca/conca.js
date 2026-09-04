@@ -20,6 +20,7 @@ let xIdArea = 0 , xIdPuesto = 0 ;
 let dataEnviarPost = ``;
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
+let xIdFormx = ``;
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
@@ -32,6 +33,32 @@ let dataEnviarPost = ``;
 /* ------------------------------------------------------------- */
 let dataJson = [];
 /* ------------------------------------------------------------- */
+// columnas que se mostrarán en la tabla
+const columnasVisibles  = [ "id" , "Nombre", "DNI", "Email", "Rol", "Estado"];
+
+// campos que tendrá el formulario
+const formFields        = ["Nombre", "DNI", "Email", "Rol", "Estado"];
+
+// campos hidden
+const hiddenFields      = ["id", "uu_id"];
+
+// valores por defecto
+const defaultValues = {
+    Rol: "admin",
+    Estado: "active"
+};
+
+
+
+
+
+
+
+
+
+
+
+
 /* ------------------------------------------------------------- */
 // ======================================================
 // ======================================================
@@ -229,12 +256,95 @@ let optsLangDatatable = {
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
+        $("#tblUsuarios").on("click", ".btn-edit", function () {
+            const row = $("#tblUsuarios").DataTable().row($(this).parents("tr")).data();
+            openEditorTab(row, false);
+        });
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
+        $(document).on("click", ".btn-guardar", function () {
+
+            $.blockUI({ message: "Guardando..." });
+
+            const formId = $(this).data("form");
+            const formData = {};
+
+            $(`#${formId}`).serializeArray().forEach(item => {
+                formData[item.name] = item.value;
+            });
+
+            if (!formData.uu_id) {
+                formData.uu_id = crypto.randomUUID();
+            }
+
+            fetch("api/v1/orders/guardar", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ data: formData })
+            })
+            .then(r => r.json())
+            .then(resp => {
+
+                const newId = resp.data.id;
+                const oldId = formData.id;
+
+                // Actualizar el tab
+                updateTabId(oldId, newId);
+
+                // Actualizar el campo id del formulario
+                $(`#${newId}-formulario input[name="id"]`).val(newId);
+            })
+            .finally(() => $.unblockUI());
+        });
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
+        $("#tblUsuarios").on("click", ".btn-anular", function () {
+            const row = $("#tblUsuarios").DataTable().row($(this).parents("tr")).data();
+
+            $.blockUI({ message: "Anulando..." });
+
+            fetch("api/v1/orders/anular", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ uu_id: row.uu_id })
+            })
+            .then(r => r.json())
+            .finally(() => $.unblockUI());
+        });
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
+        $("#btnNuevo").on("click", function () {
+
+            $.blockUI({ message: "Creando nuevo..." });
+
+            const newId = randomId();
+            const rowData = {
+                id: newId,
+                uu_id: crypto.randomUUID()
+            };
+
+            openEditorTab(rowData, true);
+
+            $.unblockUI();
+        });
+        /* ------------------------------------------------------------- */
+        /* ------------------------------------------------------------- */
+        $(document).on("click", ".btn-close-tab", function () {
+
+            const tabId = $(this).data("tab");
+            const contentId = $(this).data("content");
+
+            // Si el tab cerrado estaba activo, mover foco a "lista"
+            const isActive = $(`#${tabId}`).hasClass("active");
+
+            $(`#li-${tabId}`).remove();
+            $(`#${contentId}`).remove();
+
+            if (isActive) {
+                const tab = new bootstrap.Tab(document.getElementById("tab-lista"));
+                tab.show();
+            }
+        });
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
@@ -574,7 +684,8 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
             case 'listar-cab':
                 
             dataJson = json.data;
-            generarTabla( json.data );
+            //generarTabla( json.data );
+            renderTable( json.data ); 
 
             break;
             // -------------------------------------------------------------
@@ -843,7 +954,297 @@ function mostrarNotificacion(mensaje) {
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
+function renderTable(data) {
+
+    $.blockUI({ message: "Cargando..." });
+
+    // Limpiar DataTable si ya existe
+    if ($.fn.DataTable.isDataTable("#tblUsuarios")) {
+        $("#tblUsuarios").DataTable().clear().destroy();
+    }
+
+    const cols = [
+        {
+            title: "Editar",
+            data: null,
+            render: () => `<button class="btn btn-sm btn-primary btn-edit">✏️</button>`
+        },
+        {
+            title: "Anular",
+            data: null,
+            render: () => `<button class="btn btn-sm btn-danger btn-anular">🗑️</button>`
+        }
+    ];
+
+    columnasVisibles.forEach(col => {
+        cols.push({ title: col, data: col });
+    });
+
+    $("#tblUsuarios").DataTable({
+        data,
+        columns: cols,
+        responsive: true,
+        autoWidth: false
+    });
+
+    $.unblockUI();
+}
 /* ------------------------------------------------------------- */
+function renderForm(rowData = {}) {
+
+    $.blockUI({ message: "Cargando formulario..." });
+
+    const frm = $("#frmEditor");
+    frm.empty();
+
+    // campos visibles
+    formFields.forEach(field => {
+        frm.append(`
+            <div class="col-md-6">
+                <label class="form-label">${field}</label>
+                <input type="text" class="form-control" name="${field}" value="${rowData[field] || defaultValues[field] || ""}">
+            </div>
+        `);
+    });
+
+    // hidden fields
+    hiddenFields.forEach(field => {
+        frm.append(`
+            <input type="hidden" name="${field}" value="${rowData[field] || ""}">
+        `);
+    });
+
+    // botón guardar
+    frm.append(`
+        <div class="col-12">
+            <button type="button" class="btn btn-success" id="btnGuardar">Guardar</button>
+        </div>
+    `);
+
+    // cambiar pestaña
+    $("#pills-edit-tab").tab("show");
+
+    $.unblockUI();
+}
+/* ------------------------------------------------------------- */
+function generateUUID() {
+    return crypto.randomUUID();
+}
+/* ------------------------------------------------------------- */
+function cargarDatos() {
+    $.blockUI({ message: "Listando..." });
+
+    fetch("api/v1/orders/listar")
+        .then(r => r.json())
+        .then(resp => renderTable(resp.data))
+        .finally(() => $.unblockUI());
+}
+/* ------------------------------------------------------------- */
+function openEditorTab(rowData, isNew = false) {
+
+    const tabId             = `tab-${rowData.id}`;
+    const tabContentId      = `content-${rowData.id}`;
+    const formId            = `${rowData.id}-formulario`;
+    xIdFormx                = formId;
+
+    idCab                   = isNew ? 0 : rowData.id
+
+    const existingTab = document.getElementById(tabId);
+
+    if (existingTab) {
+        const tab = new bootstrap.Tab(existingTab);
+        tab.show();
+        return;
+    }
+
+    $("#dynamicTabs").append(`
+        <li class="nav-item" id="li-${tabId}">
+            <button class="nav-link d-flex align-items-center" id="${tabId}" 
+                data-bs-toggle="pill" data-bs-target="#${tabContentId}">
+                <span class="tab-label">${isNew ? "nuevo" : rowData.id}</span>
+                <span class="ms-2 text-danger fw-bold btn-close-tab" data-tab="${tabId}" data-content="${tabContentId}" style="cursor:pointer;">✕</span>
+            </button>
+        </li>
+    `);
+
+    $("#dynamicTabContent").append(`
+        <div class="tab-pane fade" id="${tabContentId}">
+            <form id="${formId}" class="row g-3"></form>
+        </div>
+    `);
+
+    renderFormInTab(rowData, formId);
+
+    const newTab = new bootstrap.Tab(document.getElementById(tabId));
+    newTab.show();
+}
+/* ------------------------------------------------------------- */
+function renderFormInTab(rowData, formId) {
+
+    $.blockUI({ message: "Cargando formulario..." });
+
+    const frm = $(`#${formId}`);
+    frm.empty();
+
+    let htmlForm = `
+    <div class=" demo-card  rounded-xl mb-5 ">
+        <div class=" demo-card-header d-flex align-items-center justify-content-between px-6 py-5  " >
+            <h3 class="demo-card-title m-0">Tab Pill</h3>
+        </div>
+        <div class=" demo-card-body " >
+            <div class=" demo-card-body-content row " >
+    `;
+
+    formFields.forEach(field => {
+        switch ( field ) {
+            case 'Nombre':
+                htmlForm += `
+                <div class="col-md-6">
+                    <label class="form-label" >Nombre:</label>
+                    <input type="text" class="form-control" name="${field}" value="${rowData[field] || defaultValues[field] || ""}" />
+                </div>
+                `;
+                break;
+        
+            default:
+                htmlForm += `
+                <div class="col-md-6">
+                    <label class="form-label">${field}</label>
+                    <input type="text" class="form-control" name="${field}" 
+                        value="${rowData[field] || defaultValues[field] || ""}">
+                </div>
+                `;
+            break;
+        }
+        //frm.append( htmlForm );
+    });
+    htmlForm += `
+            </div>
+        </div>
+    </div>
+    `;
+
+
+    hiddenFields.forEach(field => {
+        htmlForm += `<input type="hidden" name="${field}" value="${rowData[field] || ""}">`;
+        // frm.append(`
+        //     <input type="hidden" name="${field}" value="${rowData[field] || ""}">
+        // `);
+    });
+
+    htmlForm += `
+        <div class="col-12">
+            <button type="button" class="btn btn-success btn-guardar" data-form="${formId}">
+                Guardar
+            </button>
+        </div>
+    `;
+    // frm.append(`
+    //     <div class="col-12">
+    //         <button type="button" class="btn btn-success btn-guardar" data-form="${formId}">
+    //             Guardar
+    //         </button>
+    //     </div>
+    // `);
+
+    frm.append( htmlForm );
+
+    $.unblockUI();
+}
+
+/* ------------------------------------------------------------- */
+function updateTabId(oldId, newId) {
+
+    const oldTabId = `tab-${oldId}`;
+    const oldContentId = `content-${oldId}`;
+    const oldFormId = `${oldId}-formulario`;
+
+    const newTabId = `tab-${newId}`;
+    const newContentId = `content-${newId}`;
+    const newFormId = `${newId}-formulario`;
+
+    // Actualizar label
+    $(`#${oldTabId} .tab-label`).text(newId);
+
+    // Actualizar IDs del tab
+    $(`#${oldTabId}`)
+        .attr("id", newTabId)
+        .attr("data-bs-target", `#${newContentId}`);
+
+    $(`#li-${oldTabId}`).attr("id", `li-${newTabId}`);
+
+    // Actualizar botón cerrar
+    $(`#${newTabId} .btn-close-tab`)
+        .attr("data-tab", newTabId)
+        .attr("data-content", newContentId);
+
+    // Actualizar contenido del tab
+    $(`#${oldContentId}`)
+        .attr("id", newContentId);
+
+    // Actualizar ID del formulario
+    $(`#${oldFormId}`).attr("id", newFormId);
+}
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+function randomId() {
+    return Math.floor(Math.random() * 1000000);
+}
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* ------------------------------------------------------------- */
 // ======================================================
 // DETECTORES
@@ -1117,6 +1518,10 @@ function generarFormulario(obj) {
                 </div>`;
             break;
             // -------------------------------------
+            case 'Password_hash':
+                html += ``;
+            break;
+            // -------------------------------------
             default:
                 html += `
                 <div class=" mb-3 col-lg-3 " >
@@ -1191,8 +1596,8 @@ function nuevoRegistro() {
     const tabContentId    = `tab-content-${newId}`;
 
     $("#editorTabs").append(`
-        <li id="li-${tabId}">
-        <a href="#${tabContentId}" id="${tabId}" data-toggle="tab">
+        <li id="li-${tabId}" class=" nav-item " >
+        <a href="#${tabContentId}" id="${tabId}" data-toggle="tab" class=" nav-link " >
             Nuevo
             <span class="label label-danger" onclick="cerrarTab(event,'${tabId}','${tabContentId}')">✖</span>
         </a>
