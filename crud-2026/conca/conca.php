@@ -4,7 +4,7 @@
     <div class="container">
 
         <div class="page-header pb-7">
-            <h2 class="fw-semibold fs-7" >Usuarios del sistema</h2>
+            <h2 class="fw-semibold fs-7" >Boda</h2>
         </div> <!-- breadcrumb end -->
 
         <div class="page-content">
