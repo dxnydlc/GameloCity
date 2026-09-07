@@ -13,24 +13,47 @@ TRUNCATE TABLE ssays01.orq_protocolo_medico;
 DROP TABLE if exists ssays01.orq_protocolo_medico;
 
 CREATE TABLE `orq_protocolo_medico` (
-	`id`			INT(10) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-	`uu_id` 	 VARCHAR(150) DEFAULT NULL,
+  `id`			INT(10) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `uu_id` 	 VARCHAR(150) DEFAULT NULL,
 
-	`Codigo` 	      VARCHAR(150) DEFAULT NULL,
-	`Descripcion`   VARCHAR(150) DEFAULT NUll,
-	`Estado`        VARCHAR(150) DEFAULT 'Activado',
+  `Codigo` 	      VARCHAR(150) DEFAULT NULL,
+  `Descripcion`   VARCHAR(150) DEFAULT NUll,
+  `Estado`        VARCHAR(150) DEFAULT 'Activado',
 
-	`DniUsuarioMod`   VARCHAR(150) DEFAULT NUll,
-	`UsuarioMod`      VARCHAR(150) DEFAULT NUll,
+  `DniUsuarioMod`   VARCHAR(150) DEFAULT NUll,
+  `UsuarioMod`      VARCHAR(150) DEFAULT NUll,
 
-	`deleted_at` 	TIMESTAMP NULL DEFAULT NULL,
-	`created_at` 	TIMESTAMP NULL DEFAULT NULL,
-	`updated_at` 	TIMESTAMP NULL DEFAULT NULL,
-	
+  `deleted_at` 	TIMESTAMP NULL DEFAULT NULL,
+  `created_at` 	TIMESTAMP NULL DEFAULT NULL,
+  `updated_at` 	TIMESTAMP NULL DEFAULT NULL,
+
     INDEX idx_IdCli ( IdClienteProv ),
     INDEX idx_IdSuc ( IdSucursal ) 
 )
 ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=UTF8MB4_UNICODE_CI;
+
+-- Con clave foranea
+CREATE TABLE tbl_invitados (
+  id				BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  uu_id				VARCHAR(50) NOT NULL UNIQUE,
+  token				VARCHAR(100) NOT NULL UNIQUE,
+  Nombre			VARCHAR(150) NOT NULL,
+  IdBoda			BIGINT UNSIGNED NULL,
+  email				VARCHAR(150) NULL,
+  phone				VARCHAR(50) NULL,
+  group_name		VARCHAR(100) NULL,
+  max_companions	INT UNSIGNED NOT NULL DEFAULT 0,
+  invitation_sent_at DATETIME NULL,
+  -- event_id           BIGINT UNSIGNED NULL,
+  created_at         TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at         TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  
+  INDEX idx_IdCli ( Nombre ),
+
+  CONSTRAINT fk_invitados_boda
+    FOREIGN KEY ( IdBoda ) REFERENCES tbl_boda(id)
+      ON UPDATE CASCADE ON DELETE SET NULL
+) ENGINE=InnoDB;
 
 /*
 /**
