@@ -1026,7 +1026,7 @@ function renderForm(rowData = {}) {
     // hidden fields
     hiddenFields.forEach(field => {
         frm.append(`
-            <input type="hidden" name="${field}" id="${field}" value="${rowData[field] || ""}">
+            htmlForm += `<input type="hidden" name="${field}" id="${field}" value="${rowData[field] || defaultValues[field] }">`;
         `);
     });
 
@@ -1124,7 +1124,7 @@ function renderFormInTab( rowData , formId ) {
                 htmlForm += `
                 <div class="col-md-6">
                     <label class="form-label" >Nombre:</label>
-                    <input type="text" class="form-control" name="${field}" value="${rowData[field] || defaultValues[field] || ""}" placeholder="Civil/Religioso" />
+                    <input type="text" class="form-control" name="${field}" value="${rowData[field] ? rowData[field] : defaultValues[field]}" placeholder="-" />
                 </div>
                 `;
             break;
@@ -1133,7 +1133,7 @@ function renderFormInTab( rowData , formId ) {
                 htmlForm += `
                 <div class=" col-md-2 ">
                     <label class="form-label" >Fecha:</label>
-                    <input type="date" class="form-control" name="${field}" value="${rowData[field] || defaultValues[field] || ""}" />
+                    <input type="date" class="form-control" name="${field}" value="${rowData[field] ? rowData[field] : defaultValues[field]}" />
                 </div>
                 `;
             break;
@@ -1142,7 +1142,7 @@ function renderFormInTab( rowData , formId ) {
                 htmlForm += `
                 <div class=" col-md-2 ">
                     <label class="form-label" >Hora:</label>
-                    <input type="time" class="form-control" name="${field}" value="${rowData[field] || defaultValues[field] || ""}" />
+                    <input type="time" class="form-control" name="${field}" value="${rowData[field] ? rowData[field] : defaultValues[field]}" />
                 </div>
                 `;
             break;
@@ -1170,7 +1170,7 @@ function renderFormInTab( rowData , formId ) {
                 htmlForm += `
                 <div class=" col-md-6 ">
                     <label class="form-label" >Dirección:</label>
-                    <input type="text" class="form-control" name="${field}" value="${rowData[field] || defaultValues[field] || ""}" />
+                    <input type="text" class="form-control" name="${field}" value="${rowData[field] ? rowData[field] : defaultValues[field]}" />
                 </div>
                 `;
             break;
