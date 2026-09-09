@@ -1063,7 +1063,7 @@ function openEditorTab( rowData , isNew = false )
 
     const tabId             = `tab-${rowData.id}`;
     const tabContentId      = `content-${rowData.id}`;
-    const formId            = isNew ? `${rowData.id}-formulario` : `frmDocumento-${rowData.id}`;
+    const formId            = isNew ? `formulario_${rowData.id}` : `frmDocumento_${rowData.id}`;
     xIdForm                 = formId;
 
     idCab                   = isNew ? 0 : rowData.id
@@ -1189,7 +1189,7 @@ function renderFormInTab( rowData , formId ) {
                 htmlForm += `
                 <div class="col-md-6">
                     <label class="form-label">${field}</label>
-                    <input type="text" class="form-control" name="${field}" 
+                    <input type="text" class="form-control" name="${field}" id="${field}" 
                         value="${rowData[field] || defaultValues[field] || ""}">
                 </div>
                 `;
@@ -1206,7 +1206,7 @@ function renderFormInTab( rowData , formId ) {
 
 
     hiddenFields.forEach(field => {
-        htmlForm += `<input type="hidden" name="${field}" value="${rowData[field] || ""}">`;
+        htmlForm += `<input type="hidden" name="${field}" id="${field}" value="${rowData[field] || ""}">`;
         // frm.append(`
         //     <input type="hidden" name="${field}" value="${rowData[field] || ""}">
         // `);
