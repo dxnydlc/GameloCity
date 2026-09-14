@@ -284,8 +284,6 @@ require('colors');
   // ...................................................................
   // ...................................................................
   async demoFuncion() {
-    
-
     try {
       
       let data = await this.datosModel.find({
@@ -325,9 +323,6 @@ require('colors');
   // ...................................................................
   // ...................................................................
   async guardar( dto : CreateMipCaracteristicaDto ) {
-    
-
-
     try {
 
       //Comprobar si el codigo ya existe
@@ -378,9 +373,6 @@ require('colors');
   // ...................................................................
   // ...................................................................
   async getTodos() {
-    
-
-
     try {
       
       let data = await this.datosModel.find({
@@ -418,9 +410,6 @@ require('colors');
   // ...................................................................
   // ...................................................................
   async getbyId( id : number ) {
-
-
-
     try {
 
       let data = await this.datosModel.findOne({
@@ -456,9 +445,6 @@ require('colors');
   // ...................................................................
   // ...................................................................
   async Actualizar( uuID : string , dto : UpdateMipCaracteristicaDto ) {
-    
-
-
     try {
 
       // Primero ver si esta activo o no {-.-}
@@ -505,9 +491,6 @@ require('colors');
   // ...................................................................
   // ...................................................................
   async AnularbyId( id : number ) {
-
-
-
     try {
 
       const updatedAt = moment().format('YYYY-MM-DD HH:mm:ss');
@@ -545,6 +528,51 @@ require('colors');
   }
   // ...................................................................
   // ...................................................................
+  async getActivos() {
+
+    try {
+      
+      let data = await this.datosModel.createQueryBuilder('c')
+      .select([ 
+        "c.id as id" , 
+        "c.uu_id as uu_id" , 
+        "b.Nombre as Boda" , 
+        "c.Tipo as Tipo" , 
+        "c.Nombre as Nombre" , 
+        "c.Apellidos as Apellidos" , 
+        "c.DNI as DNI" , 
+        "c.Email as Email" , 
+        "c.Estado as Estado" 
+      ])
+      .innerJoin( "tbl_boda" , "b" , " c.IdBoda = b.id " )
+      .where(" c.Estado = 'activo' ")
+      .getRawMany();
+  
+      return {
+        data , 
+        version : '1' , 
+        msg : { titulo : 'Correcto' , texto : 'Registros cargados' , clase : 'success' , call : 'tostada2' }
+      }
+
+    } catch (error) {
+
+      // Para depuración local
+      varDump(error); 
+
+      // SI EL ERROR YA ES DE NESTJS (ej. BadRequestException), LO RELANZAMOS DIRECTO
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
+      throw new InternalServerErrorException({
+        message: 'Error en el servicio de Novios',
+        cause: error // Mantiene el rastro del error original en logs internos
+      });
+
+    }
+
+  }
   // ...................................................................
   // ...................................................................
   // ...................................................................
@@ -725,7 +753,7 @@ import { UtilidadesService } from 'src/utilidades/utilidades.service';
 // ................................................................
   // ................................................................
   constructor(
-    private readonly mipCaracteristicasService: MipCaracteristicasService , 
+    private readonly servicio: MipCaracteristicasService , 
     private readonly util : UtilidadesService , 
   ) {}
   // ................................................................
@@ -748,6 +776,11 @@ import { UtilidadesService } from 'src/utilidades/utilidades.service';
   // ................................................................
   // ................................................................
   // ................................................................
+  @Get('get-activos')
+  @HttpCode(200)
+  async getActivos() {
+    return this.servicio.getTodos();
+  }
   // ................................................................
   // ................................................................
   @Post('guardar')
@@ -775,21 +808,21 @@ import { UtilidadesService } from 'src/utilidades/utilidades.service';
       UsuarioMod: Usuario,
     };
 
-    return this.mipCaracteristicasService.guardar( bodyProocolo );
+    return this.servicio.guardar( bodyProocolo );
   }
   // ................................................................
   // ................................................................
   @Get('get-todos')
   @HttpCode(200)
   async getTodos() {
-    return this.mipCaracteristicasService.getTodos();
+    return this.servicio.getTodos();
   }
   // ................................................................
   // ................................................................
   @Get('get-by-id/:id')
   @HttpCode(200)
   async getbyId( @Param('id') id : number ) {
-    return this.mipCaracteristicasService.getbyId( id );
+    return this.servicio.getbyId( id );
   }
   // ................................................................
   // ................................................................
@@ -815,14 +848,14 @@ import { UtilidadesService } from 'src/utilidades/utilidades.service';
       DniUsuarioMod: IdUsuario,
       UsuarioMod: Usuario,
     };
-    return this.mipCaracteristicasService.Actualizar( uuid , bodyProocolo);
+    return this.servicio.Actualizar( uuid , bodyProocolo);
   }
   // ................................................................
   // ................................................................
   @Delete('anular-by-id/:id')
   @HttpCode(200)
   async Anular( @Param('id') id  : number ) {
-    return this.mipCaracteristicasService.AnularbyId( id );
+    return this.servicio.AnularbyId( id );
   }
   // ................................................................
   // ................................................................
