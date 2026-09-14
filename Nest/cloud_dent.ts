@@ -47,7 +47,9 @@ CREATE TABLE tbl_invitados (
   -- event_id           BIGINT UNSIGNED NULL,
   created_at         TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at         TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-  deleted_at 	TIMESTAMP NULL DEFAULT NULL,
+  deleted_at 	      TIMESTAMP NULL DEFAULT NULL,
+  DniUsuarioMod     VARCHAR(150) DEFAULT NUll,
+  UsuarioMod        VARCHAR(150) DEFAULT NUll,
   
   -- reemplaza
   INDEX idx_IdCli ( Nombre ),
@@ -122,6 +124,7 @@ export class DatosModel {
 
     
 
+--- Version con manejo de tipo
 import { Column, Entity, Generated, Index, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm"
 
 @Entity({ name: 'tbl_invitados' })
