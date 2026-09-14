@@ -44,6 +44,7 @@ CREATE TABLE tbl_invitados (
   group_name		VARCHAR(100) NULL,
   max_companions	INT UNSIGNED NOT NULL DEFAULT 0,
   invitation_sent_at DATETIME NULL,
+  Estado   		 ENUM('activo', 'anulado', 'pausado') NOT NULL DEFAULT 'activo',
   -- event_id           BIGINT UNSIGNED NULL,
   created_at         TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at         TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
