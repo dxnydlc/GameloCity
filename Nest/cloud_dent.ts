@@ -47,9 +47,11 @@ CREATE TABLE tbl_invitados (
   -- event_id           BIGINT UNSIGNED NULL,
   created_at         TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at         TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  deleted_at 	TIMESTAMP NULL DEFAULT NULL,
   
+  -- reemplaza
   INDEX idx_IdCli ( Nombre ),
-
+  -- reemplaza
   CONSTRAINT fk_invitados_boda
     FOREIGN KEY ( IdBoda ) REFERENCES tbl_boda(id)
       ON UPDATE CASCADE ON DELETE SET NULL
