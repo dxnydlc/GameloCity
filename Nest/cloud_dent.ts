@@ -542,7 +542,10 @@ require('colors');
         "c.Apellidos as Apellidos" , 
         "c.DNI as DNI" , 
         "c.Email as Email" , 
-        "c.Estado as Estado" 
+        "c.Estado as Estado" , 
+        "c.UsuarioMod as UsuarioMod" , 
+        "DATE_FORMAT( c.Fecha , '%Y-%m-%d') as Fecha" , 
+        "DATE_FORMAT( c.created_at , '%Y-%m-%d %H:%i:%s') as created_at" 
       ])
       .innerJoin( "tbl_boda" , "b" , " c.IdBoda = b.id " )
       .where(" c.Estado = 'activo' ")
@@ -779,7 +782,7 @@ import { UtilidadesService } from 'src/utilidades/utilidades.service';
   @Get('get-activos')
   @HttpCode(200)
   async getActivos() {
-    return this.servicio.getTodos();
+    return this.servicio.getActivos();
   }
   // ................................................................
   // ................................................................
