@@ -644,7 +644,7 @@ function prepararRequest( tipoReq ) {
             xMetodo         = `POST`;
 
             if( idCab > 0 ){
-                xUrl            = `${urlServicio}actualizar/${uu_id}`;
+                xUrl            = `${urlServicio}actualizar/${dataEnviarPost.uu_id}`;
                 xMetodo         = `PATCH`;
             }
         break;
