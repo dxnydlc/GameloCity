@@ -1335,6 +1335,8 @@ function abrirTab(id) {
   const tabId = `tab-${id}`;
   const tabContentId = `tab-content-${id}`;
 
+  idCab             = id;
+
   if ($("#" + tabId).length) {
     $("#" + tabId).tab("show");
     return;
