@@ -2882,4 +2882,19 @@ notifier.show("Procesando solicitud…", "info", 7000);
 
 
 
+
+
+// Descargar archivo url
+// Descargar archivo url
+function descargarExcel( url , nombreDescarga ) {
+    // nombreDescarga con extensión | invitados-mesas.xlsx
+  const link        = document.createElement('a');
+  link.href         = url;
+  link.download     = nombreDescarga;
+
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
 */
