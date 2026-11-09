@@ -1418,6 +1418,7 @@ let dataAudit = {
   Evento      : 'Enviado-Rep-Legal' , 
   Entrada     : '' , 
   Salida      : '' , 
+  Correlativo : 0 , 
   DNI         : IdUsuario  , 
   Usuario     : Usuario , 
   created_at  : createdAt , 
