@@ -135,6 +135,7 @@ export class InvitadoModel {
     id: number = 0;
 
     @Column({ type: 'varchar', length: 50, unique: true })
+    @Generated("uuid")
     uu_id: string = '';
 
     @Column({ type: 'varchar', length: 100, unique: true })
@@ -1409,5 +1410,23 @@ export class ExcelService {
 
   // ...................................................................
 
+
+// Auditoria
+let dataAudit = {
+    Formulario  : 'Envio-Boletas' , 
+    tipo_doc    : 'Envio-Boletas' ,
+    Evento      : 'Enviado-Rep-Legal' , 
+    Entrada     : '' , 
+    Salida      : '' , 
+    DNI         : 0  , 
+    correlativo : 0  , 
+    Usuario     : Usuario , 
+    created_at  : IdUsuario , 
+  };
+
+  // mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
+  dataAudit.Evento      = `Descargar boletas ya firmadas de rep legal ${dataCab.Codigo}.`;
+  await this.srvAudit.i( dataAudit );
+  // mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
 
 /**/
