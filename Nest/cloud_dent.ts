@@ -1413,16 +1413,15 @@ export class ExcelService {
 
 // Auditoria
 let dataAudit = {
-    Formulario  : 'Envio-Boletas' , 
-    tipo_doc    : 'Envio-Boletas' ,
-    Evento      : 'Enviado-Rep-Legal' , 
-    Entrada     : '' , 
-    Salida      : '' , 
-    DNI         : 0  , 
-    correlativo : 0  , 
-    Usuario     : Usuario , 
-    created_at  : IdUsuario , 
-  };
+  Formulario  : 'Enviado-Rep-Legal' , 
+  tipo_doc    : 'Envio-Boletas' ,
+  Evento      : 'Enviado-Rep-Legal' , 
+  Entrada     : '' , 
+  Salida      : '' , 
+  DNI         : IdUsuario  , 
+  Usuario     : Usuario , 
+  created_at  : createdAt , 
+};
 
   // mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
   dataAudit.Evento      = `Descargar boletas ya firmadas de rep legal ${dataCab.Codigo}.`;
