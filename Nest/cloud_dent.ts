@@ -13,24 +13,52 @@ TRUNCATE TABLE ssays01.orq_protocolo_medico;
 DROP TABLE if exists ssays01.orq_protocolo_medico;
 
 CREATE TABLE `orq_protocolo_medico` (
-	`id`			INT(10) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-	`uu_id` 	 VARCHAR(150) DEFAULT NULL,
+  `id`			INT(10) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `uu_id` 	 VARCHAR(150) DEFAULT NULL,
 
-	`Codigo` 	      VARCHAR(150) DEFAULT NULL,
-	`Descripcion`   VARCHAR(150) DEFAULT NUll,
-	`Estado`        VARCHAR(150) DEFAULT 'Activado',
+  `Codigo` 	      VARCHAR(150) DEFAULT NULL,
+  `Descripcion`   VARCHAR(150) DEFAULT NUll,
+  `Estado`        VARCHAR(150) DEFAULT 'Activado',
 
-	`DniUsuarioMod`   VARCHAR(150) DEFAULT NUll,
-	`UsuarioMod`      VARCHAR(150) DEFAULT NUll,
+  `DniUsuarioMod`   VARCHAR(150) DEFAULT NUll,
+  `UsuarioMod`      VARCHAR(150) DEFAULT NUll,
 
-	`deleted_at` 	TIMESTAMP NULL DEFAULT NULL,
-	`created_at` 	TIMESTAMP NULL DEFAULT NULL,
-	`updated_at` 	TIMESTAMP NULL DEFAULT NULL,
-	
+  `deleted_at` 	TIMESTAMP NULL DEFAULT NULL,
+  `created_at` 	TIMESTAMP NULL DEFAULT NULL,
+  `updated_at` 	TIMESTAMP NULL DEFAULT NULL,
+
     INDEX idx_IdCli ( IdClienteProv ),
     INDEX idx_IdSuc ( IdSucursal ) 
 )
 ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=UTF8MB4_UNICODE_CI;
+
+-- Con clave foranea
+CREATE TABLE tbl_invitados (
+  id				BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  uu_id				VARCHAR(50) NOT NULL UNIQUE,
+  token				VARCHAR(100) NOT NULL UNIQUE,
+  Nombre			VARCHAR(150) NOT NULL,
+  IdBoda			BIGINT UNSIGNED NULL,
+  email				VARCHAR(150) NULL,
+  phone				VARCHAR(50) NULL,
+  group_name		VARCHAR(100) NULL,
+  max_companions	INT UNSIGNED NOT NULL DEFAULT 0,
+  invitation_sent_at DATETIME NULL,
+  Estado   		 ENUM('activo', 'anulado', 'pausado') NOT NULL DEFAULT 'activo',
+  -- event_id           BIGINT UNSIGNED NULL,
+  created_at         TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at         TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  deleted_at 	      TIMESTAMP NULL DEFAULT NULL,
+  DniUsuarioMod     VARCHAR(150) DEFAULT NUll,
+  UsuarioMod        VARCHAR(150) DEFAULT NUll,
+  
+  -- reemplaza
+  INDEX idx_IdCli ( Nombre ),
+  -- reemplaza
+  CONSTRAINT fk_invitados_boda
+    FOREIGN KEY ( IdBoda ) REFERENCES tbl_boda(id)
+      ON UPDATE CASCADE ON DELETE SET NULL
+) ENGINE=InnoDB;
 
 /*
 /**
@@ -96,6 +124,91 @@ export class DatosModel {
     updated_at! : string
 
     
+
+--- Version con manejo de tipo
+import { Column, Entity, Generated, Index, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm"
+
+@Entity({ name: 'tbl_invitados' })
+export class InvitadoModel {
+
+    @PrimaryGeneratedColumn({ type: 'bigint', unsigned: true })
+    id: number = 0;
+
+    @Column({ type: 'varchar', length: 50, unique: true })
+    @Generated("uuid")
+    uu_id: string = '';
+
+    @Column({ type: 'varchar', length: 100, unique: true })
+    token: string = '';
+
+    @Index('idx_invitado_nombre')
+    @Column({ type: 'varchar', length: 150 })
+    Nombre: string = '';
+
+    // -----------------------------
+    // Relaciones
+    // -----------------------------
+
+    @Index('idx_invitado_boda')
+    @Column({ type: 'bigint', unsigned: true, nullable: true })
+    IdBoda: number = 0;
+
+    @Column({type : 'double'})
+    IdNovio : number = 0
+
+    // -----------------------------
+    // Datos del invitado
+    // -----------------------------
+
+    @Column({ type: 'varchar', length: 150, nullable: true })
+    email : string = ''
+
+    @Column({ type: 'varchar', length: 50, nullable: true })
+    phone : string = ''
+
+    @Column({ type: 'varchar', length: 100, nullable: true })
+    group_name : string = ''
+
+    @Column({
+        type: 'enum',
+        enum: ['activo', 'anulado', 'pausado', 'no-podra', 'confirmado'],
+        default: 'activo',
+    })
+    Estado: string = '';
+
+    @Column({ type: 'int', unsigned: true, default: 0 })
+    max_companions : number = 0
+
+    @Column({ type: 'datetime', nullable: true })
+    invitation_sent_at : string = ''
+
+    // -----------------------------
+    // Auditoría
+    // -----------------------------
+
+    @Column({
+        type        : 'timestamp',
+        default     : () => 'CURRENT_TIMESTAMP',
+    })
+    created_at: string = '';
+
+    @Column({
+        type        : 'timestamp',
+        nullable    : true,
+        onUpdate    : 'CURRENT_TIMESTAMP',
+    })
+    updated_at      : string = '';
+
+    @Column({ type: 'timestamp', nullable: true })
+    deleted_at      : string = '';
+
+    @Column({ type: 'varchar', length: 50 })
+    DniUsuarioMod   : string = '';
+
+    @Column({ type: 'varchar', length: 150 })
+    UsuarioMod      : string = '';
+
+}
 
 // ========================== DTO
 
@@ -172,8 +285,6 @@ require('colors');
   // ...................................................................
   // ...................................................................
   async demoFuncion() {
-    
-
     try {
       
       let data = await this.datosModel.find({
@@ -213,9 +324,6 @@ require('colors');
   // ...................................................................
   // ...................................................................
   async guardar( dto : CreateMipCaracteristicaDto ) {
-    
-
-
     try {
 
       //Comprobar si el codigo ya existe
@@ -266,9 +374,6 @@ require('colors');
   // ...................................................................
   // ...................................................................
   async getTodos() {
-    
-
-
     try {
       
       let data = await this.datosModel.find({
@@ -306,9 +411,6 @@ require('colors');
   // ...................................................................
   // ...................................................................
   async getbyId( id : number ) {
-
-
-
     try {
 
       let data = await this.datosModel.findOne({
@@ -344,9 +446,6 @@ require('colors');
   // ...................................................................
   // ...................................................................
   async Actualizar( uuID : string , dto : UpdateMipCaracteristicaDto ) {
-    
-
-
     try {
 
       // Primero ver si esta activo o no {-.-}
@@ -393,9 +492,6 @@ require('colors');
   // ...................................................................
   // ...................................................................
   async AnularbyId( id : number ) {
-
-
-
     try {
 
       const updatedAt = moment().format('YYYY-MM-DD HH:mm:ss');
@@ -433,6 +529,54 @@ require('colors');
   }
   // ...................................................................
   // ...................................................................
+  async getActivos() {
+
+    try {
+      
+      let data = await this.datosModel.createQueryBuilder('c')
+      .select([ 
+        "c.id as id" , 
+        "c.uu_id as uu_id" , 
+        "b.Nombre as Boda" , 
+        "c.Tipo as Tipo" , 
+        "c.Nombre as Nombre" , 
+        "c.Apellidos as Apellidos" , 
+        "c.DNI as DNI" , 
+        "c.Email as Email" , 
+        "c.Estado as Estado" , 
+        "c.UsuarioMod as UsuarioMod" , 
+        "DATE_FORMAT( c.Fecha , '%Y-%m-%d') as Fecha" , 
+        "DATE_FORMAT( c.created_at , '%Y-%m-%d %H:%i:%s') as created_at" 
+      ])
+      .innerJoin( "tbl_boda" , "b" , " c.IdBoda = b.id " )
+      .where(" c.Estado = 'activo' ")
+      .getRawMany();
+  
+      return {
+        data , 
+        version : '1' , 
+        msg : { titulo : 'Correcto' , texto : 'Registros cargados' , clase : 'success' , call : 'tostada2' }
+      }
+
+    } catch (error) {
+
+      // Para depuración local
+      varDump(error); 
+
+      // SI EL ERROR YA ES DE NESTJS (ej. BadRequestException), LO RELANZAMOS DIRECTO
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
+      throw new InternalServerErrorException({
+        message: 'Error en el servicio de Novios',
+        cause: error // Mantiene el rastro del error original en logs internos
+      });
+
+    }
+
+  }
   // ...................................................................
   // ...................................................................
   // ...................................................................
@@ -613,7 +757,7 @@ import { UtilidadesService } from 'src/utilidades/utilidades.service';
 // ................................................................
   // ................................................................
   constructor(
-    private readonly mipCaracteristicasService: MipCaracteristicasService , 
+    private readonly servicio: MipCaracteristicasService , 
     private readonly util : UtilidadesService , 
   ) {}
   // ................................................................
@@ -636,6 +780,11 @@ import { UtilidadesService } from 'src/utilidades/utilidades.service';
   // ................................................................
   // ................................................................
   // ................................................................
+  @Get('get-activos')
+  @HttpCode(200)
+  async getActivos() {
+    return this.servicio.getActivos();
+  }
   // ................................................................
   // ................................................................
   @Post('guardar')
@@ -663,21 +812,21 @@ import { UtilidadesService } from 'src/utilidades/utilidades.service';
       UsuarioMod: Usuario,
     };
 
-    return this.mipCaracteristicasService.guardar( bodyProocolo );
+    return this.servicio.guardar( bodyProocolo );
   }
   // ................................................................
   // ................................................................
   @Get('get-todos')
   @HttpCode(200)
   async getTodos() {
-    return this.mipCaracteristicasService.getTodos();
+    return this.servicio.getTodos();
   }
   // ................................................................
   // ................................................................
   @Get('get-by-id/:id')
   @HttpCode(200)
   async getbyId( @Param('id') id : number ) {
-    return this.mipCaracteristicasService.getbyId( id );
+    return this.servicio.getbyId( id );
   }
   // ................................................................
   // ................................................................
@@ -703,14 +852,14 @@ import { UtilidadesService } from 'src/utilidades/utilidades.service';
       DniUsuarioMod: IdUsuario,
       UsuarioMod: Usuario,
     };
-    return this.mipCaracteristicasService.Actualizar( uuid , bodyProocolo);
+    return this.servicio.Actualizar( uuid , bodyProocolo);
   }
   // ................................................................
   // ................................................................
   @Delete('anular-by-id/:id')
   @HttpCode(200)
   async Anular( @Param('id') id  : number ) {
-    return this.mipCaracteristicasService.AnularbyId( id );
+    return this.servicio.AnularbyId( id );
   }
   // ................................................................
   // ................................................................
@@ -1261,5 +1410,23 @@ export class ExcelService {
 
   // ...................................................................
 
+
+// Auditoria
+let dataAudit = {
+  Formulario  : 'Enviado-Rep-Legal' , 
+  tipo_doc    : 'Envio-Boletas' ,
+  Evento      : 'Enviado-Rep-Legal' , 
+  Entrada     : '' , 
+  Salida      : '' , 
+  Correlativo : 0 , 
+  DNI         : IdUsuario  , 
+  Usuario     : Usuario , 
+  created_at  : createdAt , 
+};
+
+  // mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
+  dataAudit.Evento      = `Descargar boletas ya firmadas de rep legal ${dataCab.Codigo}.`;
+  await this.srvAudit.i( dataAudit );
+  // mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
 
 /**/
